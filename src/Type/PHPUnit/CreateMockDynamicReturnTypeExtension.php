@@ -19,7 +19,14 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return $methodReflection->getName() === 'createMock';
+		return in_array(
+			$methodReflection->getName(),
+			[
+				'createMock',
+				'getMockForAbstractClass',
+			],
+			true
+		);
 	}
 
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type

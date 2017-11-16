@@ -12,7 +12,7 @@ use PHPStan\Type\TypeCombinator;
 class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	public static function getClass(): string
+	public function getClass(): string
 	{
 		return \PHPUnit_Framework_MockObject_MockBuilder::class;
 	}

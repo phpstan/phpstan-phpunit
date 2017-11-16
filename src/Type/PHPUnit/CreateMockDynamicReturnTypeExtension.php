@@ -20,7 +20,7 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 		'getMockFromWsdl' => 1,
 	];
 
-	public static function getClass(): string
+	public function getClass(): string
 	{
 		return \PHPUnit\Framework\TestCase::class;
 	}

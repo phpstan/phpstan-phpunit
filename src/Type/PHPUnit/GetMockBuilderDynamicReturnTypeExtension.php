@@ -10,7 +10,7 @@ use PHPStan\Type\Type;
 class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
-	public static function getClass(): string
+	public function getClass(): string
 	{
 		return \PHPUnit\Framework\TestCase::class;
 	}

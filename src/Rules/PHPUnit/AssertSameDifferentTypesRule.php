@@ -47,7 +47,7 @@ class AssertSameDifferentTypesRule implements \PHPStan\Rules\Rule
 			return [];
 		}
 
-		if (!$testCaseType->isSupersetOf($calledOnType)->yes()) {
+		if (!$testCaseType->isSuperTypeOf($calledOnType)->yes()) {
 			return [];
 		}
 
@@ -61,7 +61,7 @@ class AssertSameDifferentTypesRule implements \PHPStan\Rules\Rule
 		$leftType = $scope->getType($node->args[0]->value);
 		$rightType = $scope->getType($node->args[1]->value);
 
-		if ($leftType->isSupersetOf($rightType)->no()) {
+		if ($leftType->isSuperTypeOf($rightType)->no()) {
 			return [
 				sprintf(
 					'Call to assertSame() with different types %s and %s will always result in test failure.',

@@ -5,6 +5,7 @@ namespace PHPStan\Type\Prophecy;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -24,7 +25,11 @@ class ObjectProphecyDynamicReturnTypeExtension implements \PHPStan\Type\DynamicM
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
 	{
 		if ($methodReflection->getName() === 'reveal') {
-			return $scope->getType($methodCall->var);
+			$calledOnType = $scope->getType($methodCall->var);
+
+			if ($calledOnType instanceof ObjectProphecyType) {
+				return new ObjectType($calledOnType->getMockedClass());
+			}
 		}
 
 		return $methodReflection->getReturnType();

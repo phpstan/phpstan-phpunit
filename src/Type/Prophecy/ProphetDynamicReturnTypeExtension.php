@@ -6,13 +6,14 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;
+use Prophecy\Prophet;
 
 class ProphetDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
 
 	public function getClass(): string
 	{
-		return \PHPUnit_Framework_MockObject_MockBuilder::class;
+		return Prophet::class;
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool

@@ -56,10 +56,10 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 			$class = $scope->getClassReflection()->getName();
 		}
 
-		$mockedClassType = new ObjectType($class);
-		$mockType = new ObjectType(\PHPUnit_Framework_MockObject_MockObject::class);
-
-		return TypeCombinator::intersect($mockedClassType, $mockType);
+		return TypeCombinator::intersect(
+			new ObjectType($class),
+			$methodReflection->getReturnType()
+		);
 	}
 
 }

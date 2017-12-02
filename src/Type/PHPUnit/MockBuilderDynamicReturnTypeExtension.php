@@ -4,17 +4,35 @@ namespace PHPStan\Type\PHPUnit;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\Broker;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeWithClassName;
 
-class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension, \PHPStan\Reflection\BrokerAwareExtension
 {
+
+	/**
+	 * @var \PHPStan\Broker\Broker
+	 */
+	private $broker;
+
+	public function setBroker(Broker $broker)
+	{
+		$this->broker = $broker;
+	}
 
 	public function getClass(): string
 	{
-		return \PHPUnit_Framework_MockObject_MockBuilder::class;
+		$testCase = $this->broker->getClass(\PHPUnit\Framework\TestCase::class);
+		$mockBuilderType = $testCase->getNativeMethod('getMockBuilder')->getReturnType();
+		if (!$mockBuilderType instanceof TypeWithClassName) {
+			throw new \PHPStan\ShouldNotHappenException();
+		}
+
+		return $mockBuilderType->getClassName();
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
@@ -40,10 +58,10 @@ class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMeth
 			return $methodReflection->getReturnType();
 		}
 
-		$mockedClassType = new ObjectType($calledOnType->getMockedClass());
-		$mockType = new ObjectType(\PHPUnit_Framework_MockObject_MockObject::class);
-
-		return TypeCombinator::intersect($mockedClassType, $mockType);
+		return TypeCombinator::intersect(
+			new ObjectType($calledOnType->getMockedClass()),
+			$methodReflection->getReturnType()
+		);
 	}
 
 }

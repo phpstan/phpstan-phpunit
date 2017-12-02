@@ -6,6 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 
 class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
@@ -22,29 +23,34 @@ class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicM
 
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
 	{
+		$mockBuilderType = $methodReflection->getReturnType();
 		if (count($methodCall->args) === 0) {
-			return $methodReflection->getReturnType();
+			return $mockBuilderType;
 		}
 		$arg = $methodCall->args[0]->value;
 		if (!($arg instanceof \PhpParser\Node\Expr\ClassConstFetch)) {
-			return $methodReflection->getReturnType();
+			return $mockBuilderType;
 		}
 
 		$class = $arg->class;
 		if (!($class instanceof \PhpParser\Node\Name)) {
-			return $methodReflection->getReturnType();
+			return $mockBuilderType;
 		}
 
 		$class = (string) $class;
 		if ($class === 'static') {
-			return $methodReflection->getReturnType();
+			return $mockBuilderType;
 		}
 
 		if ($class === 'self') {
 			$class = $scope->getClassReflection()->getName();
 		}
 
-		return new MockBuilderType($class);
+		if (!$mockBuilderType instanceof TypeWithClassName) {
+			throw new \PHPStan\ShouldNotHappenException();
+		}
+
+		return new MockBuilderType($mockBuilderType, $class);
 	}
 
 }

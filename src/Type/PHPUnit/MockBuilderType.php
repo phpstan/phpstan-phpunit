@@ -2,6 +2,8 @@
 
 namespace PHPStan\Type\PHPUnit;
 
+use PHPStan\Type\TypeWithClassName;
+
 class MockBuilderType extends \PHPStan\Type\ObjectType
 {
 
@@ -10,9 +12,12 @@ class MockBuilderType extends \PHPStan\Type\ObjectType
 	 */
 	private $mockedClass;
 
-	public function __construct(string $mockedClass)
+	public function __construct(
+		TypeWithClassName $mockBuilderType,
+		string $mockedClass
+	)
 	{
-		parent::__construct(\PHPUnit_Framework_MockObject_MockBuilder::class);
+		parent::__construct($mockBuilderType->getClassName());
 		$this->mockedClass = $mockedClass;
 	}
 

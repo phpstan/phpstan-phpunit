@@ -16,6 +16,8 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 	private $methods = [
 		'createMock' => 0,
 		'createConfiguredMock' => 0,
+		'createPartialMock' => 0,
+		'createTestProxy' => 0,
 		'getMockForAbstractClass' => 0,
 		'getMockFromWsdl' => 1,
 	];

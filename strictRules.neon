@@ -7,3 +7,7 @@ services:
 		class: PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPStan\Rules\PHPUnit\AssertSameWithCountRule
+		tags:
+			- phpstan.rules.rule

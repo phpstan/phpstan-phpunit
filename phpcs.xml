@@ -36,4 +36,5 @@
 			<property name="enableVoidTypeHint" type="false" />
 		</properties>
 	</rule>
+	<exclude-pattern>tests/*/data</exclude-pattern>
 </ruleset>

@@ -18,6 +18,10 @@ It also contains this framework-specific rule (can be enabled separately):
 
 * Check that both values passed to `assertSame()` method are of the same type.
 
+It also contains this strict framework-specific rule (can be enabled separately):
+
+* Check that you are not using `assertSame()` with `null` as expected value. `assertNull()` should be used instead.
+
 ## How to document mock objects in phpDocs?
 
 If you need to configure the mock even after you assign it to a property or return it from a method, you should add `PHPUnit_Framework_MockObject_MockObject` to the phpDoc:
@@ -80,4 +84,10 @@ To perform framework-specific checks, include also this file:
 
 ```
 	- vendor/phpstan/phpstan-phpunit/rules.neon
+```
+
+To perform addition strict PHPUnit checks, include also this file:
+
+```
+	- vendor/phpstan/phpstan-phpunit/strictRules.neon
 ```

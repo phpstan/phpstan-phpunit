@@ -1,5 +1,9 @@
 services:
 	-
+		class: PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
+		tags:
+			- phpstan.rules.rule
+	-
 		class: PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
 		tags:
 			- phpstan.rules.rule

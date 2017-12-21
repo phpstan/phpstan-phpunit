@@ -36,8 +36,20 @@ class AssertSameDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCase
 				14,
 			],
 			[
+				'Call to assertSame() with different types string and int will always result in test failure.',
+				16,
+			],
+			[
+				'Call to assertSame() with different types string and int will always result in test failure.',
+				17,
+			],
+			[
+				'Call to assertSame() with different types string and int will always result in test failure.',
+				18,
+			],
+			[
 				'Call to assertSame() with different types array<string> and array<int> will always result in test failure.',
-				35,
+				39,
 			],
 		]);
 	}

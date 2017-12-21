@@ -4,7 +4,6 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\ObjectType;
 
 class AssertSameDifferentTypesRule implements \PHPStan\Rules\Rule
 {
@@ -21,33 +20,7 @@ class AssertSameDifferentTypesRule implements \PHPStan\Rules\Rule
 	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
-		$testCaseType = new ObjectType(\PHPUnit\Framework\TestCase::class);
-		if ($node instanceof Node\Expr\MethodCall) {
-			$calledOnType = $scope->getType($node->var);
-		} elseif ($node instanceof Node\Expr\StaticCall) {
-			if ($node->class instanceof Node\Name) {
-				$class = (string) $node->class;
-				if (in_array(
-					strtolower($class),
-					[
-						'self',
-						'static',
-						'parent',
-					],
-					true
-				)) {
-					$calledOnType = new ObjectType($scope->getClassReflection()->getName());
-				} else {
-					$calledOnType = new ObjectType($class);
-				}
-			} else {
-				$calledOnType = $scope->getType($node->class);
-			}
-		} else {
-			return [];
-		}
-
-		if (!$testCaseType->isSuperTypeOf($calledOnType)->yes()) {
+		if (!AssertRuleHelper::isMethodOrStaticCallOnTestCase($node, $scope)) {
 			return [];
 		}
 

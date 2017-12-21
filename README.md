@@ -18,8 +18,10 @@ It also contains this framework-specific rule (can be enabled separately):
 
 * Check that both values passed to `assertSame()` method are of the same type.
 
-It also contains this strict framework-specific rule (can be enabled separately):
+It also contains this strict framework-specific rules (can be enabled separately):
 
+* Check that you are not using `assertSame()` with `true` as expected value. `assertTrue()` should be used instead.
+* Check that you are not using `assertSame()` with `false` as expected value. `assertFalse()` should be used instead.
 * Check that you are not using `assertSame()` with `null` as expected value. `assertNull()` should be used instead.
 
 ## How to document mock objects in phpDocs?

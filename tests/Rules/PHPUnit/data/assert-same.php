@@ -12,6 +12,10 @@ class FooTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame(1, $this->returnsString());
 		$this->assertSame('1', self::returnsInt());
 		$this->assertSame(['a', 'b'], [1, 2]);
+
+		self::assertSame('1', 2); // test self
+		static::assertSame('1', 2); // test static
+		parent::assertSame('1', 2); // test parent
 	}
 
 	private function returnsString(): string
@@ -46,6 +50,19 @@ class FooTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame(1, self::returnsInt());
 		$this->assertSame(['a'], ['a', 1]);
 		$this->assertSame(['a', 2, 3.0], ['a', 1]);
+		self::assertSame(1, 2); // test self
+		static::assertSame(1, 2); // test static
+		parent::assertSame(1, 2); // test parent
+	}
+
+	public function testOther()
+	{
+		// assertEquals is not checked
+		$this->assertEquals('1', 1);
+
+		// only calls on \PHPUnit\Framework\TestCase are analyzed
+		$foo = new \Dummy\Foo();
+		$foo->assertSame();
 	}
 
 }

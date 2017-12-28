@@ -12,7 +12,7 @@ class AssertSameBooleanExpectedRuleTest extends \PHPStan\Testing\RuleTestCase
 		return new AssertSameBooleanExpectedRule();
 	}
 
-	public function testRule()
+	public function testRule(): void
 	{
 		$this->analyse([__DIR__ . '/data/assert-same-boolean-expected.php'], [
 			[

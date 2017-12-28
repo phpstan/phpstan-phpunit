@@ -12,7 +12,7 @@ class AssertSameDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCase
 		return new AssertSameDifferentTypesRule();
 	}
 
-	public function testRule()
+	public function testRule(): void
 	{
 		$this->analyse([__DIR__ . '/data/assert-same.php'], [
 			[

@@ -12,7 +12,7 @@ class AssertSameWithCountRuleTest extends \PHPStan\Testing\RuleTestCase
 		return new AssertSameWithCountRule();
 	}
 
-	public function testRule()
+	public function testRule(): void
 	{
 		$this->analyse([__DIR__ . '/data/assert-same-count.php'], [
 			[

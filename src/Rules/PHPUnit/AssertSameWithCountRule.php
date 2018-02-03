@@ -36,10 +36,13 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 		if (
 			$right instanceof Node\Expr\FuncCall
 			&& $right->name instanceof Node\Name
-			&& strtolower($right->name->toString()) === 'count'
+			&& in_array(strtolower($right->name->toString()), ['count', 'sizeof'], true)
 		) {
 			return [
-				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
+				sprintf(
+					'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, %s($variable)).',
+					strtolower($right->name->toString())
+				),
 			];
 		}
 

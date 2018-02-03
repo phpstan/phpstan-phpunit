@@ -15,4 +15,13 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame(5, $this->count()); // OK
 	}
 
+	public function testAssertSameWithSizeOf()
+	{
+		$this->assertSame(5, sizeof([1, 2, 3]));
+	}
+
+	public function testAssertSameWithSizeOfMethodIsOK()
+	{
+		$this->assertSame(5, $this->sizeof()); // OK
+	}
 }

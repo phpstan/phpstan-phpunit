@@ -4,8 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\FalseBooleanType;
-use PHPStan\Type\TrueBooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 
 class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
 {
@@ -35,16 +34,16 @@ class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
 
 		$leftType = $scope->getType($node->args[0]->value);
 
-		if ($leftType instanceof TrueBooleanType) {
-			return [
-				'You should use assertTrue() instead of assertSame() when expecting "true"',
-			];
-		}
-
-		if ($leftType instanceof FalseBooleanType) {
-			return [
-				'You should use assertFalse() instead of assertSame() when expecting "false"',
-			];
+		if ($leftType instanceof ConstantBooleanType) {
+			if ($leftType->getValue()) {
+				return [
+					'You should use assertTrue() instead of assertSame() when expecting "true"',
+				];
+			} else {
+				return [
+					'You should use assertFalse() instead of assertSame() when expecting "false"',
+				];
+			}
 		}
 
 		return [];

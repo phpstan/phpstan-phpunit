@@ -5,6 +5,7 @@ namespace PHPStan\Type\PHPUnit;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -38,25 +39,12 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 		if (!isset($methodCall->args[$argumentIndex])) {
 			return $methodReflection->getReturnType();
 		}
-		$arg = $methodCall->args[$argumentIndex]->value;
-		if (!($arg instanceof \PhpParser\Node\Expr\ClassConstFetch)) {
+		$argType = $scope->getType($methodCall->args[$argumentIndex]->value);
+		if (!$argType instanceof ConstantStringType) {
 			return $methodReflection->getReturnType();
 		}
 
-		$class = $arg->class;
-		if (!($class instanceof \PhpParser\Node\Name)) {
-			return $methodReflection->getReturnType();
-		}
-
-		$class = (string) $class;
-
-		if ($class === 'static') {
-			return $methodReflection->getReturnType();
-		}
-
-		if ($class === 'self') {
-			$class = $scope->getClassReflection()->getName();
-		}
+		$class = $argType->getValue();
 
 		return TypeCombinator::intersect(
 			new ObjectType($class),

@@ -1,13 +1,4 @@
-services:
-	-
-		class: PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPStan\Rules\PHPUnit\AssertSameWithCountRule
-		tags:
-			- phpstan.rules.rule
+rules:
+	- PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
+	- PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
+	- PHPStan\Rules\PHPUnit\AssertSameWithCountRule

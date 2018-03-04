@@ -1,5 +1,2 @@
-services:
-	-
-		class: PHPStan\Rules\PHPUnit\AssertSameDifferentTypesRule
-		tags:
-			- phpstan.rules.rule
+rules:
+	- PHPStan\Rules\PHPUnit\AssertSameDifferentTypesRule

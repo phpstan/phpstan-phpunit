@@ -7,9 +7,7 @@ use PHPStan\Type\TypeWithClassName;
 class MockBuilderType extends \PHPStan\Type\ObjectType
 {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $mockedClass;
 
 	public function __construct(

@@ -14,9 +14,7 @@ use PHPStan\Type\TypeWithClassName;
 class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension, \PHPStan\Reflection\BrokerAwareExtension
 {
 
-	/**
-	 * @var \PHPStan\Broker\Broker
-	 */
+	/** @var \PHPStan\Broker\Broker */
 	private $broker;
 
 	public function setBroker(Broker $broker): void

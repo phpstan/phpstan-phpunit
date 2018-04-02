@@ -13,10 +13,8 @@ This extension provides following features:
 * `getMock()` called on `MockBuilder` is also supported.
 * Interprets `Foo|PHPUnit_Framework_MockObject_MockObject` in phpDoc so that it results in an intersection type instead of a union type.
 * Defines early terminating method calls for the `PHPUnit\Framework\TestCase` class to prevent undefined variable errors.
-
-It also contains this framework-specific rule (can be enabled separately):
-
-* Check that both values passed to `assertSame()` method are of the same type.
+* Specifies types of expressions passed to various `assert` methods like `assertInstanceOf`, `assertTrue`, `assertInternalType` etc.
+* Combined with PHPStan's level 4, it points out always-true and always-false asserts like `assertTrue(true)` etc.
 
 It also contains this strict framework-specific rules (can be enabled separately):
 
@@ -87,10 +85,4 @@ To perform framework-specific checks, include also this file:
 
 ```
 	- vendor/phpstan/phpstan-phpunit/rules.neon
-```
-
-To perform addition strict PHPUnit checks, include also this file:
-
-```
-	- vendor/phpstan/phpstan-phpunit/strictRules.neon
 ```

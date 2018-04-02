@@ -1,4 +1,0 @@
-rules:
-	- PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
-	- PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
-	- PHPStan\Rules\PHPUnit\AssertSameWithCountRule

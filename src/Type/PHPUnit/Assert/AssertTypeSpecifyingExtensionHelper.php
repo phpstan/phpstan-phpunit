@@ -177,6 +177,10 @@ class AssertTypeSpecifyingExtensionHelper
 							$functionName = 'is_bool';
 							break;
 
+						case 'scalar':
+							$functionName = 'is_scalar';
+							break;
+
 						case 'null':
 							$functionName = 'is_null';
 							break;

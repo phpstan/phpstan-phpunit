@@ -7,6 +7,18 @@ parameters:
 
 services:
 	-
+		class: PHPStan\Type\PHPUnit\Assert\AssertFunctionTypeSpecifyingExtension
+		tags:
+			- phpstan.typeSpecifier.functionTypeSpecifyingExtension
+	-
+		class: PHPStan\Type\PHPUnit\Assert\AssertMethodTypeSpecifyingExtension
+		tags:
+			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
+	-
+		class: PHPStan\Type\PHPUnit\Assert\AssertStaticMethodTypeSpecifyingExtension
+		tags:
+			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension
+	-
 		class: PHPStan\Type\PHPUnit\CreateMockDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension

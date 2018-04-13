@@ -28,27 +28,27 @@ class AssertSameStaticMethodDifferentTypesRuleTest extends \PHPStan\Testing\Rule
 	{
 		$this->analyse([__DIR__ . '/data/assert-same.php'], [
 			[
-				'Call to static method PHPUnit\Framework\Assert::assertSame() with string and int(2) will always evaluate to false.',
+				'Call to static method PHPUnit\Framework\Assert::assertSame() with \'1\' and 2 will always evaluate to false.',
 				16,
 			],
 			[
-				'Call to static method PHPUnit\Framework\Assert::assertSame() with string and int(2) will always evaluate to false.',
+				'Call to static method PHPUnit\Framework\Assert::assertSame() with \'1\' and 2 will always evaluate to false.',
 				17,
 			],
 			[
-				'Call to static method PHPUnit\Framework\Assert::assertSame() with string and int(2) will always evaluate to false.',
+				'Call to static method PHPUnit\Framework\Assert::assertSame() with \'1\' and 2 will always evaluate to false.',
 				18,
 			],
 			[
-				'Call to static method PHPUnit\Framework\Assert::assertSame() with int(1) and int(2) will always evaluate to false.',
+				'Call to static method PHPUnit\Framework\Assert::assertSame() with 1 and 2 will always evaluate to false.',
 				53,
 			],
 			[
-				'Call to static method PHPUnit\Framework\Assert::assertSame() with int(1) and int(2) will always evaluate to false.',
+				'Call to static method PHPUnit\Framework\Assert::assertSame() with 1 and 2 will always evaluate to false.',
 				54,
 			],
 			[
-				'Call to static method PHPUnit\Framework\Assert::assertSame() with int(1) and int(2) will always evaluate to false.',
+				'Call to static method PHPUnit\Framework\Assert::assertSame() with 1 and 2 will always evaluate to false.',
 				55,
 			],
 		]);

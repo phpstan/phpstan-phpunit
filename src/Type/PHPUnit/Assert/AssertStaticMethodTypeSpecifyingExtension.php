@@ -24,7 +24,7 @@ class AssertStaticMethodTypeSpecifyingExtension implements StaticMethodTypeSpeci
 
 	public function getClass(): string
 	{
-		return \PHPUnit\Framework\TestCase::class;
+		return \PHPUnit\Framework\Assert::class;
 	}
 
 	public function isStaticMethodSupported(

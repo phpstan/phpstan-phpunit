@@ -68,10 +68,6 @@ class AssertSameMethodDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCa
 				47,
 			],
 			[
-				'Call to method PHPUnit\Framework\Assert::assertSame() with stdClass and stdClass will always evaluate to true.',
-				48,
-			],
-			[
 				'Call to method PHPUnit\Framework\Assert::assertSame() with array(\'a\') and array(\'a\', 1) will always evaluate to false.',
 				51,
 			],

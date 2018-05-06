@@ -11,7 +11,7 @@ class AssertSameStaticMethodDifferentTypesRuleTest extends \PHPStan\Testing\Rule
 
 	protected function getRule(): Rule
 	{
-		return new ImpossibleCheckTypeStaticMethodCallRule(true);
+		return new ImpossibleCheckTypeStaticMethodCallRule($this->getTypeSpecifier(), true);
 	}
 
 	/**

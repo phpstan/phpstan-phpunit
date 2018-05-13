@@ -1,7 +1,7 @@
 includes:
 	- extension.neon
 	- rules.neon
-	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	#- vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
 	excludes_analyse:

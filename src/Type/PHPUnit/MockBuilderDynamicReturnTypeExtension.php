@@ -6,6 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -25,7 +26,9 @@ class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMeth
 	public function getClass(): string
 	{
 		$testCase = $this->broker->getClass(\PHPUnit\Framework\TestCase::class);
-		$mockBuilderType = $testCase->getNativeMethod('getMockBuilder')->getReturnType();
+		$mockBuilderType = ParametersAcceptorSelector::selectSingle(
+			$testCase->getNativeMethod('getMockBuilder')->getVariants()
+		)->getReturnType();
 		if (!$mockBuilderType instanceof TypeWithClassName) {
 			throw new \PHPStan\ShouldNotHappenException();
 		}
@@ -52,13 +55,15 @@ class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMeth
 			return $calledOnType;
 		}
 
+		$parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+
 		if (!$calledOnType instanceof MockBuilderType) {
-			return $methodReflection->getReturnType();
+			return $parametersAcceptor->getReturnType();
 		}
 
 		return TypeCombinator::intersect(
 			new ObjectType($calledOnType->getMockedClass()),
-			$methodReflection->getReturnType()
+			$parametersAcceptor->getReturnType()
 		);
 	}
 

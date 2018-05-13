@@ -5,6 +5,7 @@ namespace PHPStan\Type\PHPUnit;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -24,7 +25,8 @@ class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicM
 
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
 	{
-		$mockBuilderType = $methodReflection->getReturnType();
+		$parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+		$mockBuilderType = $parametersAcceptor->getReturnType();
 		if (count($methodCall->args) === 0) {
 			return $mockBuilderType;
 		}

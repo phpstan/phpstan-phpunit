@@ -28,7 +28,7 @@ class AssertSameNullExpectedRule implements \PHPStan\Rules\Rule
 		if (count($node->args) < 2) {
 			return [];
 		}
-		if (!is_string($node->name) || strtolower($node->name) !== 'assertsame') {
+		if (!$node->name instanceof Node\Identifier || strtolower($node->name->name) !== 'assertsame') {
 			return [];
 		}
 

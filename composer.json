@@ -12,7 +12,8 @@
 	"require": {
 		"php": "~7.1",
 		"phpstan/phpstan": "^0.10",
-		"phpunit/phpunit": "^7.0"
+		"phpunit/phpunit": "^7.0",
+		"nikic/php-parser": "^4.0"
 	},
 	"require-dev": {
 		"consistence/coding-standard": "^3.0.1",

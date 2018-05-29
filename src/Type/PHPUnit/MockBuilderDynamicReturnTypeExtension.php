@@ -25,7 +25,7 @@ class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMeth
 
 	public function getClass(): string
 	{
-		$testCase = $this->broker->getClass(\PHPUnit\Framework\TestCase::class);
+		$testCase = $this->broker->getClass('PHPUnit\Framework\TestCase');
 		$mockBuilderType = ParametersAcceptorSelector::selectSingle(
 			$testCase->getNativeMethod('getMockBuilder')->getVariants()
 		)->getReturnType();

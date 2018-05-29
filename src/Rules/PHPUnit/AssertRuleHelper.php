@@ -11,7 +11,7 @@ class AssertRuleHelper
 
 	public static function isMethodOrStaticCallOnTestCase(Node $node, Scope $scope): bool
 	{
-		$testCaseType = new ObjectType(\PHPUnit\Framework\TestCase::class);
+		$testCaseType = new ObjectType('PHPUnit\Framework\TestCase');
 		if ($node instanceof Node\Expr\MethodCall) {
 			$calledOnType = $scope->getType($node->var);
 		} elseif ($node instanceof Node\Expr\StaticCall) {

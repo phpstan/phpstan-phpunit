@@ -12,7 +12,6 @@
 	"require": {
 		"php": "~7.1",
 		"phpstan/phpstan": "^0.10",
-		"phpunit/phpunit": "^7.0",
 		"nikic/php-parser": "^4.0"
 	},
 	"require-dev": {
@@ -22,7 +21,11 @@
 		"phing/phing": "^2.16.0",
 		"phpstan/phpstan-strict-rules": "^0.10",
 		"satooshi/php-coveralls": "^1.0",
-		"slevomat/coding-standard": "^4.5.2"
+		"slevomat/coding-standard": "^4.5.2",
+		"phpunit/phpunit": "^7.0"
+	},
+	"conflict": {
+		"phpunit/phpunit": "<7.0"
 	},
 	"autoload": {
 		"psr-4": {

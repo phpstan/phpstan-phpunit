@@ -15,7 +15,7 @@ class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicM
 
 	public function getClass(): string
 	{
-		return \PHPUnit\Framework\TestCase::class;
+		return 'PHPUnit\Framework\TestCase';
 	}
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool

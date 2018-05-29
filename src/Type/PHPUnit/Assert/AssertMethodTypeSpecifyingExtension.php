@@ -24,7 +24,7 @@ class AssertMethodTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 
 	public function getClass(): string
 	{
-		return \PHPUnit\Framework\TestCase::class;
+		return 'PHPUnit\Framework\TestCase';
 	}
 
 	public function isMethodSupported(

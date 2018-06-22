@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use PHPStan\Rules\Comparison\ImpossibleCheckTypeHelper;
 use PHPStan\Rules\Comparison\ImpossibleCheckTypeStaticMethodCallRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\PHPUnit\Assert\AssertStaticMethodTypeSpecifyingExtension;
@@ -11,7 +12,7 @@ class AssertSameStaticMethodDifferentTypesRuleTest extends \PHPStan\Testing\Rule
 
 	protected function getRule(): Rule
 	{
-		return new ImpossibleCheckTypeStaticMethodCallRule($this->getTypeSpecifier(), true);
+		return new ImpossibleCheckTypeStaticMethodCallRule(new ImpossibleCheckTypeHelper($this->getTypeSpecifier()), true);
 	}
 
 	/**

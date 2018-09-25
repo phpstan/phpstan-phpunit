@@ -49,6 +49,7 @@ class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMeth
 			[
 				'getMock',
 				'getMockForAbstractClass',
+				'getMockForTrait',
 			],
 			true
 		)) {

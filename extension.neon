@@ -7,6 +7,10 @@ parameters:
 
 services:
 	-
+		class: PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension
+		tags:
+			- phpstan.phpDoc.typeNodeResolverExtension
+	-
 		class: PHPStan\Type\PHPUnit\Assert\AssertFunctionTypeSpecifyingExtension
 		tags:
 			- phpstan.typeSpecifier.functionTypeSpecifyingExtension

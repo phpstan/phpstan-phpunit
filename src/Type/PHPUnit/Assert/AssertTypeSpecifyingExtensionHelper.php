@@ -51,6 +51,10 @@ class AssertTypeSpecifyingExtensionHelper
 			return substr($name, 3);
 		}
 
+		if (strpos($name, 'IsNot') === 0) {
+			return 'Is' . substr($name, 5);
+		}
+
 		return $name;
 	}
 
@@ -147,6 +151,39 @@ class AssertTypeSpecifyingExtensionHelper
 						$actual->value,
 						new \PhpParser\Node\Expr\ConstFetch(new Name('null'))
 					);
+				},
+				'IsArray' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_array'), [$actual]);
+				},
+				'IsBool' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_bool'), [$actual]);
+				},
+				'IsCallable' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_callable'), [$actual]);
+				},
+				'IsFloat' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_float'), [$actual]);
+				},
+				'IsInt' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_int'), [$actual]);
+				},
+				'IsIterable' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_iterable'), [$actual]);
+				},
+				'IsNumeric' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_numeric'), [$actual]);
+				},
+				'IsObject' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_object'), [$actual]);
+				},
+				'IsResource' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_resource'), [$actual]);
+				},
+				'IsString' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_string'), [$actual]);
+				},
+				'IsScalar' => function (Scope $scope, Arg $actual) {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('is_scalar'), [$actual]);
 				},
 				'InternalType' => function (Scope $scope, Arg $type, Arg $value) {
 					$typeType = $scope->getType($type->value);

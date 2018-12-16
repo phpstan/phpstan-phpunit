@@ -41,13 +41,14 @@ class AssertTypeSpecifyingExtensionHelper
 
 	private static function trimName(string $name): string
 	{
-		if (substr($name, 0, strlen('assert')) !== 'assert') {
+		if (strpos($name, 'assert') !== 0) {
 			return $name;
 		}
 
 		$name = substr($name, strlen('assert'));
-		if (substr($name, 0, 3) === 'Not') {
-			$name = substr($name, 3);
+
+		if (strpos($name, 'Not') === 0) {
+			return substr($name, 3);
 		}
 
 		return $name;

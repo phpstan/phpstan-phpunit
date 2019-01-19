@@ -1,18 +1,25 @@
 language: php
+
 php:
   - 7.1
   - 7.2
+
 env:
   - dependencies=lowest
   - dependencies=highest
-before_script:
+
+before_install:
   - composer self-update
+
+install:
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --no-interaction; fi;
   - if [ "$dependencies" = "highest" ]; then composer update --no-interaction; fi;
+
 script:
   - vendor/bin/phing
   - >
     wget https://github.com/maglnet/ComposerRequireChecker/releases/download/0.2.1/composer-require-checker.phar
     && php composer-require-checker.phar check composer.json
+
 after_script:
   - php vendor/bin/coveralls -v

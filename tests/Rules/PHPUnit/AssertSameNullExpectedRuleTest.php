@@ -23,6 +23,10 @@ class AssertSameNullExpectedRuleTest extends \PHPStan\Testing\RuleTestCase
 				'You should use assertNull() instead of assertSame(null, $actual).',
 				13,
 			],
+			[
+				'You should use assertNull() instead of assertSame(null, $actual).',
+				24,
+			],
 		]);
 	}
 

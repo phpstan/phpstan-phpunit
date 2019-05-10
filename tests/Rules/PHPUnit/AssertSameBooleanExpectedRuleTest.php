@@ -31,6 +31,10 @@ class AssertSameBooleanExpectedRuleTest extends \PHPStan\Testing\RuleTestCase
 				'You should use assertFalse() instead of assertSame() when expecting "false"',
 				17,
 			],
+			[
+				'You should use assertTrue() instead of assertSame() when expecting "true"',
+				26,
+			],
 		]);
 	}
 

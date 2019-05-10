@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 class AssertRuleHelper
 {
 
-	public static function isMethodOrStaticCallOnTestCase(Node $node, Scope $scope): bool
+	public static function isMethodOrStaticCallOnAssert(Node $node, Scope $scope): bool
 	{
-		$testCaseType = new ObjectType('PHPUnit\Framework\TestCase');
+		$testCaseType = new ObjectType('PHPUnit\Framework\Assert');
 		if ($node instanceof Node\Expr\MethodCall) {
 			$calledOnType = $scope->getType($node->var);
 		} elseif ($node instanceof Node\Expr\StaticCall) {

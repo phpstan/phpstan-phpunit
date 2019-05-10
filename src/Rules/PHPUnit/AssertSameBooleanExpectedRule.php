@@ -21,7 +21,7 @@ class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
 	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if (!AssertRuleHelper::isMethodOrStaticCallOnTestCase($node, $scope)) {
+		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
 			return [];
 		}
 

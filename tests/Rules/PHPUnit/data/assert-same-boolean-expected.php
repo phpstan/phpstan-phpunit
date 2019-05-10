@@ -21,4 +21,9 @@ class AssertSameBooleanExpectedTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame($a, 'b'); // OK
 	}
 
+	public function testAssertSameIsDetectedWithDirectAssertAccess()
+	{
+		\PHPUnit\Framework\Assert::assertSame(true, 'foo');
+	}
+
 }

@@ -19,4 +19,9 @@ class AssertSameNullExpectedTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame($c, 'foo'); // nullable is OK
 	}
 
+	public function testAssertSameIsDetectedWithDirectAssertAccess()
+	{
+		\PHPUnit\Framework\Assert::assertSame(null, 'foo');
+	}
+
 }

@@ -15,4 +15,9 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame(5, $this->count()); // OK
 	}
 
+	public function testAssertSameIsDetectedWithDirectAssertAccess()
+	{
+		\PHPUnit\Framework\Assert::assertSame(5, count([1, 2, 3]));
+	}
+
 }

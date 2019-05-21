@@ -66,23 +66,31 @@ public function testSomething()
 }
 ```
 
-## Usage
+
+## Installation
 
 To use this extension, require it in [Composer](https://getcomposer.org/):
 
-```bash
+```
 composer require --dev phpstan/phpstan-phpunit
 ```
 
-And include extension.neon in your project's PHPStan config:
+If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
+
+<details>
+  <summary>Manual installation</summary>
+
+If you don't want to use `phpstan/extension-installer`, include extension.neon in your project's PHPStan config:
 
 ```
 includes:
-	- vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
 ```
 
 To perform framework-specific checks, include also this file:
 
 ```
-	- vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
 ```
+
+</details>

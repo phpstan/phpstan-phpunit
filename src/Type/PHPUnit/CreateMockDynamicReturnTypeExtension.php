@@ -22,6 +22,7 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 		'createTestProxy' => 0,
 		'getMockForAbstractClass' => 0,
 		'getMockFromWsdl' => 1,
+		'getMockForTrait' => 0,
 	];
 
 	public function getClass(): string

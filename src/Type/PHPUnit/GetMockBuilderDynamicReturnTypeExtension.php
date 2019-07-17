@@ -4,14 +4,23 @@ namespace PHPStan\Type\PHPUnit;
 
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\Broker;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
-class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension, \PHPStan\Reflection\BrokerAwareExtension
 {
+
+	/** @var \PHPStan\Broker\Broker */
+	private $broker;
+
+	public function setBroker(Broker $broker): void
+	{
+		$this->broker = $broker;
+	}
 
 	public function getClass(): string
 	{
@@ -37,6 +46,9 @@ class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicM
 
 		$class = $argType->getValue();
 
+		if (!$this->broker->hasClass($class)) {
+			return $mockBuilderType;
+		}
 		if (!$mockBuilderType instanceof TypeWithClassName) {
 			throw new \PHPStan\ShouldNotHappenException();
 		}

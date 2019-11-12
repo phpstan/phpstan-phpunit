@@ -2,13 +2,11 @@ includes:
 	- extension.neon
 	- rules.neon
 	- vendor/phpstan/phpstan-strict-rules/rules.neon
-	- vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
 	excludes_analyse:
-		- */tests/*/data/*
-	ignoreErrors:
-		- '~^Parameter \#1 \$node \(.*\) of method .*Rule::processNode\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method PHPStan\\Rules\\Rule::processNode\(\)$~'
+		- tests/*/data/*
 
 services:
 	scopeIsInClass:

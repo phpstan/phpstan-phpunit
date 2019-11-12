@@ -5,6 +5,9 @@ namespace PHPStan\Rules\PHPUnit;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 
+/**
+ * @implements \PHPStan\Rules\Rule<\PhpParser\NodeAbstract>
+ */
 class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 {
 
@@ -13,16 +16,14 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 		return \PhpParser\NodeAbstract::class;
 	}
 
-	/**
-	 * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @return string[] errors
-	 */
 	public function processNode(Node $node, Scope $scope): array
 	{
 		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
 			return [];
 		}
+
+		/** @var \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
+		$node = $node;
 
 		if (count($node->args) < 2) {
 			return [];

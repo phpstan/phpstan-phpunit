@@ -7,6 +7,9 @@ use PHPStan\Rules\Comparison\ImpossibleCheckTypeStaticMethodCallRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\PHPUnit\Assert\AssertStaticMethodTypeSpecifyingExtension;
 
+/**
+ * @extends \PHPStan\Testing\RuleTestCase<ImpossibleCheckTypeStaticMethodCallRule>
+ */
 class AssertSameStaticMethodDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCase
 {
 

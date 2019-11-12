@@ -4,6 +4,9 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
 
+/**
+ * @extends \PHPStan\Testing\RuleTestCase<AssertSameWithCountRule>
+ */
 class AssertSameWithCountRuleTest extends \PHPStan\Testing\RuleTestCase
 {
 

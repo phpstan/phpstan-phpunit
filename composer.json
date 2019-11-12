@@ -23,13 +23,13 @@
 		"nikic/php-parser": "^4.0"
 	},
 	"require-dev": {
-		"consistence/coding-standard": "^3.0.1",
+		"consistence/coding-standard": "^3.5",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
 		"jakub-onderka/php-parallel-lint": "^1.0",
 		"phing/phing": "^2.16.0",
 		"phpstan/phpstan-strict-rules": "^0.12",
 		"satooshi/php-coveralls": "^1.0",
-		"slevomat/coding-standard": "^4.5.2",
+		"slevomat/coding-standard": "^4.7.2",
 		"phpunit/phpunit": "^7.0"
 	},
 	"conflict": {

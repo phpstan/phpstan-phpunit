@@ -4,6 +4,9 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
 
+/**
+ * @extends \PHPStan\Testing\RuleTestCase<AssertSameBooleanExpectedRule>
+ */
 class AssertSameBooleanExpectedRuleTest extends \PHPStan\Testing\RuleTestCase
 {
 

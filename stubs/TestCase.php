@@ -13,6 +13,13 @@ class TestCase
 	 * @param class-string<T> $originalClassName
 	 * @return MockObject&T
 	 */
+	public function createStub($originalClassName) {}
+
+	/**
+	 * @template T
+	 * @param class-string<T> $originalClassName
+	 * @return MockObject&T
+	 */
 	public function createMock($originalClassName) {}
 
 	/**

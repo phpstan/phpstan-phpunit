@@ -75,10 +75,4 @@ class TestCase
 	 */
 	protected function getMockFromWsdl($wsdlFile, $originalClassName = '', $mockClassName = '', array $methods = [], $callOriginalConstructor = true, array $options = []) {}
 
-	/**
-	 * @param class-string<\Throwable> $exception
-	 * @return void
-	 */
-	public function expectException(string $exception) {}
-
 }

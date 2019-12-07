@@ -11,18 +11,18 @@ class MockBuilder
 {
 
 	/**
-	 * @param TestCase $testCase
-	 * @param class-string<TMockedClass> $type
+	 * @phpstan-param TestCase $testCase
+	 * @phpstan-param class-string<TMockedClass> $type
 	 */
 	public function __construct(TestCase $testCase, $type) {}
 
 	/**
-	 * @return MockObject&TMockedClass
+	 * @phpstan-return MockObject&TMockedClass
 	 */
 	public function getMock() {}
 
 	/**
-	 * @return MockObject&TMockedClass
+	 * @phpstan-return MockObject&TMockedClass
 	 */
 	public function getMockForAbstractClass() {}
 

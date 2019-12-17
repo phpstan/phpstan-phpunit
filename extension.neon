@@ -6,6 +6,7 @@ parameters:
 			- markTestSkipped
 	stubFiles:
 		- stubs/MockBuilder.php
+		- stubs/MockObject.php
 		- stubs/TestCase.php
 
 services:

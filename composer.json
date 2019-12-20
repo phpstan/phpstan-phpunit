@@ -24,6 +24,9 @@
 		"satooshi/php-coveralls": "^1.0",
 		"slevomat/coding-standard": "^4.7.2"
 	},
+	"config": {
+		"sort-packages": true
+	},
 	"extra": {
 		"branch-alias": {
 			"dev-master": "0.12-dev"

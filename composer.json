@@ -29,7 +29,8 @@
 		"phpstan/phpstan-strict-rules": "^0.12",
 		"satooshi/php-coveralls": "^1.0",
 		"slevomat/coding-standard": "^4.7.2",
-		"phpunit/phpunit": "^7.0"
+		"phpunit/phpunit": "^7.0",
+		"ergebnis/composer-normalize": "^2.0.2"
 	},
 	"conflict": {
 		"phpunit/phpunit": "<7.0"

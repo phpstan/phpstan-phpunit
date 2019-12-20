@@ -54,6 +54,7 @@ class TestCase
 	/**
 	 * @template T
 	 * @phpstan-param class-string<T> $originalClassName
+	 * @phpstan-param mixed[] $arguments
 	 * @phpstan-param string $mockClassName
 	 * @phpstan-param bool $callOriginalConstructor
 	 * @phpstan-param bool $callOriginalClone
@@ -69,8 +70,9 @@ class TestCase
 	 * @phpstan-param string $wsdlFile
 	 * @phpstan-param class-string<T> $originalClassName
 	 * @phpstan-param string $mockClassName
+	 * @phpstan-param string[] $methods
 	 * @phpstan-param bool $callOriginalConstructor
-	 * @phpstan-param array $options
+	 * @phpstan-param mixed[] $options
 	 * @phpstan-return MockObject&T
 	 */
 	protected function getMockFromWsdl($wsdlFile, $originalClassName = '', $mockClassName = '', array $methods = [], $callOriginalConstructor = true, array $options = []) {}

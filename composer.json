@@ -1,10 +1,29 @@
 {
 	"name": "phpstan/phpstan-phpunit",
-	"description": "PHPUnit extensions and rules for PHPStan",
 	"type": "phpstan-extension",
-	"license": ["MIT"],
-	"minimum-stability": "dev",
-	"prefer-stable": true,
+	"description": "PHPUnit extensions and rules for PHPStan",
+	"license": [
+		"MIT"
+	],
+	"require": {
+		"php": "~7.1",
+		"nikic/php-parser": "^4.0",
+		"phpstan/phpstan": "^0.12"
+	},
+	"conflict": {
+		"phpunit/phpunit": "<7.0"
+	},
+	"require-dev": {
+		"consistence/coding-standard": "^3.5",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+		"ergebnis/composer-normalize": "^2.0.2",
+		"jakub-onderka/php-parallel-lint": "^1.0",
+		"phing/phing": "^2.16.0",
+		"phpstan/phpstan-strict-rules": "^0.12",
+		"phpunit/phpunit": "^7.0",
+		"satooshi/php-coveralls": "^1.0",
+		"slevomat/coding-standard": "^4.7.2"
+	},
 	"extra": {
 		"branch-alias": {
 			"dev-master": "0.12-dev"
@@ -16,31 +35,16 @@
 			]
 		}
 	},
-	"require": {
-		"php": "~7.1",
-		"phpstan/phpstan": "^0.12",
-		"nikic/php-parser": "^4.0"
-	},
-	"require-dev": {
-		"consistence/coding-standard": "^3.5",
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
-		"jakub-onderka/php-parallel-lint": "^1.0",
-		"phing/phing": "^2.16.0",
-		"phpstan/phpstan-strict-rules": "^0.12",
-		"satooshi/php-coveralls": "^1.0",
-		"slevomat/coding-standard": "^4.7.2",
-		"phpunit/phpunit": "^7.0",
-		"ergebnis/composer-normalize": "^2.0.2"
-	},
-	"conflict": {
-		"phpunit/phpunit": "<7.0"
-	},
 	"autoload": {
 		"psr-4": {
 			"PHPStan\\": "src/"
 		}
 	},
 	"autoload-dev": {
-		"classmap": ["tests/"]
-	}
+		"classmap": [
+			"tests/"
+		]
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

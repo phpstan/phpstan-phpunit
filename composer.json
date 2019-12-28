@@ -8,7 +8,7 @@
 	"require": {
 		"php": "~7.1",
 		"nikic/php-parser": "^4.0",
-		"phpstan/phpstan": "^0.12"
+		"phpstan/phpstan": "^0.12.4"
 	},
 	"conflict": {
 		"phpunit/phpunit": "<7.0"

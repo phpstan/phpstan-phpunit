@@ -5,9 +5,9 @@ parameters:
 			- markTestIncomplete
 			- markTestSkipped
 	stubFiles:
-		- stubs/MockBuilder.php
-		- stubs/MockObject.php
-		- stubs/TestCase.php
+		- stubs/MockBuilder.stub
+		- stubs/MockObject.stub
+		- stubs/TestCase.stub
 
 services:
 	-

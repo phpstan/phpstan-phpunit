@@ -56,7 +56,7 @@ protected function setUp()
 {
 	$fooMock = $this->createMock(Foo::class);
 	$fooMock->method('doFoo')->will($this->returnValue('test'));
-	$this->foo = $foo;
+	$this->foo = $fooMock;
 }
 
 public function testSomething()

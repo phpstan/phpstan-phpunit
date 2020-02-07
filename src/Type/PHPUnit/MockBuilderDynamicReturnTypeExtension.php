@@ -5,14 +5,16 @@ namespace PHPStan\Type\PHPUnit;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
+use PHPStan\Reflection\BrokerAwareExtension;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 
-class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension, \PHPStan\Reflection\BrokerAwareExtension
+class MockBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension, BrokerAwareExtension
 {
 
 	/** @var \PHPStan\Broker\Broker */

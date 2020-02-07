@@ -14,12 +14,19 @@ use PHPStan\Node\VirtualNode;
 use PHPStan\PhpDoc\PhpDocNodeResolver;
 use PHPStan\PhpDoc\PhpDocStringResolver;
 use PHPStan\Testing\TestCase;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\FileTypeMapper;
 use PHPStan\Type\VerbosityLevel;
 
 abstract class ExtensionTestCase extends TestCase
 {
 
+	/**
+	 * @param string $file
+	 * @param string $expression
+	 * @param string $type
+	 * @param array<DynamicMethodReturnTypeExtension> $extensions
+	 */
 	protected function processFile(
 		string $file,
 		string $expression,
@@ -27,6 +34,11 @@ abstract class ExtensionTestCase extends TestCase
 		array $extensions
 	): void
 	{
+		foreach ($extensions as $extension) {
+			if (!$extension instanceof DynamicMethodReturnTypeExtension) {
+				throw new \InvalidArgumentException();
+			}
+		}
 		$broker = $this->createBroker($extensions);
 		$parser = $this->getParser();
 		$currentWorkingDirectory = $this->getCurrentWorkingDirectory();

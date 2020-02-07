@@ -8,10 +8,11 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
-class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class GetMockBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
 	public function getClass(): string
@@ -43,7 +44,7 @@ class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicM
 		}
 
 		if ($argType instanceof ConstantArrayType) {
-			$classes = array_map(function (Type $argType): string {
+			$classes = array_map(function (ConstantStringType $argType): string {
 				return $argType->getValue();
 			}, $argType->getValueTypes());
 

@@ -21,7 +21,7 @@ class CreateMockExtensionTest extends ExtensionTestCase
 			__DIR__ . '/data/create-mock.php',
 			$expression,
 			$type,
-			[new CreateMockDynamicReturnTypeExtension(), new GetMockBuilderDynamicReturnTypeExtension()]
+			[new CreateMockDynamicReturnTypeExtension()]
 		);
 	}
 

@@ -2,10 +2,11 @@
 
 namespace PHPStan\Type\PHPUnit;
 
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
 
-class MockBuilderType extends \PHPStan\Type\ObjectType
+class MockBuilderType extends ObjectType
 {
 
 	/** @var array<string> */

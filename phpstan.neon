@@ -7,6 +7,7 @@ includes:
 parameters:
 	excludes_analyse:
 		- tests/*/data/*
+	treatPhpDocTypesAsCertain: false
 
 services:
 	scopeIsInClass:

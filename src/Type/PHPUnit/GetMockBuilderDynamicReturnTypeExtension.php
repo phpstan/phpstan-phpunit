@@ -6,6 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -30,18 +31,26 @@ class GetMockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicM
 		if (count($methodCall->args) === 0) {
 			return $mockBuilderType;
 		}
-		$argType = $scope->getType($methodCall->args[0]->value);
-		if (!$argType instanceof ConstantStringType) {
-			return $mockBuilderType;
-		}
-
-		$class = $argType->getValue();
-
 		if (!$mockBuilderType instanceof TypeWithClassName) {
 			throw new \PHPStan\ShouldNotHappenException();
 		}
 
-		return new MockBuilderType($mockBuilderType, $class);
+		$argType = $scope->getType($methodCall->args[0]->value);
+		if ($argType instanceof ConstantStringType) {
+			$class = $argType->getValue();
+
+			return new MockBuilderType($mockBuilderType, $class);
+		}
+
+		if ($argType instanceof ConstantArrayType) {
+			$classes = array_map(function (Type $argType): string {
+				return $argType->getValue();
+			}, $argType->getValueTypes());
+
+			return new MockBuilderType($mockBuilderType, ...$classes);
+		}
+
+		return $mockBuilderType;
 	}
 
 }

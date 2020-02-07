@@ -8,26 +8,29 @@ use PHPStan\Type\VerbosityLevel;
 class MockBuilderType extends \PHPStan\Type\ObjectType
 {
 
-	/** @var string */
-	private $mockedClass;
+	/** @var array<string> */
+	private $mockedClasses;
 
 	public function __construct(
 		TypeWithClassName $mockBuilderType,
-		string $mockedClass
+		string ...$mockedClasses
 	)
 	{
 		parent::__construct($mockBuilderType->getClassName());
-		$this->mockedClass = $mockedClass;
+		$this->mockedClasses = $mockedClasses;
 	}
 
-	public function getMockedClass(): string
+	/**
+	 * @return array<string>
+	 */
+	public function getMockedClasses(): array
 	{
-		return $this->mockedClass;
+		return $this->mockedClasses;
 	}
 
 	public function describe(VerbosityLevel $level): string
 	{
-		return sprintf('%s<%s>', parent::describe($level), $this->mockedClass);
+		return sprintf('%s<%s>', parent::describe($level), implode('&', $this->mockedClasses));
 	}
 
 }

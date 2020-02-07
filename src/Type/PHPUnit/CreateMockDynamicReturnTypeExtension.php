@@ -6,6 +6,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -31,6 +32,7 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
+		$name = $methodReflection->getName();
 		return array_key_exists($methodReflection->getName(), $this->methods);
 	}
 
@@ -42,15 +44,25 @@ class CreateMockDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 			return $parametersAcceptor->getReturnType();
 		}
 		$argType = $scope->getType($methodCall->args[$argumentIndex]->value);
-		if (!$argType instanceof ConstantStringType) {
+
+		$types = [];
+		if ($argType instanceof ConstantStringType) {
+			$types[] = new ObjectType($argType->getValue());
+		}
+
+		if ($argType instanceof ConstantArrayType) {
+			$types = array_map(function (Type $argType): ObjectType {
+				return new ObjectType($argType->getValue());
+			}, $argType->getValueTypes());
+		}
+
+		if (count($types) === 0) {
 			return $parametersAcceptor->getReturnType();
 		}
 
-		$class = $argType->getValue();
-
 		return TypeCombinator::intersect(
-			new ObjectType($class),
-			$parametersAcceptor->getReturnType()
+			$parametersAcceptor->getReturnType(),
+			...$types
 		);
 	}
 

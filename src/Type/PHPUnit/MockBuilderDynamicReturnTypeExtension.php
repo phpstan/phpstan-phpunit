@@ -60,10 +60,13 @@ class MockBuilderDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMeth
 		if (!$calledOnType instanceof MockBuilderType) {
 			return $parametersAcceptor->getReturnType();
 		}
+		$types = array_map(function (string $type): ObjectType {
+			return new ObjectType($type);
+		}, $calledOnType->getMockedClasses());
 
 		return TypeCombinator::intersect(
-			new ObjectType($calledOnType->getMockedClass()),
-			$parametersAcceptor->getReturnType()
+			$parametersAcceptor->getReturnType(),
+			...$types
 		);
 	}
 

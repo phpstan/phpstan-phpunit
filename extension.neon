@@ -20,10 +20,14 @@ services:
 			- phpstan.typeSpecifier.functionTypeSpecifyingExtension
 	-
 		class: PHPStan\Type\PHPUnit\Assert\AssertMethodTypeSpecifyingExtension
+		arguments:
+			classWithAssertionMethods: PHPUnit\Framework\TestCase
 		tags:
 			- phpstan.typeSpecifier.methodTypeSpecifyingExtension
 	-
 		class: PHPStan\Type\PHPUnit\Assert\AssertStaticMethodTypeSpecifyingExtension
+		arguments:
+			classWithAssertionMethods: PHPUnit\Framework\Assert
 		tags:
 			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension
 	-

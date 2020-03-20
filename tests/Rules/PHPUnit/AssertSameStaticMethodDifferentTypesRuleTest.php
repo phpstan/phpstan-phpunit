@@ -24,7 +24,7 @@ class AssertSameStaticMethodDifferentTypesRuleTest extends \PHPStan\Testing\Rule
 	protected function getStaticMethodTypeSpecifyingExtensions(): array
 	{
 		return [
-			new AssertStaticMethodTypeSpecifyingExtension(),
+			new AssertStaticMethodTypeSpecifyingExtension('PHPUnit\Framework\Assert'),
 		];
 	}
 

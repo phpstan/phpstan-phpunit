@@ -24,7 +24,7 @@ class AssertSameMethodDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCa
 	protected function getMethodTypeSpecifyingExtensions(): array
 	{
 		return [
-			new AssertMethodTypeSpecifyingExtension(),
+			new AssertMethodTypeSpecifyingExtension('PHPUnit\Framework\TestCase'),
 		];
 	}
 

@@ -7,6 +7,7 @@ use PHPStan\PhpDoc\TypeNodeResolverAwareExtension;
 use PHPStan\PhpDoc\TypeNodeResolverExtension;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
@@ -44,7 +45,10 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
 			}
 
 			if (array_key_exists($type->getClassName(), $mockClassNames)) {
-				return \PHPStan\Type\TypeCombinator::intersect(...$types);
+				$resultType = \PHPStan\Type\TypeCombinator::intersect(...$types);
+				if (!$resultType instanceof NeverType) {
+					return $resultType;
+				}
 			}
 		}
 

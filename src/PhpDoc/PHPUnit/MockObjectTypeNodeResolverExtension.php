@@ -46,9 +46,11 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
 
 			if (array_key_exists($type->getClassName(), $mockClassNames)) {
 				$resultType = \PHPStan\Type\TypeCombinator::intersect(...$types);
-				if (!$resultType instanceof NeverType) {
-					return $resultType;
+				if ($resultType instanceof NeverType) {
+					continue;
 				}
+
+				return $resultType;
 			}
 		}
 

@@ -4,6 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\ObjectType;
 
 /**
  * @implements \PHPStan\Rules\Rule<\PhpParser\NodeAbstract>
@@ -42,6 +43,21 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 			return [
 				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
 			];
+		}
+
+		if (
+			$right instanceof Node\Expr\MethodCall
+			&& $right->name instanceof Node\Identifier
+			&& strtolower($right->name->toString()) === 'count'
+			&& count($right->args) === 0
+		) {
+			$type = $scope->getType($right->var);
+
+			if ((new ObjectType(\Countable::class))->isSuperTypeOf($type)->yes()) {
+				return [
+					'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).',
+				];
+			}
 		}
 
 		return [];

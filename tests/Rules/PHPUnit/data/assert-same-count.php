@@ -12,7 +12,9 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 
 	public function testAssertSameWithCountMethodIsOK()
 	{
-		$this->assertSame(5, $this->count()); // OK
+		$foo = new \stdClass();
+
+		$this->assertSame(5, $foo->count()); // OK
 	}
 
 	public function testAssertSameIsDetectedWithDirectAssertAccess()
@@ -20,4 +22,19 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 		\PHPUnit\Framework\Assert::assertSame(5, count([1, 2, 3]));
 	}
 
+	public function testAssertSameWithCountMethodForCountableVariableIsNotOK()
+	{
+		$foo = new \stdClass();
+		$foo->bar = new Bar ();
+
+		$this->assertSame(5, $foo->bar->count());
+	}
+
 }
+
+class Bar implements \Countable {
+	public function count()
+	{
+		return 1;
+	}
+};

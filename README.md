@@ -4,7 +4,7 @@
 [![Latest Stable Version](https://poser.pugx.org/phpstan/phpstan-phpunit/v/stable)](https://packagist.org/packages/phpstan/phpstan-phpunit)
 [![License](https://poser.pugx.org/phpstan/phpstan-phpunit/license)](https://packagist.org/packages/phpstan/phpstan-phpunit)
 
-* [PHPStan](https://github.com/phpstan/phpstan)
+* [PHPStan](https://phpstan.org/)
 * [PHPUnit](https://phpunit.de)
 
 This extension provides following features:

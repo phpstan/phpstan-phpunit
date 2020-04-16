@@ -9,7 +9,7 @@
 
 This extension provides following features:
 
-* `createMock()`, `getMockForAbstractClass()` and `getMockFromWsdl()` methods return an intersection type (see the [detailed explanation of intersection types](https://medium.com/@ondrejmirtes/union-types-vs-intersection-types-fd44a8eacbb)) of the mock object and the mocked class so that both methods from the mock object (like `expects`) and from the mocked class are available on the object.
+* `createMock()`, `getMockForAbstractClass()` and `getMockFromWsdl()` methods return an intersection type (see the [detailed explanation of intersection types](https://phpstan.org/blog/union-types-vs-intersection-types)) of the mock object and the mocked class so that both methods from the mock object (like `expects`) and from the mocked class are available on the object.
 * `getMock()` called on `MockBuilder` is also supported.
 * Interprets `Foo|PHPUnit_Framework_MockObject_MockObject` in phpDoc so that it results in an intersection type instead of a union type.
 * Defines early terminating method calls for the `PHPUnit\Framework\TestCase` class to prevent undefined variable errors.

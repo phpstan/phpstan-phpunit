@@ -24,7 +24,11 @@ class AssertSameWithCountRuleTest extends \PHPStan\Testing\RuleTestCase
 			],
 			[
 				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
-				20,
+				22,
+			],
+			[
+				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).',
+				30,
 			],
 		]);
 	}

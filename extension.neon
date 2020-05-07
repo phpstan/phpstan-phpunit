@@ -5,6 +5,7 @@ parameters:
 			- markTestIncomplete
 			- markTestSkipped
 	stubFiles:
+		- stubs/InvocationMocker.stub
 		- stubs/MockBuilder.stub
 		- stubs/MockObject.stub
 		- stubs/TestCase.stub
@@ -27,6 +28,14 @@ services:
 		tags:
 			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension
 	-
+		class: PHPStan\Type\PHPUnit\InvocationMockerDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: PHPStan\Type\PHPUnit\MockBuilderDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\PHPUnit\MockObjectDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension

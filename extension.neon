@@ -5,9 +5,7 @@ parameters:
 			- markTestIncomplete
 			- markTestSkipped
 	stubFiles:
-		- stubs/MockBuilder.stub
 		- stubs/MockObject.stub
-		- stubs/TestCase.stub
 
 services:
 	-
@@ -26,6 +24,14 @@ services:
 		class: PHPStan\Type\PHPUnit\Assert\AssertStaticMethodTypeSpecifyingExtension
 		tags:
 			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension
+	-
+		class: PHPStan\Type\PHPUnit\CreateMockDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Type\PHPUnit\GetMockBuilderDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
 		class: PHPStan\Type\PHPUnit\MockBuilderDynamicReturnTypeExtension
 		tags:

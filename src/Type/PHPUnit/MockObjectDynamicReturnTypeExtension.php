@@ -9,7 +9,7 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use PHPUnit\Framework\MockObject\InvocationMocker;
+use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class MockObjectDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension

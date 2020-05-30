@@ -8,7 +8,7 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
-use PHPUnit\Framework\MockObject\InvocationMocker;
+use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**

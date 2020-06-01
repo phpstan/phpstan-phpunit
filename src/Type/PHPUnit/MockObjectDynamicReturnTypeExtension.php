@@ -7,6 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
@@ -29,12 +30,16 @@ class MockObjectDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 	{
 		$type = $scope->getType($methodCall->var);
 		if (!($type instanceof IntersectionType)) {
-			return new GenericObjectType(InvocationMocker::class, []);
+			return new ObjectType(InvocationMocker::class);
 		}
 
-		$mockClasses = array_filter($type->getTypes(), function (Type $type): bool {
+		$mockClasses = array_values(array_filter($type->getTypes(), function (Type $type): bool {
 			return !$type instanceof TypeWithClassName || $type->getClassName() !== MockObject::class;
-		});
+		}));
+
+		if (count($mockClasses) !== 1) {
+			return new ObjectType(InvocationMocker::class);
+		}
 
 		return new GenericObjectType(InvocationMocker::class, $mockClasses);
 	}

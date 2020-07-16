@@ -1,4 +1,6 @@
 parameters:
+	additionalConstructors:
+		- PHPUnit\Framework\TestCase::setUp
 	earlyTerminatingMethodCalls:
 		PHPUnit\Framework\TestCase:
 			- fail

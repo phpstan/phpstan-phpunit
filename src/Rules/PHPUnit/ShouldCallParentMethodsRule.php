@@ -21,9 +21,6 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		/** @var InClassMethodNode $node */
-		$node = $node;
-
 		if ($scope->getClassReflection() === null) {
 			return [];
 		}
@@ -42,16 +39,18 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 			return [];
 		}
 
-		if (!in_array(strtolower($node->getOriginalNode()->name->name), ['setup', 'teardown'], true)) {
+		$methodName = $node->getOriginalNode()->name->name;
+
+		if (!in_array(strtolower($methodName), ['setup', 'teardown'], true)) {
 			return [];
 		}
 
-		$hasParentCall = $this->hasParentClassCall($node->getOriginalNode()->getStmts());
+		$hasParentCall = $this->hasParentClassCall($node->getOriginalNode()->getStmts(), strtolower($methodName));
 
 		if (!$hasParentCall) {
 			return [
 				RuleErrorBuilder::message(
-					sprintf('Missing call to parent::%s method.', $node->getOriginalNode()->name->name)
+					sprintf('Missing call to parent::%s() method.', $methodName)
 				)->build(),
 			];
 		}
@@ -61,10 +60,11 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 
 	/**
 	 * @param Node\Stmt[]|null $stmts
+	 * @param string           $methodName
 	 *
 	 * @return bool
 	 */
-	private function hasParentClassCall(?array $stmts): bool
+	private function hasParentClassCall(?array $stmts, string $methodName): bool
 	{
 		if ($stmts === null) {
 			return false;
@@ -93,7 +93,7 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 				continue;
 			}
 
-			if (in_array(strtolower($stmt->expr->name->name), ['setup', 'teardown'], true)) {
+			if (strtolower($stmt->expr->name->name) === $methodName) {
 				return true;
 			}
 		}

@@ -55,7 +55,7 @@ class FooBarBazTest extends BaseTestCase
 	public function setUp(): void
 	{
 		$result = 1 + 1;
-		parent::setUp();
+		parent::tearDown();
 
 		$this->fooBarBaz = $result;
 	}

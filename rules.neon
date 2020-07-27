@@ -1,3 +1,11 @@
+conditionalTags:
+    PHPStan\Rules\PHPUnit\ShouldCallParentMethodsRule:
+        phpstan.rules.rule: %featureToggles.bleedingEdge%
+
+services:
+    -
+        class: PHPStan\Rules\PHPUnit\ShouldCallParentMethodsRule
+
 rules:
 	- PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
 	- PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule

@@ -21,7 +21,8 @@ class ShouldCallParentMethodsRuleTest extends \PHPStan\Testing\RuleTestCase
 			[
 				'Missing call to parent::setUp() method.',
 				32,
-			],[
+			],
+			[
 				'Missing call to parent::setUp() method.',
 				55,
 			],

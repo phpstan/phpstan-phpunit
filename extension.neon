@@ -2,7 +2,7 @@ parameters:
 	additionalConstructors:
 		- PHPUnit\Framework\TestCase::setUp
 	earlyTerminatingMethodCalls:
-		PHPUnit\Framework\TestCase:
+		PHPUnit\Framework\Assert:
 			- fail
 			- markTestIncomplete
 			- markTestSkipped

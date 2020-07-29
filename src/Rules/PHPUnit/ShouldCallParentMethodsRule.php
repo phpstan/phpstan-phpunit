@@ -21,6 +21,10 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
+		$methodName = $node->getOriginalNode()->name->name;
+		if (!in_array(strtolower($methodName), ['setup', 'teardown'], true)) {
+			return [];
+		}
 		if ($scope->getClassReflection() === null) {
 			return [];
 		}
@@ -34,14 +38,12 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 		if ($parentClass === false) {
 			return [];
 		}
-
-		if ($parentClass->getName() === TestCase::class) {
+		if (!$parentClass->hasNativeMethod($methodName)) {
 			return [];
 		}
 
-		$methodName = $node->getOriginalNode()->name->name;
-
-		if (!in_array(strtolower($methodName), ['setup', 'teardown'], true)) {
+		$parentMethod = $parentClass->getNativeMethod($methodName);
+		if ($parentMethod->getDeclaringClass()->getName() === TestCase::class) {
 			return [];
 		}
 

@@ -75,3 +75,18 @@ class NormalClass extends NormalBaseClass
 		return true;
 	}
 }
+
+abstract class BaseTestWithoutSetUp extends TestCase
+{
+
+}
+
+class LoremTest extends BaseTestWithoutSetUp
+{
+
+	protected function setUp(): void
+	{
+		// parent call is not missing here
+	}
+
+}

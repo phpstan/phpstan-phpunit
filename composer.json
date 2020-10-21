@@ -16,10 +16,10 @@
 		"consistence/coding-standard": "^3.10",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
 		"ergebnis/composer-normalize": "^2.0.2",
-		"phing/phing": "^2.16.0",
+		"phing/phing": "^2.16.2",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"phpstan/phpstan-strict-rules": "^0.12",
-		"phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
+		"phpunit/phpunit": "^7.5.18",
 		"satooshi/php-coveralls": "^1.0",
 		"slevomat/coding-standard": "^6.4"
 	},

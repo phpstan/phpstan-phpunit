@@ -1,6 +1,6 @@
 # PHPStan PHPUnit extensions and rules
 
-[![Build Status](https://travis-ci.com/phpstan/phpstan-phpunit.svg?branch=master)](https://travis-ci.com/phpstan/phpstan-phpunit)
+[![Build](https://github.com/phpstan/phpstan-phpunit/workflows/Build/badge.svg)](https://github.com/phpstan/phpstan-phpunit/actions)
 [![Latest Stable Version](https://poser.pugx.org/phpstan/phpstan-phpunit/v/stable)](https://packagist.org/packages/phpstan/phpstan-phpunit)
 [![License](https://poser.pugx.org/phpstan/phpstan-phpunit/license)](https://packagist.org/packages/phpstan/phpstan-phpunit)
 

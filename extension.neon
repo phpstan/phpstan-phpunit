@@ -1,4 +1,6 @@
 parameters:
+	phpunit:
+		convertUnionToIntersectionType: true
 	additionalConstructors:
 		- PHPUnit\Framework\TestCase::setUp
 	earlyTerminatingMethodCalls:
@@ -12,11 +14,14 @@ parameters:
 		- stubs/MockObject.stub
 		- stubs/TestCase.stub
 
+parametersSchema:
+	phpunit: structure([
+		convertUnionToIntersectionType: bool()
+	])
+
 services:
 	-
 		class: PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension
-		tags:
-			- phpstan.phpDoc.typeNodeResolverExtension
 	-
 		class: PHPStan\Type\PHPUnit\Assert\AssertFunctionTypeSpecifyingExtension
 		tags:
@@ -41,3 +46,7 @@ services:
 		class: PHPStan\Type\PHPUnit\MockObjectDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+
+conditionalTags:
+	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:
+		phpstan.phpDoc.typeNodeResolverExtension: %phpunit.convertUnionToIntersectionType%

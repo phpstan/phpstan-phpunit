@@ -14,8 +14,19 @@ use PHPStan\Type\StaticMethodTypeSpecifyingExtension;
 class AssertStaticMethodTypeSpecifyingExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifierAwareExtension
 {
 
+	/** @var class-string */
+	private $classWithAssertionMethods;
+
 	/** @var TypeSpecifier */
 	private $typeSpecifier;
+
+	/**
+	 * @param class-string $classWithAssertionMethods
+	 */
+	public function __construct(string $classWithAssertionMethods)
+	{
+		$this->classWithAssertionMethods = $classWithAssertionMethods;
+	}
 
 	public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
 	{
@@ -24,7 +35,7 @@ class AssertStaticMethodTypeSpecifyingExtension implements StaticMethodTypeSpeci
 
 	public function getClass(): string
 	{
-		return 'PHPUnit\Framework\Assert';
+		return $this->classWithAssertionMethods;
 	}
 
 	public function isStaticMethodSupported(

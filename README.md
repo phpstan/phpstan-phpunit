@@ -94,3 +94,39 @@ To perform framework-specific checks, include also this file:
 ```
 
 </details>
+
+
+## Codeception parameters
+
+This extension works well with [Codeception](https://github.com/Codeception/Codeception) too.
+
+[Unit tests](https://codeception.com/docs/05-UnitTests) are already recognised by default;
+[Functional tests](https://codeception.com/docs/04-FunctionalTests) and
+[Acceptance tests](https://codeception.com/docs/03-AcceptanceTests) instead have to be configured
+manually since assertion classes are generated at runtime with different namespaces and class names.
+
+Here's an example configuration:
+
+```
+services:
+    -
+        class: PHPStan\Type\PHPUnit\Assert\AssertMethodTypeSpecifyingExtension
+        arguments:
+            classWithAssertionMethods: My\CustomNamespace\_support\FunctionalTester
+        tags:
+            - phpstan.typeSpecifier.methodTypeSpecifyingExtension
+    -
+        class: PHPStan\Type\PHPUnit\Assert\AssertStaticMethodTypeSpecifyingExtension
+        arguments:
+            classWithAssertionMethods: My\CustomNamespace\_support\FunctionalTester
+        tags:
+            - phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension
+
+parameters:
+    earlyTerminatingMethodCalls:
+        My\CustomNamespace\_support\FunctionalTester:
+            - fail
+        Codeception\Scenario:
+            - incomplete
+            - skip
+```

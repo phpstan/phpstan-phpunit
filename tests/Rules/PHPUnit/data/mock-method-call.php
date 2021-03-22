@@ -26,6 +26,16 @@ class Foo extends \PHPUnit\Framework\TestCase
 		$bar->method('doBadThing');
 	}
 
+	public function testWithMockBuilder()
+	{
+		$this->getMockBuilder(Bar::class)->getMock()->method('doBadThing');
+	}
+
+	public function testWhenAddingMethod()
+	{
+		$this->getMockBuilder(Bar::class)->setMethods(['doBadThing'])->getMock()->method('doBadThing');
+	}
+
 }
 
 class Bar {

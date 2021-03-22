@@ -26,6 +26,10 @@ class MockMethodCallRuleTest extends \PHPStan\Testing\RuleTestCase
 				'Trying to mock an undefined method doBadThing() on class MockMethodCall\Bar.',
 				20,
 			],
+			[
+				'Trying to mock an undefined method doBadThing() on class MockMethodCall\Bar.',
+				31,
+			],
 		]);
 	}
 

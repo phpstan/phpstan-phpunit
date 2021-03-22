@@ -52,6 +52,12 @@ class MockMethodCallRule implements \PHPStan\Rules\Rule
 				return $class !== MockObject::class;
 			});
 
+			// `MockBuilder::setMethods` and `MockBuilder::addMethods` are not supported by this rule
+			// so since a lot of the usage are with `stdClass`, we silent the error
+			if (\implode('&', $mockClass) === 'stdClass') {
+				return [];
+			}
+
 			return [
 				sprintf(
 					'Trying to mock an undefined method %s() on class %s.',

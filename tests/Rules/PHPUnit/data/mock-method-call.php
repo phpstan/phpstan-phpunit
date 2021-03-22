@@ -31,9 +31,9 @@ class Foo extends \PHPUnit\Framework\TestCase
 		$this->getMockBuilder(Bar::class)->getMock()->method('doBadThing');
 	}
 
-	public function testWhenAddingMethod()
+	public function testWhenAddingMethodToStdClass()
 	{
-		$this->getMockBuilder(Bar::class)->setMethods(['doBadThing'])->getMock()->method('doBadThing');
+		$this->getMockBuilder(\stdClass::class)->setMethods(['doBadThing'])->getMock()->method('doBadThing');
 	}
 
 }

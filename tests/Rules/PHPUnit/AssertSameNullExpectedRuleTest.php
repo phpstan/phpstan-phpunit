@@ -33,4 +33,14 @@ class AssertSameNullExpectedRuleTest extends \PHPStan\Testing\RuleTestCase
 		]);
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [
+			__DIR__ . '/../../../extension.neon',
+		];
+	}
+
 }

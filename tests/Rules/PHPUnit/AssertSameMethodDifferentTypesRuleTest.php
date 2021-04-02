@@ -5,7 +5,6 @@ namespace PHPStan\Rules\PHPUnit;
 use PHPStan\Rules\Comparison\ImpossibleCheckTypeHelper;
 use PHPStan\Rules\Comparison\ImpossibleCheckTypeMethodCallRule;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\PHPUnit\Assert\AssertMethodTypeSpecifyingExtension;
 
 /**
  * @extends \PHPStan\Testing\RuleTestCase<ImpossibleCheckTypeMethodCallRule>
@@ -16,16 +15,6 @@ class AssertSameMethodDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCa
 	protected function getRule(): Rule
 	{
 		return new ImpossibleCheckTypeMethodCallRule(new ImpossibleCheckTypeHelper($this->createBroker(), $this->getTypeSpecifier(), [], true), true, true);
-	}
-
-	/**
-	 * @return \PHPStan\Type\MethodTypeSpecifyingExtension[]
-	 */
-	protected function getMethodTypeSpecifyingExtensions(): array
-	{
-		return [
-			new AssertMethodTypeSpecifyingExtension(),
-		];
 	}
 
 	public function testRule(): void
@@ -72,6 +61,16 @@ class AssertSameMethodDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCa
 				52,
 			],
 		]);
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [
+			__DIR__ . '/../../../extension.neon',
+		];
 	}
 
 }

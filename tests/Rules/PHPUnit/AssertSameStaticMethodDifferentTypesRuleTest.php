@@ -2,7 +2,6 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PHPStan\Rules\Comparison\ImpossibleCheckTypeHelper;
 use PHPStan\Rules\Comparison\ImpossibleCheckTypeStaticMethodCallRule;
 use PHPStan\Rules\Rule;
 
@@ -14,7 +13,7 @@ class AssertSameStaticMethodDifferentTypesRuleTest extends \PHPStan\Testing\Rule
 
 	protected function getRule(): Rule
 	{
-		return new ImpossibleCheckTypeStaticMethodCallRule(new ImpossibleCheckTypeHelper($this->createBroker(), $this->getTypeSpecifier(), [], true), true, true);
+		return self::getContainer()->getByType(ImpossibleCheckTypeStaticMethodCallRule::class);
 	}
 
 	public function testRule(): void
@@ -54,6 +53,7 @@ class AssertSameStaticMethodDifferentTypesRuleTest extends \PHPStan\Testing\Rule
 	{
 		return [
 			__DIR__ . '/../../../extension.neon',
+			__DIR__ . '/../../../vendor/phpstan/phpstan-strict-rules/rules.neon',
 		];
 	}
 

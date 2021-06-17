@@ -10,6 +10,10 @@ class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 	/** @return mixed[] */
 	public function dataFileAsserts(): iterable
 	{
+		if (!function_exists('PHPUnit\\Framework\\assertInstanceOf')) {
+			return [];
+		}
+
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/assert-function.php');
 	}
 

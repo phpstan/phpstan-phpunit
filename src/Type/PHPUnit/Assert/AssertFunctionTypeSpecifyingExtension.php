@@ -29,7 +29,7 @@ class AssertFunctionTypeSpecifyingExtension implements FunctionTypeSpecifyingExt
 	): bool
 	{
 		return AssertTypeSpecifyingExtensionHelper::isSupported(
-			$functionReflection->getName(),
+			$this->trimName($functionReflection->getName()),
 			$node->args
 		);
 	}
@@ -44,9 +44,19 @@ class AssertFunctionTypeSpecifyingExtension implements FunctionTypeSpecifyingExt
 		return AssertTypeSpecifyingExtensionHelper::specifyTypes(
 			$this->typeSpecifier,
 			$scope,
-			$functionReflection->getName(),
+			$this->trimName($functionReflection->getName()),
 			$node->args
 		);
+	}
+
+	private function trimName(string $functionName): string
+	{
+		$prefix = 'PHPUnit\\Framework\\';
+		if (strpos($functionName, $prefix) === 0) {
+			return substr($functionName, strlen($prefix));
+		}
+
+		return $functionName;
 	}
 
 }

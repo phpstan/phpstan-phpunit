@@ -252,6 +252,9 @@ class AssertTypeSpecifyingExtensionHelper
 						]
 					);
 				},
+				'ArrayHasKey' => function (Scope $scope, Arg $key, Arg $array): FuncCall {
+					return new \PhpParser\Node\Expr\FuncCall(new Name('array_key_exists'), [$key, $array]);
+				},
 			];
 		}
 

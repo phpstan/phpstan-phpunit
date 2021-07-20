@@ -33,7 +33,7 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 }
 
 class Bar implements \Countable {
-	public function count()
+	public function count(): int
 	{
 		return 1;
 	}

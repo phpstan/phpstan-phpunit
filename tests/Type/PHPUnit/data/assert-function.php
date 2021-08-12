@@ -4,8 +4,8 @@ namespace AssertFunction;
 
 use function PHPStan\Testing\assertType;
 use function PHPUnit\Framework\assertArrayHasKey;
-use function PHPUnit\Framework\assertArrayNotHasKey;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertObjectHasAttribute;
 
 class Foo
 {
@@ -28,6 +28,12 @@ class Foo
 	{
 		assertArrayHasKey('key', $a);
 		assertType("array&hasOffset('key')", $a);
+	}
+
+	public function objectHasAttribute(object $a): void
+	{
+		assertObjectHasAttribute('property', $a);
+		assertType("object&hasProperty(property)", $a);
 	}
 
 }

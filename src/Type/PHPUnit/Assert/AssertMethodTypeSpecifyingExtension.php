@@ -35,7 +35,7 @@ class AssertMethodTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 	{
 		return AssertTypeSpecifyingExtensionHelper::isSupported(
 			$methodReflection->getName(),
-			$node->args
+			$node->getArgs()
 		);
 	}
 
@@ -50,7 +50,7 @@ class AssertMethodTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
 			$this->typeSpecifier,
 			$scope,
 			$functionReflection->getName(),
-			$node->args
+			$node->getArgs()
 		);
 	}
 

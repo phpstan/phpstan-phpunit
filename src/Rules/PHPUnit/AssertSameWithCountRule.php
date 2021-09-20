@@ -26,14 +26,14 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 		/** @var \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
 		$node = $node;
 
-		if (count($node->args) < 2) {
+		if (count($node->getArgs()) < 2) {
 			return [];
 		}
 		if (!$node->name instanceof Node\Identifier || strtolower($node->name->name) !== 'assertsame') {
 			return [];
 		}
 
-		$right = $node->args[1]->value;
+		$right = $node->getArgs()[1]->value;
 
 		if (
 			$right instanceof Node\Expr\FuncCall
@@ -49,7 +49,7 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 			$right instanceof Node\Expr\MethodCall
 			&& $right->name instanceof Node\Identifier
 			&& strtolower($right->name->toString()) === 'count'
-			&& count($right->args) === 0
+			&& count($right->getArgs()) === 0
 		) {
 			$type = $scope->getType($right->var);
 

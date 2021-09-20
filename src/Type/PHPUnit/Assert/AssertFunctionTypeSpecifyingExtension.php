@@ -30,7 +30,7 @@ class AssertFunctionTypeSpecifyingExtension implements FunctionTypeSpecifyingExt
 	{
 		return AssertTypeSpecifyingExtensionHelper::isSupported(
 			$this->trimName($functionReflection->getName()),
-			$node->args
+			$node->getArgs()
 		);
 	}
 
@@ -45,7 +45,7 @@ class AssertFunctionTypeSpecifyingExtension implements FunctionTypeSpecifyingExt
 			$this->typeSpecifier,
 			$scope,
 			$this->trimName($functionReflection->getName()),
-			$node->args
+			$node->getArgs()
 		);
 	}
 

@@ -31,11 +31,11 @@ class MockMethodCallRule implements \PHPStan\Rules\Rule
 			return [];
 		}
 
-		if (count($node->args) < 1) {
+		if (count($node->getArgs()) < 1) {
 			return [];
 		}
 
-		$argType = $scope->getType($node->args[0]->value);
+		$argType = $scope->getType($node->getArgs()[0]->value);
 		if (!($argType instanceof ConstantStringType)) {
 			return [];
 		}

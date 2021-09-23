@@ -35,7 +35,7 @@ class ShouldCallParentMethodsRule implements \PHPStan\Rules\Rule
 
 		$parentClass = $scope->getClassReflection()->getParentClass();
 
-		if ($parentClass === false) {
+		if ($parentClass === null) {
 			return [];
 		}
 		if (!$parentClass->hasNativeMethod($methodName)) {

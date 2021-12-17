@@ -87,10 +87,8 @@ class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertFileEquals('a', $actualString);
 		$this->assertFileNotEquals('a', $actualString);
 		$this->assertGreaterThan('a', $actualInt);
-		$this->assertInstanceOf('a', $actualInt);
 		$this->assertLessThan('a', $actualInt);
 		$this->assertNotEquals('a', $actualString);
-		$this->assertNotInstanceOf('a', $actualInt);
 		$this->assertNotSame('a', $actualString);
 		$this->assertSame('a', $actualString);
 		$this->assertStringEqualsFile('a', $actualString);
@@ -101,10 +99,8 @@ class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertFileEquals($actualString, 'a');
 		$this->assertFileNotEquals($actualString, 'a');
 		$this->assertGreaterThan($actualInt, 'a');
-		$this->assertInstanceOf($actualString, 'a');
 		$this->assertLessThan($actualInt, 'a');
 		$this->assertNotEquals($actualString, 'a');
-		$this->assertNotInstanceOf($actualString, 'a');
 		$this->assertNotSame($actualString, 'a');
 		$this->assertSame($actualString, 'a');
 		$this->assertStringEqualsFile($actualString, 'a');

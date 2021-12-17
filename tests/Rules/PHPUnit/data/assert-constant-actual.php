@@ -41,6 +41,24 @@ class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame('foo', returnIntegerFunction());
 	}
 
+	public function testAssertionWithConstantBooleanActualIsDetected()
+	{
+		// Incorrect use of a constant boolean for `$actual`.
+		$this->assertSame(true, false);
+
+		$expected = false;
+		$actual = rand(1, 2);
+
+		// Incorrect order for `$expected` and `$actual`.
+		$this->assertSame($actual, $expected);
+
+		// Correct order for `$expected` and `$actual`.
+		$this->assertSame($expected, $actual);
+
+		// Correct use of an boolean result.
+		$this->assertSame('foo', returnBooleanFunction());
+	}
+
 	public function testAssertionWithConstantArrayActualIsDetected()
 	{
 		// Incorrect use of a constant array for `$actual`.
@@ -67,6 +85,10 @@ function returnStringFunction() : string {
 
 function returnIntegerFunction() : int {
 	return 789;
+}
+
+function returnBooleanFunction() : bool {
+	return false;
 }
 
 function returnArrayFunction() : array {

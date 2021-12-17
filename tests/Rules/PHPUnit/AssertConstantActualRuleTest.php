@@ -42,6 +42,14 @@ class AssertConstantActualRuleTest extends \PHPStan\Testing\RuleTestCase
 				'The value of `$actual` should not be a constant',
 				53,
 			],
+			[
+				'The value of `$actual` should not be a constant',
+				65,
+			],
+			[
+				'The value of `$actual` should not be a constant',
+				71,
+			],
 		]);
 	}
 

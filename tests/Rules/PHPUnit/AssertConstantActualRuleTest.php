@@ -51,6 +51,54 @@ class AssertConstantActualRuleTest extends \PHPStan\Testing\RuleTestCase
 				$message,
 				71,
 			],
+			[
+				$message,
+				100,
+			],
+			[
+				$message,
+				101,
+			],
+			[
+				$message,
+				102,
+			],
+			[
+				$message,
+				103,
+			],
+			[
+				$message,
+				104,
+			],
+			[
+				$message,
+				105,
+			],
+			[
+				$message,
+				106,
+			],
+			[
+				$message,
+				107,
+			],
+			[
+				$message,
+				108,
+			],
+			[
+				$message,
+				109,
+			],
+			[
+				$message,
+				110,
+			],
+			[
+				$message,
+				111,
+			],
 		]);
 	}
 

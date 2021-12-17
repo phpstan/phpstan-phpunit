@@ -3,6 +3,7 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ConstantType;
 
@@ -11,6 +12,23 @@ use PHPStan\Type\ConstantType;
  */
 class AssertConstantActualRule implements \PHPStan\Rules\Rule
 {
+
+	/** @var array<int, string> */
+	private static $affectedMethodPrefixes = [
+		'assertEquals',
+		'assertFileEquals',
+		'assertFileNotEquals',
+		'assertGreaterThan',
+		'assertInstanceOf',
+		'assertLessThan',
+		'assertNotEquals',
+		'assertNotInstanceOf',
+		'assertNotSame',
+		'assertObjectEquals',
+		'assertSame',
+		'assertStringEqualsFile',
+		'assertStringNotEqualsFile',
+	];
 
 	public function getNodeType(): string
 	{
@@ -29,7 +47,7 @@ class AssertConstantActualRule implements \PHPStan\Rules\Rule
 		if (count($node->getArgs()) < 2) {
 			return [];
 		}
-		if (!$node->name instanceof Node\Identifier || strpos($node->name->name, 'assert') !== 0) {
+		if (!$node->name instanceof Node\Identifier || !$this->isAffectedMethod($node->name)) {
 			return [];
 		}
 
@@ -42,6 +60,17 @@ class AssertConstantActualRule implements \PHPStan\Rules\Rule
 		return [
 			'The value of `$actual` should not be a constant',
 		];
+	}
+
+	private function isAffectedMethod(Identifier $identifier): bool
+	{
+		foreach (self::$affectedMethodPrefixes as $prefix) {
+			if (strpos($identifier->name, $prefix) === 0) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

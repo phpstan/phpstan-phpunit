@@ -22,7 +22,6 @@ class AssertConstantActualRule implements \PHPStan\Rules\Rule
 		'assertLessThan',
 		'assertNotEquals',
 		'assertNotSame',
-		'assertObjectEquals',
 		'assertSame',
 		'assertStringEqualsFile',
 		'assertStringNotEqualsFile',

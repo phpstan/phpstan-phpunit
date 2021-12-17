@@ -7,6 +7,7 @@ class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 
 	public function testAssertionWithConstantStringActualIsDetected()
 	{
+		// Incorrect use of a constant value for `$actual`.
 		$this->assertSame('a', 'a');
 
 		$expected = 'a';

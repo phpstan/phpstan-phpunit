@@ -20,11 +20,11 @@ class AssertConstantActualRuleTest extends \PHPStan\Testing\RuleTestCase
 		$this->analyse([__DIR__ . '/data/assert-constant-actual.php'], [
 			[
 				'The value of `$actual` should not be a constant',
-				10,
+				11,
 			],
 			[
 				'The value of `$actual` should not be a constant',
-				16,
+				17,
 			],
 		]);
 	}

@@ -5,7 +5,7 @@ namespace ExampleTestCase;
 class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 {
 
-	public function testAssertionWithConstantActualIsDetected()
+	public function testAssertionWithConstantStringActualIsDetected()
 	{
 		$this->assertSame('a', 'a');
 
@@ -19,18 +19,11 @@ class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame($expected, $actual);
 
 		// Correct use of a string result.
-		$this->assertSame('foo', constantActualTestFunction('foo'));
+		$this->assertSame('foo', returnStringFunction());
 	}
 
 }
 
-function constantActualTestFunction(string $type) : string {
-	switch ( $type ) {
-		case 'foo':
-			return 'foo';
-		case 'bar':
-			return 'bar';
-	}
-
+function returnStringFunction() : string {
 	return 'baz';
 }

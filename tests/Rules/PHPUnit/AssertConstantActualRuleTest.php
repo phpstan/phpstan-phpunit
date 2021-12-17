@@ -17,37 +17,38 @@ class AssertConstantActualRuleTest extends \PHPStan\Testing\RuleTestCase
 
 	public function testRule(): void
 	{
+		$message = 'The value of `$actual` should not be a constant';
 		$this->analyse([__DIR__ . '/data/assert-constant-actual.php'], [
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				11,
 			],
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				17,
 			],
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				29,
 			],
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				35,
 			],
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				47,
 			],
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				53,
 			],
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				65,
 			],
 			[
-				'The value of `$actual` should not be a constant',
+				$message,
 				71,
 			],
 		]);

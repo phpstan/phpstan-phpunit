@@ -29,13 +29,13 @@ class AssertConstantActualRule implements \PHPStan\Rules\Rule
 		if (count($node->getArgs()) < 2) {
 			return [];
 		}
-		if (!$node->name instanceof Node\Identifier || strpos($node->name->name, 'assert') !== 0 ) {
+		if (!$node->name instanceof Node\Identifier || strpos($node->name->name, 'assert') !== 0) {
 			return [];
 		}
 
 		$actualType = $scope->getType($node->getArgs()[1]->value);
 
-		if (!$actualType instanceof ConstantType ) {
+		if (!$actualType instanceof ConstantType) {
 			return [];
 		}
 

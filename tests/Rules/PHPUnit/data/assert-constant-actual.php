@@ -10,7 +10,7 @@ class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame('a', 'a');
 
 		$expected = 'a';
-		$actual = $_GET['a'];
+		$actual = rand(1, 2);
 
 		// Incorrect order for `$expected` and `$actual`.
 		$this->assertSame($actual, $expected);

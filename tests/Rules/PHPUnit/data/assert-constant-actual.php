@@ -17,6 +17,20 @@ class AssertWithConstantActualTestCase extends \PHPUnit\Framework\TestCase
 
 		// Correct order for `$expected` and `$actual`.
 		$this->assertSame($expected, $actual);
+
+		// Correct use of a string result.
+		$this->assertSame('foo', constantActualTestFunction('foo'));
 	}
 
+}
+
+function constantActualTestFunction(string $type) : string {
+	switch ( $type ) {
+		case 'foo':
+			return 'foo';
+		case 'bar':
+			return 'bar';
+	}
+
+	return 'baz';
 }

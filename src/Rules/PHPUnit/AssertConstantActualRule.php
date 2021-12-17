@@ -4,8 +4,6 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\ConstantType;
 
 /**
@@ -37,7 +35,7 @@ class AssertConstantActualRule implements \PHPStan\Rules\Rule
 
 		$actualType = $scope->getType($node->getArgs()[1]->value);
 
-		if (!$actualType instanceof ConstantScalarType ) {
+		if (!$actualType instanceof ConstantType ) {
 			return [];
 		}
 

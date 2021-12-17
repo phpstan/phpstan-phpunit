@@ -18,6 +18,7 @@ This extension provides following features:
 
 It also contains this strict framework-specific rules (can be enabled separately):
 
+* Check that you are not using a constant value in the `$actual` parameter of assertions. This helps protect against accidental reversal of `$expected` and `$actual`.
 * Check that you are not using `assertSame()` with `true` as expected value. `assertTrue()` should be used instead.
 * Check that you are not using `assertSame()` with `false` as expected value. `assertFalse()` should be used instead.
 * Check that you are not using `assertSame()` with `null` as expected value. `assertNull()` should be used instead.

@@ -5,6 +5,7 @@ namespace PHPStan\Type\PHPUnit;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
@@ -12,8 +13,11 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
+use function array_filter;
+use function array_values;
+use function count;
 
-class MockObjectDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
+class MockObjectDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
 	public function getClass(): string
@@ -33,7 +37,7 @@ class MockObjectDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMetho
 			return new ObjectType(InvocationMocker::class);
 		}
 
-		$mockClasses = array_values(array_filter($type->getTypes(), function (Type $type): bool {
+		$mockClasses = array_values(array_filter($type->getTypes(), static function (Type $type): bool {
 			return !$type instanceof TypeWithClassName || $type->getClassName() !== MockObject::class;
 		}));
 

@@ -3,11 +3,12 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
 
 /**
- * @extends \PHPStan\Testing\RuleTestCase<MockMethodCallRule>
+ * @extends RuleTestCase<MockMethodCallRule>
  */
-class MockMethodCallRuleTest extends \PHPStan\Testing\RuleTestCase
+class MockMethodCallRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

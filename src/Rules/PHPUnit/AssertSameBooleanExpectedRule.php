@@ -3,18 +3,24 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use function count;
+use function strtolower;
 
 /**
- * @implements \PHPStan\Rules\Rule<\PhpParser\NodeAbstract>
+ * @implements Rule<NodeAbstract>
  */
-class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
+class AssertSameBooleanExpectedRule implements Rule
 {
 
 	public function getNodeType(): string
 	{
-		return \PhpParser\NodeAbstract::class;
+		return NodeAbstract::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array
@@ -23,7 +29,7 @@ class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
 			return [];
 		}
 
-		/** @var \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
+		/** @var MethodCall|StaticCall $node */
 		$node = $node;
 
 		if (count($node->getArgs()) < 2) {

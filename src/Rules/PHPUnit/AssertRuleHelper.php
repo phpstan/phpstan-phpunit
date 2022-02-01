@@ -5,6 +5,8 @@ namespace PHPStan\Rules\PHPUnit;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
+use function in_array;
+use function strtolower;
 
 class AssertRuleHelper
 {

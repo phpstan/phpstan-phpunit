@@ -3,6 +3,7 @@
 namespace PHPStan\Type\PHPUnit;
 
 use PHPStan\Testing\TypeInferenceTestCase;
+use function function_exists;
 
 class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 {
@@ -19,8 +20,6 @@ class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 
 	/**
 	 * @dataProvider dataFileAsserts
-	 * @param string $assertType
-	 * @param string $file
 	 * @param mixed ...$args
 	 */
 	public function testFileAsserts(

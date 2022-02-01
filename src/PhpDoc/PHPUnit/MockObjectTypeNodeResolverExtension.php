@@ -2,6 +2,7 @@
 
 namespace PHPStan\PhpDoc\PHPUnit;
 
+use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDoc\TypeNodeResolverAwareExtension;
 use PHPStan\PhpDoc\TypeNodeResolverExtension;
@@ -9,7 +10,9 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
+use function array_key_exists;
 
 class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeNodeResolverAwareExtension
 {
@@ -27,7 +30,7 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
 		return 'phpunit-v1';
 	}
 
-	public function resolve(TypeNode $typeNode, \PHPStan\Analyser\NameScope $nameScope): ?Type
+	public function resolve(TypeNode $typeNode, NameScope $nameScope): ?Type
 	{
 		if (!$typeNode instanceof UnionTypeNode) {
 			return null;
@@ -45,7 +48,7 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
 			}
 
 			if (array_key_exists($type->getClassName(), $mockClassNames)) {
-				$resultType = \PHPStan\Type\TypeCombinator::intersect(...$types);
+				$resultType = TypeCombinator::intersect(...$types);
 				if ($resultType instanceof NeverType) {
 					continue;
 				}

@@ -4,11 +4,12 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Comparison\ImpossibleCheckTypeMethodCallRule;
 use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
 
 /**
- * @extends \PHPStan\Testing\RuleTestCase<ImpossibleCheckTypeMethodCallRule>
+ * @extends RuleTestCase<ImpossibleCheckTypeMethodCallRule>
  */
-class AssertSameMethodDifferentTypesRuleTest extends \PHPStan\Testing\RuleTestCase
+class AssertSameMethodDifferentTypesRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

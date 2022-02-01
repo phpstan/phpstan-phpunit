@@ -3,11 +3,12 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
 
 /**
- * @extends \PHPStan\Testing\RuleTestCase<ShouldCallParentMethodsRule>
+ * @extends RuleTestCase<ShouldCallParentMethodsRule>
  */
-class ShouldCallParentMethodsRuleTest extends \PHPStan\Testing\RuleTestCase
+class ShouldCallParentMethodsRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

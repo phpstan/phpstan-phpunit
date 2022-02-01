@@ -3,18 +3,25 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
+use function array_filter;
+use function count;
+use function implode;
+use function in_array;
+use function sprintf;
 
 /**
- * @implements \PHPStan\Rules\Rule<\PhpParser\Node\Expr\MethodCall>
+ * @implements Rule<MethodCall>
  */
-class MockMethodCallRule implements \PHPStan\Rules\Rule
+class MockMethodCallRule implements Rule
 {
 
 	public function getNodeType(): string
@@ -48,7 +55,7 @@ class MockMethodCallRule implements \PHPStan\Rules\Rule
 			&& in_array(MockObject::class, $type->getReferencedClasses(), true)
 			&& !$type->hasMethod($method)->yes()
 		) {
-			$mockClass = array_filter($type->getReferencedClasses(), function (string $class): bool {
+			$mockClass = array_filter($type->getReferencedClasses(), static function (string $class): bool {
 				return $class !== MockObject::class;
 			});
 
@@ -56,7 +63,7 @@ class MockMethodCallRule implements \PHPStan\Rules\Rule
 				sprintf(
 					'Trying to mock an undefined method %s() on class %s.',
 					$method,
-					\implode('&', $mockClass)
+					implode('&', $mockClass)
 				),
 			];
 		}

@@ -2,19 +2,26 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use Countable;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 use PHPStan\Type\ObjectType;
+use function count;
+use function strtolower;
 
 /**
- * @implements \PHPStan\Rules\Rule<\PhpParser\NodeAbstract>
+ * @implements Rule<NodeAbstract>
  */
-class AssertSameWithCountRule implements \PHPStan\Rules\Rule
+class AssertSameWithCountRule implements Rule
 {
 
 	public function getNodeType(): string
 	{
-		return \PhpParser\NodeAbstract::class;
+		return NodeAbstract::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array
@@ -23,7 +30,7 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 			return [];
 		}
 
-		/** @var \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
+		/** @var MethodCall|StaticCall $node */
 		$node = $node;
 
 		if (count($node->getArgs()) < 2) {
@@ -53,7 +60,7 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
 		) {
 			$type = $scope->getType($right->var);
 
-			if ((new ObjectType(\Countable::class))->isSuperTypeOf($type)->yes()) {
+			if ((new ObjectType(Countable::class))->isSuperTypeOf($type)->yes()) {
 				return [
 					'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).',
 				];

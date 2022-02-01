@@ -3,11 +3,12 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
 
 /**
- * @extends \PHPStan\Testing\RuleTestCase<AssertSameNullExpectedRule>
+ * @extends RuleTestCase<AssertSameNullExpectedRule>
  */
-class AssertSameNullExpectedRuleTest extends \PHPStan\Testing\RuleTestCase
+class AssertSameNullExpectedRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

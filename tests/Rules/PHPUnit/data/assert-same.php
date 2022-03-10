@@ -68,6 +68,7 @@ class FooTestCase extends \PHPUnit\Framework\TestCase
 	public function testStaticMethodReturnWithSameTypeIsNotReported()
 	{
 		$this->assertSame(self::createSomething('foo'), self::createSomething('foo'));
+		$this->assertNotSame(self::createSomething('bar'), self::createSomething('bar'));
 	}
 
 	/**

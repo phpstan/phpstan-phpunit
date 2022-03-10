@@ -65,4 +65,17 @@ class FooTestCase extends \PHPUnit\Framework\TestCase
 		$foo->assertSame();
 	}
 
+	public function testStaticMethodReturnWithSameTypeIsNotReported()
+	{
+		$this->assertSame(self::createSomething('foo'), self::createSomething('foo'));
+	}
+
+	/**
+	 * @return object
+	 */
+	private static function createSomething(string $what)
+	{
+		return new \stdClass();
+	}
+
 }

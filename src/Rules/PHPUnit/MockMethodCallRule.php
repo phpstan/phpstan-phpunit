@@ -12,6 +12,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use function array_filter;
 use function count;
 use function implode;
@@ -52,11 +53,14 @@ class MockMethodCallRule implements Rule
 
 		if (
 			$type instanceof IntersectionType
-			&& in_array(MockObject::class, $type->getReferencedClasses(), true)
+			&& (
+				in_array(MockObject::class, $type->getReferencedClasses(), true)
+				|| in_array(Stub::class, $type->getReferencedClasses(), true)
+			)
 			&& !$type->hasMethod($method)->yes()
 		) {
 			$mockClass = array_filter($type->getReferencedClasses(), static function (string $class): bool {
-				return $class !== MockObject::class;
+				return $class !== MockObject::class && $class !== Stub::class;
 			});
 
 			return [

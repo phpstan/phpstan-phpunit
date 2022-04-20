@@ -25,23 +25,11 @@ class AssertSameNullExpectedRuleTest extends RuleTestCase
 			],
 			[
 				'You should use assertNull() instead of assertSame(null, $actual).',
-				13,
-			],
-			[
-				'You should use assertNull() instead of assertSame(null, $actual).',
 				24,
 			],
 			[
 				'You should use assertNull() instead of assertSame(null, $actual).',
-				29,
-			],
-			[
-				'You should use assertNull() instead of assertSame(null, $actual).',
-				36,
-			],
-			[
-				'You should use assertNull() instead of assertSame(null, $actual).',
-				54,
+				60,
 			],
 		]);
 	}

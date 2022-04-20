@@ -11,10 +11,10 @@ class AssertSameBooleanExpectedTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame(false, 'a');
 
 		$truish = true;
-		$this->assertSame($truish, true);
+		$this->assertSame($truish, true); // using variable is OK
 
 		$falsish = false;
-		$this->assertSame($falsish, false);
+		$this->assertSame($falsish, false); // using variable is OK
 
 		/** @var bool $a */
 		$a = null;
@@ -67,6 +67,12 @@ class AssertSameBooleanExpectedTestCase extends \PHPUnit\Framework\TestCase
 		\PHPUnit\Framework\Assert::assertSame($this->returnTrue(), 'foo');
 		\PHPUnit\Framework\Assert::assertSame($this->returnFalse(), 'foo');
 		\PHPUnit\Framework\Assert::assertSame($this->returnBool(), 'foo');
+	}
+
+	public function testNonLowercase(): void
+	{
+		\PHPUnit\Framework\Assert::assertSame(True, 'foo');
+		\PHPUnit\Framework\Assert::assertSame(False, 'foo');
 	}
 
 }

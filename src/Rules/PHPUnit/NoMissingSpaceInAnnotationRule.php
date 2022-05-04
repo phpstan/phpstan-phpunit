@@ -69,6 +69,7 @@ class NoMissingSpaceInAnnotationRule implements Rule
 				continue; // Line without annotation
 			}
 
+			/** @var array{property: string, whitespace: string, value: string} $matches */
 			if (in_array($matches['property'], self::ANNOTATIONS_WITH_PARAMS, true) && $matches['whitespace'] === '') {
 				$errors[] = 'Annotation "' . $matches[0] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.';
 			}

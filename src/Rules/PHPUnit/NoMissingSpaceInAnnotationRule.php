@@ -68,17 +68,17 @@ class NoMissingSpaceInAnnotationRule implements Rule
 
 		foreach ($docCommentLines as $docCommentLine) {
 			// These annotations can't be retrieved using the getResolvedPhpDoc method on the FileTypeMapper as they are not present when they are invalid
-			$annotation = preg_match('/@(?<property>[a-zA-Z]+)(?<whitespace>\s*)(?<value>.*)/', $docCommentLine, $matches);
+			$annotation = preg_match('/(?<annotation>@(?<property>[a-zA-Z]+)(?<whitespace>\s*)(?<value>.*))/', $docCommentLine, $matches);
 			if ($annotation === false) {
 				continue; // Line without annotation
 			}
 
-			/** @var array{property: string, whitespace: string, value: string} $matches */
+			/** @var array{property: string, whitespace: string, value: string, annotation: string} $matches */
 			if (!in_array($matches['property'], self::ANNOTATIONS_WITH_PARAMS, true) || $matches['whitespace'] !== '') {
 				continue;
 			}
 
-			$errors[] = 'Annotation "' . $matches[0] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.';
+			$errors[] = 'Annotation "' . $matches['annotation'] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.';
 		}
 
 		return $errors;

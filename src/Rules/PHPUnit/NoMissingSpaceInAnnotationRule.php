@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\TestCase;
+use function array_key_exists;
 use function in_array;
 use function is_subclass_of;
 use function preg_match;

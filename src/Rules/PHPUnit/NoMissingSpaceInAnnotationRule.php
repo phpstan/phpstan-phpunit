@@ -57,7 +57,12 @@ class NoMissingSpaceInAnnotationRule implements Rule
 		}
 
 		$errors = [];
-		foreach (preg_split("/((\r?\n)|(\r\n?))/", $docComment->getText()) as $docCommentLine) {
+		$docCommentLines = preg_split("/((\r?\n)|(\r\n?))/", $docComment->getText());
+		if ($docCommentLines === false) {
+			return [];
+		}
+
+		foreach ($docCommentLines as $docCommentLine) {
 			// These annotations can't be retrieved using the getResolvedPhpDoc method on the FileTypeMapper as they are not present when they are invalid
 			$annotation = preg_match('/@(?<property>[a-zA-Z]+)(?<whitespace>\s*)(?<value>.*)/', $docCommentLine, $matches);
 			if ($annotation === false) {

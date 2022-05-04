@@ -1,9 +1,7 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
-namespace Rules\PHPUnit;
+namespace PHPStan\Rules\PHPUnit;
 
-use PHPStan\Rules\PHPUnit\NoMissingSpaceInAnnotationRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
@@ -124,7 +122,7 @@ class NoMissingSpaceInAnnotationRuleTest extends RuleTestCase
 			[
 				'Annotation "@uses" is invalid, "@uses" should be followed by a space and a value.',
 				113,
-			]
+			],
 		]);
 	}
 
@@ -137,4 +135,5 @@ class NoMissingSpaceInAnnotationRuleTest extends RuleTestCase
 			__DIR__ . '/../../../extension.neon',
 		];
 	}
+
 }

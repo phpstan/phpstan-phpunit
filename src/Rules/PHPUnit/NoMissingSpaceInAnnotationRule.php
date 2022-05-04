@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace PHPStan\Rules\PHPUnit;
 
@@ -7,12 +6,17 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\TestCase;
+use function in_array;
+use function is_subclass_of;
+use function preg_match;
+use function preg_split;
 
 /**
  * @implements Rule<Node>
  */
 class NoMissingSpaceInAnnotationRule implements Rule
 {
+
 	private const ANNOTATIONS_WITH_PARAMS = [
 		'backupGlobals',
 		'backupStaticAttributes',
@@ -26,7 +30,7 @@ class NoMissingSpaceInAnnotationRule implements Rule
 		'testDox',
 		'testWith',
 		'ticket',
-		'uses'
+		'uses',
 	];
 
 	public function getNodeType(): string
@@ -70,11 +74,14 @@ class NoMissingSpaceInAnnotationRule implements Rule
 			}
 
 			/** @var array{property: string, whitespace: string, value: string} $matches */
-			if (in_array($matches['property'], self::ANNOTATIONS_WITH_PARAMS, true) && $matches['whitespace'] === '') {
-				$errors[] = 'Annotation "' . $matches[0] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.';
+			if (!in_array($matches['property'], self::ANNOTATIONS_WITH_PARAMS, true) || $matches['whitespace'] !== '') {
+				continue;
 			}
+
+			$errors[] = 'Annotation "' . $matches[0] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.';
 		}
 
 		return $errors;
 	}
+
 }

@@ -73,7 +73,10 @@ class NoMissingSpaceInAnnotationRule implements Rule
 				continue; // Line without annotation
 			}
 
-			/** @var array{property: string, whitespace: string, value: string, annotation: string} $matches */
+			if (array_key_exists('property', $matches) === false || array_key_exists('whitespace', $matches) === false || array_key_exists('annotation', $matches) === false) {
+				continue;
+			}
+
 			if (!in_array($matches['property'], self::ANNOTATIONS_WITH_PARAMS, true) || $matches['whitespace'] !== '') {
 				continue;
 			}

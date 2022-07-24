@@ -4,3 +4,13 @@ rules:
 	- PHPStan\Rules\PHPUnit\AssertSameWithCountRule
 	- PHPStan\Rules\PHPUnit\MockMethodCallRule
 	- PHPStan\Rules\PHPUnit\ShouldCallParentMethodsRule
+
+services:
+	- class: PHPStan\Rules\PHPUnit\ClassCoversExistsRule
+	- class: PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule
+
+conditionalTags:
+	PHPStan\Rules\PHPUnit\ClassCoversExistsRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
+	PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%

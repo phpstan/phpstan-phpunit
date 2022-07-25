@@ -45,6 +45,10 @@ class ClassMethodCoversExistsRuleTest extends RuleTestCase
 				'@covers value ::assertNotReal references an invalid method.',
 				62,
 			],
+			[
+				'Class already @covers \PHPUnit\Framework\TestCase so the method @covers is redundant.',
+				85,
+			],
 		]);
 	}
 

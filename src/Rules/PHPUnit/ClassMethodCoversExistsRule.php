@@ -4,13 +4,16 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
+use function array_map;
 use function array_merge;
 use function array_shift;
 use function count;
+use function in_array;
 use function sprintf;
 
 /**
@@ -61,7 +64,11 @@ class ClassMethodCoversExistsRule implements Rule
 
 		$errors = [];
 		$classPhpDoc = $classReflection->getResolvedPhpDoc();
-		[, $classCoversDefaultClasses] = $this->coversHelper->getCoverAnnotations($classPhpDoc);
+		[$classCovers, $classCoversDefaultClasses] = $this->coversHelper->getCoverAnnotations($classPhpDoc);
+
+		$classCoversStrings = array_map(static function (PhpDocTagNode $covers): string {
+			return (string) $covers->value;
+		}, $classCovers);
 
 		$docComment = $node->getDocComment();
 		if ($docComment === null) {
@@ -92,6 +99,13 @@ class ClassMethodCoversExistsRule implements Rule
 		}
 
 		foreach ($methodCovers as $covers) {
+			if (in_array((string) $covers->value, $classCoversStrings, true)) {
+				$errors[] = RuleErrorBuilder::message(sprintf(
+					'Class already @covers %s so the method @covers is redundant.',
+					$covers->value
+				))->build();
+			}
+
 			$errors = array_merge(
 				$errors,
 				$this->coversHelper->processCovers($node, $covers, $coversDefaultClass)

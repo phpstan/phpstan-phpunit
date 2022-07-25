@@ -71,6 +71,17 @@ class CoversShouldExistTestCase2 extends \PHPUnit\Framework\TestCase
  */
 class MultipleCoversDefaultClass extends \PHPUnit\Framework\TestCase
 {
+}
 
+/**
+ * @covers \PHPUnit\Framework\TestCase
+ */
+class CoversShouldExistTestCase3 extends \PHPUnit\Framework\TestCase
+{
+
+	/**
+	 * @covers \PHPUnit\Framework\TestCase
+	 */
+	public function testBadCoversDefault() {}
 
 }

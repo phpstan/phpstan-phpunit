@@ -50,11 +50,7 @@ class ClassCoversExistsRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		$classReflection = $scope->getClassReflection();
-
-		if ($classReflection === null) {
-			return [];
-		}
+		$classReflection = $node->getClassReflection();
 
 		if (!$classReflection->isSubclassOf(TestCase::class)) {
 			return [];

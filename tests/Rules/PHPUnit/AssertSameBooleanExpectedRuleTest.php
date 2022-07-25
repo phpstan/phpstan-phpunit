@@ -29,15 +29,15 @@ class AssertSameBooleanExpectedRuleTest extends RuleTestCase
 			],
 			[
 				'You should use assertTrue() instead of assertSame() when expecting "true"',
-				14,
-			],
-			[
-				'You should use assertFalse() instead of assertSame() when expecting "false"',
-				17,
+				26,
 			],
 			[
 				'You should use assertTrue() instead of assertSame() when expecting "true"',
-				26,
+				74,
+			],
+			[
+				'You should use assertFalse() instead of assertSame() when expecting "false"',
+				75,
 			],
 		]);
 	}

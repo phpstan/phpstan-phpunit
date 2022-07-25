@@ -4,6 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use function interface_exists;
 
 /**
  * @extends RuleTestCase<MockMethodCallRule>
@@ -18,7 +19,7 @@ class MockMethodCallRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
-		$this->analyse([__DIR__ . '/data/mock-method-call.php'], [
+		$expectedErrors = [
 			[
 				'Trying to mock an undefined method doBadThing() on class MockMethodCall\Bar.',
 				15,
@@ -27,7 +28,16 @@ class MockMethodCallRuleTest extends RuleTestCase
 				'Trying to mock an undefined method doBadThing() on class MockMethodCall\Bar.',
 				20,
 			],
-		]);
+		];
+
+		if (interface_exists('PHPUnit\Framework\MockObject\Builder\InvocationStubber')) {
+			$expectedErrors[] = [
+				'Trying to mock an undefined method doBadThing() on class MockMethodCall\Bar.',
+				36,
+			];
+		}
+
+		$this->analyse([__DIR__ . '/data/mock-method-call.php'], $expectedErrors);
 	}
 
 	/**

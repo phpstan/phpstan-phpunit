@@ -26,6 +26,16 @@ class Foo extends \PHPUnit\Framework\TestCase
 		$bar->method('doBadThing');
 	}
 
+	public function testGoodMethodOnStub()
+	{
+		$this->createStub(Bar::class)->method('doThing');
+	}
+
+	public function testBadMethodOnStub()
+	{
+		$this->createStub(Bar::class)->method('doBadThing');
+	}
+
 }
 
 class Bar {

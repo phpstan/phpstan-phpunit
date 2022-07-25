@@ -39,6 +39,7 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
 		static $mockClassNames = [
 			'PHPUnit_Framework_MockObject_MockObject' => true,
 			'PHPUnit\Framework\MockObject\MockObject' => true,
+			'PHPUnit\Framework\MockObject\Stub' => true,
 		];
 
 		$types = $this->typeNodeResolver->resolveMultiple($typeNode->types, $nameScope);

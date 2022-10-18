@@ -46,7 +46,7 @@ class NoMissingSpaceInAnnotationRule implements Rule
 		}
 
 		if ($node instanceof Node\Stmt\Class_) {
-			if (is_subclass_of($node->namespacedName->toString(), TestCase::class) === false) {
+			if ($node->namespacedName !== null && is_a($node->namespacedName->toString(), TestCase::class, true)) {
 				return [];
 			}
 		} else {

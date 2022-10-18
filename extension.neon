@@ -51,6 +51,8 @@ services:
 		class: PHPStan\Type\PHPUnit\MockObjectDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
+		class: PHPStan\Rules\PHPUnit\CoversHelper
 
 conditionalTags:
 	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:

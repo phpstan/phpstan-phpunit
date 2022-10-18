@@ -4,11 +4,11 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\TestCase;
 use function array_key_exists;
 use function in_array;
-use function is_subclass_of;
 use function preg_match;
 use function preg_split;
 
@@ -34,6 +34,18 @@ class NoMissingSpaceInAnnotationRule implements Rule
 		'uses',
 	];
 
+	/**
+	 * Reflection provider.
+	 *
+	 * @var ReflectionProvider
+	 */
+	private $reflectionProvider;
+
+	public function __construct(ReflectionProvider $reflectionProvider)
+	{
+		$this->reflectionProvider = $reflectionProvider;
+	}
+
 	public function getNodeType(): string
 	{
 		return Node::class;
@@ -46,7 +58,7 @@ class NoMissingSpaceInAnnotationRule implements Rule
 		}
 
 		if ($node instanceof Node\Stmt\Class_) {
-			if ($node->namespacedName !== null && is_a($node->namespacedName->toString(), TestCase::class, true)) {
+			if ($node->namespacedName !== null && $this->reflectionProvider->getClass($node->namespacedName->toString())->isSubclassOf(TestCase::class) === false) {
 				return [];
 			}
 		} else {

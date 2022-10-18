@@ -13,7 +13,7 @@ class NoMissingSpaceInAnnotationRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new NoMissingSpaceInAnnotationRule();
+		return new NoMissingSpaceInAnnotationRule($this->createReflectionProvider());
 	}
 
 	public function testRule(): void

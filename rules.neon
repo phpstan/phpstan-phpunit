@@ -15,5 +15,5 @@ conditionalTags:
 		phpstan.rules.rule: %featureToggles.bleedingEdge%
 	PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule:
 		phpstan.rules.rule: %featureToggles.bleedingEdge%
-	PHPStan\Rules\PHPUnit\NoMissingSpaceInAnnotationRule
+	PHPStan\Rules\PHPUnit\NoMissingSpaceInAnnotationRule:
 		phpstan.rules.rule: %featureToggles.bleedingEdge%

@@ -5,3 +5,7 @@ rules:
 	- PHPStan\Rules\PHPUnit\NoMissingSpaceInAnnotationRule
 	- PHPStan\Rules\PHPUnit\MockMethodCallRule
 	- PHPStan\Rules\PHPUnit\ShouldCallParentMethodsRule
+
+conditionalTags:
+	PHPStan\Rules\PHPUnit\NoMissingSpaceInAnnotationRule
+		phpstan.rules.rule: %featureToggles.bleedingEdge%

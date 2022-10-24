@@ -4,6 +4,7 @@ namespace AssertFunction;
 
 use function PHPStan\Testing\assertType;
 use function PHPUnit\Framework\assertArrayHasKey;
+use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertObjectHasAttribute;
 
@@ -34,6 +35,12 @@ class Foo
 	{
 		assertObjectHasAttribute('property', $a);
 		assertType("object&hasProperty(property)", $a);
+	}
+
+	public function testEmpty($a): void
+	{
+		assertEmpty($a);
+		assertType("0|0.0|''|'0'|array{}|Countable|EmptyIterator|false|null", $a);
 	}
 
 }

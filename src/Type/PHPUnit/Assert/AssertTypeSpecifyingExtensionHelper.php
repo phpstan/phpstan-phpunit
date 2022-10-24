@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
@@ -162,7 +163,10 @@ class AssertTypeSpecifyingExtensionHelper
 					return new Expr\BinaryOp\BooleanOr(
 						new Instanceof_($actual->value, new Name(EmptyIterator::class)),
 						new Expr\BinaryOp\BooleanOr(
-							new Instanceof_($actual->value, new Name(Countable::class)),
+							new Expr\BinaryOp\BooleanAnd(
+								new Instanceof_($actual->value, new Name(Countable::class)),
+								new Identical(new FuncCall(new Name('count'), [new Arg($actual->value)]), new LNumber(0))
+							),
 							new Expr\Empty_($actual->value)
 						)
 					);

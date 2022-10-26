@@ -31,6 +31,16 @@ class ImpossibleCheckTypeMethodCallRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testBug141(): void
+	{
+		$this->analyse([__DIR__ . '/data/bug-141.php'], [
+			[
+				"Call to method PHPUnit\Framework\Assert::assertEmpty() with non-empty-array<'0.6.0'|'1.0.0'|'1.0.x-dev'|'1.1.x-dev'|'9999999-dev'|'dev-feature-b', true> will always evaluate to false.",
+				23,
+			],
+		]);
+	}
+
 	/**
 	 * @return string[]
 	 */

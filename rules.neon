@@ -8,9 +8,15 @@ rules:
 services:
 	- class: PHPStan\Rules\PHPUnit\ClassCoversExistsRule
 	- class: PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule
+	- class: PHPStan\Rules\PHPUnit\NoMissingSpaceInClassAnnotationRule
+	- class: PHPStan\Rules\PHPUnit\NoMissingSpaceInMethodAnnotationRule
 
 conditionalTags:
 	PHPStan\Rules\PHPUnit\ClassCoversExistsRule:
 		phpstan.rules.rule: %featureToggles.bleedingEdge%
 	PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
+	PHPStan\Rules\PHPUnit\NoMissingSpaceInClassAnnotationRule:
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
+	PHPStan\Rules\PHPUnit\NoMissingSpaceInMethodAnnotationRule:
 		phpstan.rules.rule: %featureToggles.bleedingEdge%

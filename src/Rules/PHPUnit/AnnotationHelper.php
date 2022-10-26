@@ -2,20 +2,15 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PhpParser\Node;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\Rule;
-use PHPUnit\Framework\TestCase;
+use PhpParser\Comment\Doc;
+use PHPStan\Rules\RuleError;
+use PHPStan\Rules\RuleErrorBuilder;
 use function array_key_exists;
 use function in_array;
 use function preg_match;
 use function preg_split;
 
-/**
- * @implements Rule<Node>
- */
-class NoMissingSpaceInAnnotationRule implements Rule
+class AnnotationHelper
 {
 
 	private const ANNOTATIONS_WITH_PARAMS = [
@@ -35,44 +30,10 @@ class NoMissingSpaceInAnnotationRule implements Rule
 	];
 
 	/**
-	 * Reflection provider.
-	 *
-	 * @var ReflectionProvider
+	 * @return RuleError[] errors
 	 */
-	private $reflectionProvider;
-
-	public function __construct(ReflectionProvider $reflectionProvider)
+	public function processDocComment(Doc $docComment): array
 	{
-		$this->reflectionProvider = $reflectionProvider;
-	}
-
-	public function getNodeType(): string
-	{
-		return Node::class;
-	}
-
-	public function processNode(Node $node, Scope $scope): array
-	{
-		if (!$node instanceof Node\Stmt\Class_ && !$node instanceof Node\Stmt\ClassMethod) {
-			return [];
-		}
-
-		if ($node instanceof Node\Stmt\Class_) {
-			if ($node->namespacedName !== null && $this->reflectionProvider->getClass($node->namespacedName->toString())->isSubclassOf(TestCase::class) === false) {
-				return [];
-			}
-		} else {
-			$classReflection = $scope->getClassReflection();
-			if ($classReflection === null || $classReflection->isSubclassOf(TestCase::class) === false) {
-				return [];
-			}
-		}
-
-		$docComment = $node->getDocComment();
-		if ($docComment === null) {
-			return [];
-		}
-
 		$errors = [];
 		$docCommentLines = preg_split("/((\r?\n)|(\r\n?))/", $docComment->getText());
 		if ($docCommentLines === false) {
@@ -94,7 +55,9 @@ class NoMissingSpaceInAnnotationRule implements Rule
 				continue;
 			}
 
-			$errors[] = 'Annotation "' . $matches['annotation'] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.';
+			$errors[] = RuleErrorBuilder::message(
+				'Annotation "' . $matches['annotation'] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.'
+			)->build();
 		}
 
 		return $errors;

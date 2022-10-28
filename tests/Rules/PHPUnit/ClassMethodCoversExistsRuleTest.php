@@ -26,7 +26,7 @@ class ClassMethodCoversExistsRuleTest extends RuleTestCase
 	{
 		$this->analyse([__DIR__ . '/data/method-coverage.php'], [
 			[
-				'@covers value ::ignoreThis references an invalid method.',
+				'@covers value \Not\A\Class::ignoreThis references an invalid method.',
 				14,
 			],
 			[
@@ -42,7 +42,7 @@ class ClassMethodCoversExistsRuleTest extends RuleTestCase
 				50,
 			],
 			[
-				'@covers value ::assertNotReal references an invalid method.',
+				'@covers value \PHPUnit\Framework\TestCase::assertNotReal references an invalid method.',
 				62,
 			],
 			[

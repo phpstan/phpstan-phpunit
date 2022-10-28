@@ -32,6 +32,10 @@ class ClassCoversExistsRuleTest extends RuleTestCase
 				'@coversDefaultClass is defined multiple times.',
 				23,
 			],
+			[
+				'@covers value \Not\A\Class references an invalid class or function.',
+				31,
+			],
 		]);
 	}
 

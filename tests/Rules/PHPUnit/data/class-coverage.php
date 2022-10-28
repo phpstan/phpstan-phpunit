@@ -26,6 +26,7 @@ class MultipleCoversDefaultClass extends \PHPUnit\Framework\TestCase
 
 /**
  * @covers \ClassCoverage\testable
+ * @covers \Not\A\Class
  */
 class CoversFunction extends \PHPUnit\Framework\TestCase
 {

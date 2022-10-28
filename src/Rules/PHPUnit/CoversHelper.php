@@ -72,6 +72,7 @@ class CoversHelper
 		$errors = [];
 		$covers = (string) $phpDocTag->value;
 		$isMethod = strpos($covers, '::') !== false;
+		$fullName = $covers;
 
 		if ($isMethod) {
 			[$className, $method] = explode('::', $covers);
@@ -81,6 +82,7 @@ class CoversHelper
 
 		if ($className === '' && $node instanceof Node\Stmt\ClassMethod && $coversDefaultClass !== null) {
 			$className = (string) $coversDefaultClass->value;
+			$fullName = $className . $covers;
 		}
 
 		if ($this->reflectionProvider->hasClass($className)) {
@@ -89,7 +91,7 @@ class CoversHelper
 			if (isset($method) && $method !== '' && !$class->hasMethod($method)) {
 				$errors[] = RuleErrorBuilder::message(sprintf(
 					'@covers value %s references an invalid method.',
-					$covers
+					$fullName
 				))->build();
 			}
 		} else {
@@ -99,7 +101,7 @@ class CoversHelper
 
 			$errors[] = RuleErrorBuilder::message(sprintf(
 				'@covers value %s references an invalid %s.',
-				$covers,
+				$fullName,
 				$isMethod ? 'method' : 'class or function'
 			))->build();
 		}

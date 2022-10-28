@@ -23,3 +23,15 @@ class CoversShouldExistTestCase2 extends \PHPUnit\Framework\TestCase
 class MultipleCoversDefaultClass extends \PHPUnit\Framework\TestCase
 {
 }
+
+/**
+ * @covers \ClassCoverage\testable
+ */
+class CoversFunction extends \PHPUnit\Framework\TestCase
+{
+}
+
+function testable(): void
+{
+
+}

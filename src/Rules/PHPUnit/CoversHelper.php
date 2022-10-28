@@ -3,6 +3,7 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ReflectionProvider;
@@ -70,8 +71,9 @@ class CoversHelper
 	{
 		$errors = [];
 		$covers = (string) $phpDocTag->value;
+		$isMethod = strpos($covers, '::') !== false;
 
-		if (strpos($covers, '::') !== false) {
+		if ($isMethod) {
 			[$className, $method] = explode('::', $covers);
 		} else {
 			$className = $covers;
@@ -83,6 +85,7 @@ class CoversHelper
 
 		if ($this->reflectionProvider->hasClass($className)) {
 			$class = $this->reflectionProvider->getClass($className);
+
 			if (isset($method) && $method !== '' && !$class->hasMethod($method)) {
 				$errors[] = RuleErrorBuilder::message(sprintf(
 					'@covers value %s references an invalid method.',
@@ -90,9 +93,14 @@ class CoversHelper
 				))->build();
 			}
 		} else {
+			if (!isset($method) && $this->reflectionProvider->hasFunction(new Name($covers, []), null)) {
+				return $errors;
+			}
+
 			$errors[] = RuleErrorBuilder::message(sprintf(
-				'@covers value %s references an invalid class.',
-				$covers
+				'@covers value %s references an invalid %s.',
+				$covers,
+				$isMethod ? 'method' : 'class or function'
 			))->build();
 		}
 		return $errors;

@@ -44,7 +44,8 @@ class DataProviderHelper
 	public function processDataProvider(
 		Scope $scope,
 		PhpDocTagNode $phpDocTag,
-		bool $checkFunctionNameCase
+		bool $checkFunctionNameCase,
+		bool $deprecationRulesInstalled
 	): array
 	{
 		$dataProviderName = $this->getDataProviderName($phpDocTag);
@@ -83,6 +84,13 @@ class DataProviderHelper
 		if (!$dataProviderMethodReflection->isPublic()) {
 			$errors[] = RuleErrorBuilder::message(sprintf(
 				'@dataProvider %s related method must be public.',
+				$dataProviderName
+			))->build();
+		}
+
+		if ($deprecationRulesInstalled && !$dataProviderMethodReflection->isStatic()) {
+			$errors[] = RuleErrorBuilder::message(sprintf(
+				'@dataProvider %s related method must be static.',
 				$dataProviderName
 			))->build();
 		}

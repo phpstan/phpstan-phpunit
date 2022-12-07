@@ -36,15 +36,24 @@ class DataProviderDeclarationRule implements Rule
 	 */
 	private $checkFunctionNameCase;
 
+	/**
+	 * When phpstan-deprecation-rules is installed, it reports deprecated usages.
+	 *
+	 * @var bool
+	 */
+	private $deprecationRulesInstalled;
+
 	public function __construct(
 		DataProviderHelper $dataProviderHelper,
 		FileTypeMapper $fileTypeMapper,
-		bool $checkFunctionNameCase
+		bool $checkFunctionNameCase,
+		bool $deprecationRulesInstalled
 	)
 	{
 		$this->dataProviderHelper = $dataProviderHelper;
 		$this->fileTypeMapper = $fileTypeMapper;
 		$this->checkFunctionNameCase = $checkFunctionNameCase;
+		$this->deprecationRulesInstalled = $deprecationRulesInstalled;
 	}
 
 	public function getNodeType(): string
@@ -80,7 +89,12 @@ class DataProviderDeclarationRule implements Rule
 		foreach ($annotations as $annotation) {
 			$errors = array_merge(
 				$errors,
-				$this->dataProviderHelper->processDataProvider($scope, $annotation, $this->checkFunctionNameCase)
+				$this->dataProviderHelper->processDataProvider(
+					$scope,
+					$annotation,
+					$this->checkFunctionNameCase,
+					$this->deprecationRulesInstalled
+				)
 			);
 		}
 

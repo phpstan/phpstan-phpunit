@@ -5,10 +5,15 @@ namespace PHPStan\Rules\PHPUnit;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\Reflection\ExtendedMethodReflection;
 use PHPStan\Reflection\MissingMethodFromReflectionException;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\Type\UnionType;
+use PHPStan\Type\VerbosityLevel;
 use function array_merge;
+use function count;
 use function preg_match;
 use function sprintf;
 
@@ -45,7 +50,8 @@ class DataProviderHelper
 		Scope $scope,
 		PhpDocTagNode $phpDocTag,
 		bool $checkFunctionNameCase,
-		bool $deprecationRulesInstalled
+		bool $deprecationRulesInstalled,
+		?ExtendedMethodReflection $testMethodReflection
 	): array
 	{
 		$dataProviderName = $this->getDataProviderName($phpDocTag);
@@ -93,6 +99,58 @@ class DataProviderHelper
 				'@dataProvider %s related method must be static.',
 				$dataProviderName
 			))->build();
+		}
+
+		$dataProviderParameterAcceptor = ParametersAcceptorSelector::selectSingle($dataProviderMethodReflection->getVariants());
+		$providerReturnType = $dataProviderParameterAcceptor->getReturnType();
+		if ($testMethodReflection !== null && $providerReturnType->isIterable()->yes()) {
+			$collectionType = $providerReturnType->getIterableValueType();
+
+			if ($collectionType->isIterable()->yes()) {
+				$testParameterAcceptor = ParametersAcceptorSelector::selectSingle($testMethodReflection->getVariants());
+
+				$valueType = $collectionType->getIterableValueType();
+
+				if ($valueType instanceof UnionType) {
+					if (count($valueType->getTypes()) !== count($testParameterAcceptor->getParameters())) {
+						$errors[] = RuleErrorBuilder::message(sprintf(
+							'@dataProvider %s returns a different number of values the test method expects.',
+							$dataProviderName
+						))->build();
+
+						return $errors;
+					}
+
+					foreach ($valueType->getTypes() as $i => $innerType) {
+						if (!$testParameterAcceptor->getParameters()[$i]->getType()->accepts($innerType, $scope->isDeclareStrictTypes())->yes()) {
+							$errors[] = RuleErrorBuilder::message(sprintf(
+								'@dataProvider %s returns %s which is not compatible with the test method parameters.',
+								$dataProviderName,
+								$providerReturnType->describe(VerbosityLevel::precise())
+							))->build();
+
+							return $errors;
+						}
+					}
+				} else {
+					if (count($testParameterAcceptor->getParameters()) !== 1) {
+						$errors[] = RuleErrorBuilder::message(sprintf(
+							'@dataProvider %s returns a different number of values the test method expects.',
+							$dataProviderName
+						))->build();
+
+						return $errors;
+					}
+
+					if (!$testParameterAcceptor->getParameters()[0]->getType()->accepts($valueType, $scope->isDeclareStrictTypes())->yes()) {
+						$errors[] = RuleErrorBuilder::message(sprintf(
+							'@dataProvider %s returns %s which is not compatible with the test method parameters.',
+							$dataProviderName,
+							$providerReturnType->describe(VerbosityLevel::precise())
+						))->build();
+					}
+				}
+			}
 		}
 
 		return $errors;

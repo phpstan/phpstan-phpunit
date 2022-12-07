@@ -84,6 +84,11 @@ class DataProviderDeclarationRule implements Rule
 
 		$annotations = $this->dataProviderHelper->getDataProviderAnnotations($methodPhpDoc);
 
+		$testMethodReflection = null;
+		if ($classReflection->hasMethod($node->name->toString())) {
+			$testMethodReflection = $classReflection->getMethod($node->name->toString(), $scope);
+		}
+
 		$errors = [];
 
 		foreach ($annotations as $annotation) {
@@ -93,7 +98,8 @@ class DataProviderDeclarationRule implements Rule
 					$scope,
 					$annotation,
 					$this->checkFunctionNameCase,
-					$this->deprecationRulesInstalled
+					$this->deprecationRulesInstalled,
+					$testMethodReflection
 				)
 			);
 		}

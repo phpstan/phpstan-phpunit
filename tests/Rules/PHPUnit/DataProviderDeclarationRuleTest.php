@@ -17,6 +17,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		return new DataProviderDeclarationRule(
 			new DataProviderHelper(),
 			self::getContainer()->getByType(FileTypeMapper::class),
+			true,
 			true
 		);
 	}
@@ -26,6 +27,10 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/data-provider-declaration.php'], [
 			[
 				'@dataProvider providebaz related method is used with incorrect case: provideBaz.',
+				13,
+			],
+			[
+				'@dataProvider provideQux related method must be static.',
 				13,
 			],
 			[

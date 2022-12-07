@@ -8,7 +8,10 @@ rules:
 services:
 	- class: PHPStan\Rules\PHPUnit\ClassCoversExistsRule
 	- class: PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule
-	- class: PHPStan\Rules\PHPUnit\DataProviderDeclarationRule
+	-
+		class: PHPStan\Rules\PHPUnit\DataProviderDeclarationRule
+		arguments:
+			checkFunctionNameCase: %checkFunctionNameCase%
 	- class: PHPStan\Rules\PHPUnit\NoMissingSpaceInClassAnnotationRule
 	- class: PHPStan\Rules\PHPUnit\NoMissingSpaceInMethodAnnotationRule
 

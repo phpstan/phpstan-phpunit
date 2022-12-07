@@ -29,13 +29,22 @@ class DataProviderDeclarationRule implements Rule
 	 */
 	private $fileTypeMapper;
 
+	/**
+	 * When set to true, it reports data provider method with incorrect name case.
+	 *
+	 * @var bool
+	 */
+	private $checkFunctionNameCase;
+
 	public function __construct(
 		DataProviderHelper $dataProviderHelper,
-		FileTypeMapper $fileTypeMapper
+		FileTypeMapper $fileTypeMapper,
+		bool $checkFunctionNameCase
 	)
 	{
 		$this->dataProviderHelper = $dataProviderHelper;
 		$this->fileTypeMapper = $fileTypeMapper;
+		$this->checkFunctionNameCase = $checkFunctionNameCase;
 	}
 
 	public function getNodeType(): string
@@ -71,7 +80,7 @@ class DataProviderDeclarationRule implements Rule
 		foreach ($annotations as $annotation) {
 			$errors = array_merge(
 				$errors,
-				$this->dataProviderHelper->processDataProvider($scope, $annotation)
+				$this->dataProviderHelper->processDataProvider($scope, $annotation, $this->checkFunctionNameCase)
 			);
 		}
 

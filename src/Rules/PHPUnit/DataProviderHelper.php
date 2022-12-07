@@ -11,7 +11,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use function array_merge;
 use function preg_match;
 use function sprintf;
-use function trim;
 
 class DataProviderHelper
 {
@@ -44,7 +43,8 @@ class DataProviderHelper
 	 */
 	public function processDataProvider(
 		Scope $scope,
-		PhpDocTagNode $phpDocTag
+		PhpDocTagNode $phpDocTag,
+		bool $checkFunctionNameCase
 	): array
 	{
 		$dataProviderName = $this->getDataProviderName($phpDocTag);
@@ -72,7 +72,7 @@ class DataProviderHelper
 
 		$errors = [];
 
-		if ($dataProviderName !== $dataProviderMethodReflection->getName()) {
+		if ($checkFunctionNameCase && $dataProviderName !== $dataProviderMethodReflection->getName()) {
 			$errors[] = RuleErrorBuilder::message(sprintf(
 				'@dataProvider %s related method is used with incorrect case: %s.',
 				$dataProviderName,
@@ -87,21 +87,12 @@ class DataProviderHelper
 			))->build();
 		}
 
-		if (!$dataProviderMethodReflection->isStatic()) {
-			$errors[] = RuleErrorBuilder::message(sprintf(
-				'@dataProvider %s related method must be static.',
-				$dataProviderName
-			))->build();
-		}
-
 		return $errors;
 	}
 
 	private function getDataProviderName(PhpDocTagNode $phpDocTag): ?string
 	{
-		$value = trim((string) $phpDocTag->value);
-
-		if (preg_match('/^[\S]+/', $value, $matches) !== 1) {
+		if (preg_match('/^[^ \t]+/', (string) $phpDocTag->value, $matches) !== 1) {
 			return null;
 		}
 

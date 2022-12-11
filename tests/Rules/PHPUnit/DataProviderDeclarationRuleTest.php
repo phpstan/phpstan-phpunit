@@ -27,19 +27,19 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/data-provider-declaration.php'], [
 			[
 				'@dataProvider providebaz related method is used with incorrect case: provideBaz.',
-				13,
+				14,
 			],
 			[
 				'@dataProvider provideQux related method must be static.',
-				13,
+				14,
 			],
 			[
 				'@dataProvider provideQuux related method must be public.',
-				13,
+				14,
 			],
 			[
 				'@dataProvider provideNonExisting related method not found.',
-				66,
+				67,
 			],
 		]);
 	}

@@ -9,6 +9,7 @@ class FooTestCase extends \PHPUnit\Framework\TestCase
 	 * @dataProvider providebaz
 	 * @dataProvider provideQux
 	 * @dataProvider provideQuux
+	 * @dataProvider \ExampleTestCase\BarTestCase::provideToOtherClass
 	 */
 	public function testIsNotFoo(string $subject): void
 	{
@@ -66,5 +67,12 @@ class BarTestCase extends \PHPUnit\Framework\TestCase
 	public function testIsNotBar(string $subject): void
 	{
 		self::assertNotSame('bar', $subject);
+	}
+
+	public static function provideToOtherClass(): iterable
+	{
+		return [
+			['toOtherClass'],
+		];
 	}
 }

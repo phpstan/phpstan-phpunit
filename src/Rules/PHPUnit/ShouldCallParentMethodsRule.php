@@ -97,7 +97,7 @@ class ShouldCallParentMethodsRule implements Rule
 				continue;
 			}
 
-			if (strtolower($stmt->expr->name->name) === $methodName) {
+			if ($stmt->expr->name->toLowerString() === $methodName) {
 				return true;
 			}
 		}

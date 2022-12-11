@@ -11,7 +11,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\ObjectType;
 use function count;
-use function strtolower;
 
 /**
  * @implements Rule<NodeAbstract>
@@ -36,7 +35,7 @@ class AssertSameWithCountRule implements Rule
 		if (count($node->getArgs()) < 2) {
 			return [];
 		}
-		if (!$node->name instanceof Node\Identifier || strtolower($node->name->name) !== 'assertsame') {
+		if (!$node->name instanceof Node\Identifier || $node->name->toLowerString() !== 'assertsame') {
 			return [];
 		}
 
@@ -45,7 +44,7 @@ class AssertSameWithCountRule implements Rule
 		if (
 			$right instanceof Node\Expr\FuncCall
 			&& $right->name instanceof Node\Name
-			&& strtolower($right->name->toString()) === 'count'
+			&& $right->name->toLowerString() === 'count'
 		) {
 			return [
 				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
@@ -55,7 +54,7 @@ class AssertSameWithCountRule implements Rule
 		if (
 			$right instanceof Node\Expr\MethodCall
 			&& $right->name instanceof Node\Identifier
-			&& strtolower($right->name->toString()) === 'count'
+			&& $right->name->toLowerString() === 'count'
 			&& count($right->getArgs()) === 0
 		) {
 			$type = $scope->getType($right->var);

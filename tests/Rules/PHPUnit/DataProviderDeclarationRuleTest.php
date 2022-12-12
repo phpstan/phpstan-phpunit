@@ -14,8 +14,10 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
+		$reflection = $this->createReflectionProvider();
+
 		return new DataProviderDeclarationRule(
-			new DataProviderHelper(),
+			new DataProviderHelper($reflection),
 			self::getContainer()->getByType(FileTypeMapper::class),
 			true,
 			true
@@ -39,7 +41,11 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 			],
 			[
 				'@dataProvider provideNonExisting related method not found.',
-				67,
+				68,
+			],
+			[
+				'@dataProvider NonExisting::provideNonExisting related class not found.',
+				68,
 			],
 		]);
 	}

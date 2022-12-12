@@ -62,6 +62,7 @@ class BarTestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @dataProvider provideNonExisting
+	 * @dataProvider NonExisting::provideNonExisting
 	 * @dataProvider provideCorge
 	 */
 	public function testIsNotBar(string $subject): void

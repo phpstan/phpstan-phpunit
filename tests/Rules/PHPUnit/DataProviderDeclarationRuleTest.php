@@ -17,7 +17,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$reflection = $this->createReflectionProvider();
 
 		return new DataProviderDeclarationRule(
-			new DataProviderHelper($reflection),
+			new DataProviderHelper($reflection, true),
 			self::getContainer()->getByType(FileTypeMapper::class),
 			true,
 			true
@@ -32,7 +32,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 				14,
 			],
 			[
-				'@dataProvider provideQux related method must be static.',
+				'@dataProvider provideQux related method must be static in PHPUnit 10 and newer.',
 				14,
 			],
 			[

@@ -26,9 +26,13 @@ class DataProviderHelper
 	 */
 	private $reflectionProvider;
 
-	public function __construct(ReflectionProvider $reflectionProvider)
+	/** @var bool */
+	private $phpunit10OrNewer;
+
+	public function __construct(ReflectionProvider $reflectionProvider, bool $phpunit10OrNewer)
 	{
 		$this->reflectionProvider = $reflectionProvider;
+		$this->phpunit10OrNewer = $phpunit10OrNewer;
 	}
 
 	/**
@@ -108,9 +112,9 @@ class DataProviderHelper
 			))->build();
 		}
 
-		if ($deprecationRulesInstalled && !$dataProviderMethodReflection->isStatic()) {
+		if ($deprecationRulesInstalled && $this->phpunit10OrNewer && !$dataProviderMethodReflection->isStatic()) {
 			$errors[] = RuleErrorBuilder::message(sprintf(
-				'@dataProvider %s related method must be static.',
+				'@dataProvider %s related method must be static in PHPUnit 10 and newer.',
 				$dataProviderValue
 			))->build();
 		}

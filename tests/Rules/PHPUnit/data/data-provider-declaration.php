@@ -2,6 +2,8 @@
 
 namespace ExampleTestCase;
 
+use \PHPUnit\Framework\Attributes\DataProvider;
+
 class FooTestCase extends \PHPUnit\Framework\TestCase
 {
 	/**
@@ -75,5 +77,17 @@ class BarTestCase extends \PHPUnit\Framework\TestCase
 		return [
 			['toOtherClass'],
 		];
+	}
+}
+
+class BazTestCase extends \PHPUnit\Framework\TestCase
+{
+	#[\PHPUnit\Framework\Attributes\DataProvider('provideNonExisting')]
+	#[DataProvider('provideNonExisting2')]
+	#[\PHPUnit\Framework\Attributes\DataProviderExternal('\\ExampleTestCase\\BarTestCase', 'providetootherclass')]
+	#[\PHPUnit\Framework\Attributes\DataProviderExternal(\ExampleTestCase\BarTestCase::class, 'providetootherclass')]
+	public function testIsNotBaz(string $subject): void
+	{
+		self::assertNotSame('baz', $subject);
 	}
 }

@@ -3,6 +3,7 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
 use function dirname;
 use function explode;
@@ -16,9 +17,13 @@ class DataProviderHelperFactory
 	/** @var ReflectionProvider */
 	private $reflectionProvider;
 
-	public function __construct(ReflectionProvider $reflectionProvider)
+	/** @var FileTypeMapper */
+	private $fileTypeMapper;
+
+	public function __construct(ReflectionProvider $reflectionProvider, FileTypeMapper $fileTypeMapper)
 	{
 		$this->reflectionProvider = $reflectionProvider;
+		$this->fileTypeMapper = $fileTypeMapper;
 	}
 
 	public function create(): DataProviderHelper
@@ -46,7 +51,7 @@ class DataProviderHelperFactory
 			}
 		}
 
-		return new DataProviderHelper($this->reflectionProvider, $phpUnit10OrNewer);
+		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $phpUnit10OrNewer);
 	}
 
 }

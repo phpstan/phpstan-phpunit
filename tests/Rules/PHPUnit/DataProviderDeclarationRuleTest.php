@@ -17,8 +17,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$reflection = $this->createReflectionProvider();
 
 		return new DataProviderDeclarationRule(
-			new DataProviderHelper($reflection, true),
-			self::getContainer()->getByType(FileTypeMapper::class),
+			new DataProviderHelper($reflection, self::getContainer()->getByType(FileTypeMapper::class),true),
 			true,
 			true
 		);
@@ -29,23 +28,39 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/data-provider-declaration.php'], [
 			[
 				'@dataProvider providebaz related method is used with incorrect case: provideBaz.',
-				14,
+				16,
 			],
 			[
 				'@dataProvider provideQux related method must be static in PHPUnit 10 and newer.',
-				14,
+				16,
 			],
 			[
 				'@dataProvider provideQuux related method must be public.',
-				14,
+				16,
 			],
 			[
 				'@dataProvider provideNonExisting related method not found.',
-				68,
+				70,
 			],
 			[
 				'@dataProvider NonExisting::provideNonExisting related class not found.',
-				68,
+				70,
+			],
+			[
+				'@dataProvider provideNonExisting related method not found.',
+				85,
+			],
+			[
+				'@dataProvider provideNonExisting2 related method not found.',
+				86,
+			],
+			[
+				'@dataProvider ExampleTestCase\\BarTestCase::providetootherclass related method is used with incorrect case: provideToOtherClass.',
+				87,
+			],
+			[
+				'@dataProvider ExampleTestCase\\BarTestCase::providetootherclass related method is used with incorrect case: provideToOtherClass.',
+				88,
 			],
 		]);
 	}

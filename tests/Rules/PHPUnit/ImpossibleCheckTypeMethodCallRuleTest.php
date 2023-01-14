@@ -37,6 +37,7 @@ class ImpossibleCheckTypeMethodCallRuleTest extends RuleTestCase
 			[
 				"Call to method PHPUnit\Framework\Assert::assertEmpty() with non-empty-array<'0.6.0'|'1.0.0'|'1.0.x-dev'|'1.1.x-dev'|'9999999-dev'|'dev-feature-b', true> will always evaluate to false.",
 				23,
+				'Because the type is coming from a PHPDoc, you can turn off this check by setting <fg=cyan>treatPhpDocTypesAsCertain: false</> in your <fg=cyan>%configurationFile%</>.',
 			],
 		]);
 	}

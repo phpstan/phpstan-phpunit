@@ -43,6 +43,7 @@ class AssertSameMethodDifferentTypesRuleTest extends RuleTestCase
 			[
 				'Call to method PHPUnit\Framework\Assert::assertSame() with array<string> and array<int> will always evaluate to false.',
 				39,
+				'Because the type is coming from a PHPDoc, you can turn off this check by setting <fg=cyan>treatPhpDocTypesAsCertain: false</> in your <fg=cyan>%configurationFile%</>.',
 			],
 			[
 				'Call to method PHPUnit\Framework\Assert::assertSame() with 1 and 1 will always evaluate to true.',

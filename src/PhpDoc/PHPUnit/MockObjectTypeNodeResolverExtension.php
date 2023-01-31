@@ -11,8 +11,8 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\TypeWithClassName;
 use function array_key_exists;
+use function count;
 
 class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, TypeNodeResolverAwareExtension
 {
@@ -44,11 +44,12 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
 
 		$types = $this->typeNodeResolver->resolveMultiple($typeNode->types, $nameScope);
 		foreach ($types as $type) {
-			if (!$type instanceof TypeWithClassName) {
+			$classNames = $type->getObjectClassNames();
+			if (count($classNames) !== 1) {
 				continue;
 			}
 
-			if (array_key_exists($type->getClassName(), $mockClassNames)) {
+			if (array_key_exists($classNames[0], $mockClassNames)) {
 				$resultType = TypeCombinator::intersect(...$types);
 				if ($resultType instanceof NeverType) {
 					continue;

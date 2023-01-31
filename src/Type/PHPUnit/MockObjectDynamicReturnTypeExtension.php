@@ -10,7 +10,6 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use function array_filter;
@@ -38,7 +37,12 @@ class MockObjectDynamicReturnTypeExtension implements DynamicMethodReturnTypeExt
 		}
 
 		$mockClasses = array_values(array_filter($type->getTypes(), static function (Type $type): bool {
-			return !$type instanceof TypeWithClassName || $type->getClassName() !== MockObject::class;
+			$classNames = $type->getObjectClassNames();
+			if (count($classNames) !== 1) {
+				return true;
+			}
+
+			return $classNames[0] !== MockObject::class;
 		}));
 
 		if (count($mockClasses) !== 1) {

@@ -18,7 +18,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Analyser\TypeSpecifierContext;
-use PHPStan\Type\Constant\ConstantStringType;
 use ReflectionObject;
 use function array_key_exists;
 use function count;
@@ -126,13 +125,15 @@ class AssertTypeSpecifyingExtensionHelper
 			self::$resolvers = [
 				'InstanceOf' => static function (Scope $scope, Arg $class, Arg $object): ?Instanceof_ {
 					$classType = $scope->getType($class->value);
-					if (!$classType instanceof ConstantStringType) {
+					$constantStrings = $classType->getConstantStrings();
+
+					if (count($constantStrings) !== 1) {
 						return null;
 					}
 
 					return new Instanceof_(
 						$object->value,
-						new Name($classType->getValue())
+						new Name($constantStrings[0]->getValue())
 					);
 				},
 				'Same' => static function (Scope $scope, Arg $expected, Arg $actual): Identical {
@@ -206,11 +207,13 @@ class AssertTypeSpecifyingExtensionHelper
 				},
 				'InternalType' => static function (Scope $scope, Arg $type, Arg $value): ?FuncCall {
 					$typeType = $scope->getType($type->value);
-					if (!$typeType instanceof ConstantStringType) {
+					$constantStrings = $typeType->getConstantStrings();
+
+					if (count($constantStrings) !== 1) {
 						return null;
 					}
 
-					switch ($typeType->getValue()) {
+					switch ($constantStrings[0]->getValue()) {
 						case 'numeric':
 							$functionName = 'is_numeric';
 							break;

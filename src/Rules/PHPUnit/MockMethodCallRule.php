@@ -8,7 +8,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
-use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
@@ -81,7 +80,7 @@ class MockMethodCallRule implements Rule
 
 			$mockClass = $type->getTypes()[0];
 
-			if (!($mockClass instanceof ObjectType) || $mockClass->hasMethod($method)->yes()) {
+			if (!$mockClass->isObject()->yes() || $mockClass->hasMethod($method)->yes()) {
 				continue;
 			}
 

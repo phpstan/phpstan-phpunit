@@ -36,6 +36,10 @@ class ClassCoversExistsRuleTest extends RuleTestCase
 				'@covers value \Not\A\Class references an invalid class or function.',
 				31,
 			],
+			[
+				'@covers value does not specify anything.',
+				43,
+			],
 		]);
 	}
 

@@ -36,3 +36,10 @@ function testable(): void
 {
 
 }
+
+/**
+ * @covers
+ */
+class CoversNothing extends \PHPUnit\Framework\TestCase
+{
+}

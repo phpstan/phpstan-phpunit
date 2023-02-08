@@ -95,6 +95,12 @@ class CoversHelper
 				))->build();
 			}
 		} else {
+			if ($covers === '') {
+				$errors[] = RuleErrorBuilder::message('@covers value does not specify anything.')->build();
+
+				return $errors;
+			}
+
 			if (!isset($method) && $this->reflectionProvider->hasFunction(new Name($covers, []), null)) {
 				return $errors;
 			}

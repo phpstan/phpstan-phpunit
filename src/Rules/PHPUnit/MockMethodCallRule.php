@@ -6,9 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
-use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
@@ -71,24 +69,15 @@ class MockMethodCallRule implements Rule
 				);
 			}
 
-			if (
-				!($type instanceof GenericObjectType)
-				|| $type->getClassName() !== InvocationMocker::class
-				|| count($type->getTypes()) <= 0
-			) {
-				continue;
-			}
-
-			$mockClass = $type->getTypes()[0];
-
-			if (!($mockClass instanceof ObjectType) || $mockClass->hasMethod($method)->yes()) {
+			$mockedClassObject = $type->getTemplateType(InvocationMocker::class, 'TMockedClass');
+			if ($mockedClassObject->hasMethod($method)->yes()) {
 				continue;
 			}
 
 			$errors[] = sprintf(
 				'Trying to mock an undefined method %s() on class %s.',
 				$method,
-				$mockClass->getClassName()
+				implode('|', $mockedClassObject->getObjectClassNames())
 			);
 		}
 

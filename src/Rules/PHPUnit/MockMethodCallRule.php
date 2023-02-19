@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\IntersectionType;
 use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
@@ -51,8 +50,7 @@ class MockMethodCallRule implements Rule
 			$type = $scope->getType($node->var);
 
 			if (
-				$type instanceof IntersectionType
-				&& (
+				(
 					in_array(MockObject::class, $type->getObjectClassNames(), true)
 					|| in_array(Stub::class, $type->getObjectClassNames(), true)
 				)

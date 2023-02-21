@@ -20,4 +20,13 @@ class Foo extends TestCase
 		$this->assertEmpty($o);
 	}
 
+	/**
+	 * @param class-string<\Exception> $name
+	 * @return void
+	 */
+	public function doBaz(\Exception $e, string $name): void
+	{
+		$this->assertInstanceOf($name, $e);
+	}
+
 }

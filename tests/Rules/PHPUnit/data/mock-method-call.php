@@ -36,6 +36,11 @@ class Foo extends \PHPUnit\Framework\TestCase
 		$this->createStub(Bar::class)->method('doBadThing');
 	}
 
+	public function testMockObject(\PHPUnit\Framework\MockObject\MockObject $mock)
+	{
+		$mock->method('doFoo');
+	}
+
 }
 
 class Bar {

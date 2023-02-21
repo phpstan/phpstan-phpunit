@@ -56,15 +56,19 @@ class MockMethodCallRule implements Rule
 				)
 				&& !$type->hasMethod($method)->yes()
 			) {
-				$mockClass = array_filter($type->getObjectClassNames(), static function (string $class): bool {
+				$mockClasses = array_filter($type->getObjectClassNames(), static function (string $class): bool {
 					return $class !== MockObject::class && $class !== Stub::class;
 				});
+				if (count($mockClasses) === 0) {
+					continue;
+				}
 
 				$errors[] = sprintf(
 					'Trying to mock an undefined method %s() on class %s.',
 					$method,
-					implode('&', $mockClass)
+					implode('&', $mockClasses)
 				);
+				continue;
 			}
 
 			$mockedClassObject = $type->getTemplateType(InvocationMocker::class, 'TMockedClass');

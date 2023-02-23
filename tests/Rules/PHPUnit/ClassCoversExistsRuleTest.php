@@ -40,6 +40,11 @@ class ClassCoversExistsRuleTest extends RuleTestCase
 				'@covers value does not specify anything.',
 				43,
 			],
+			[
+				'@covers value NotFullyQualified references an invalid class or function.',
+				50,
+				'The @covers annotation requires a fully qualified name.',
+			],
 		]);
 	}
 

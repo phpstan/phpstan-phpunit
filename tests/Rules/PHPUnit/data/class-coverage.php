@@ -43,3 +43,10 @@ function testable(): void
 class CoversNothing extends \PHPUnit\Framework\TestCase
 {
 }
+
+/**
+ * @covers NotFullyQualified
+ */
+class CoversNotFullyQualified extends \PHPUnit\Framework\TestCase
+{
+}

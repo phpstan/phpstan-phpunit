@@ -50,3 +50,10 @@ class CoversNothing extends \PHPUnit\Framework\TestCase
 class CoversNotFullyQualified extends \PHPUnit\Framework\TestCase
 {
 }
+
+/**
+ * @covers ::str_replace
+ */
+class CoversGlobalFunction extends \PHPUnit\Framework\TestCase
+{
+}

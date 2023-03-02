@@ -76,10 +76,15 @@ class MockMethodCallRule implements Rule
 				continue;
 			}
 
+			$classNames = $mockedClassObject->getObjectClassNames();
+			if (count($classNames) === 0) {
+				continue;
+			}
+
 			$errors[] = sprintf(
 				'Trying to mock an undefined method %s() on class %s.',
 				$method,
-				implode('|', $mockedClassObject->getObjectClassNames())
+				implode('|', $classNames)
 			);
 		}
 

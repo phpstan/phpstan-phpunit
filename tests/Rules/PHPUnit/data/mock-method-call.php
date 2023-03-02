@@ -56,3 +56,18 @@ class BarWithMethod {
 		return $string;
 	}
 };
+
+final class FinalFoo
+{
+
+}
+
+class FinalFooTest extends \PHPUnit\Framework\TestCase
+{
+
+	public function testMockFinalClass()
+	{
+		$this->createMock(FinalFoo::class)->method('doFoo');
+	}
+
+}

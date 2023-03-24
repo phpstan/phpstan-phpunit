@@ -45,6 +45,10 @@ class ClassCoversExistsRuleTest extends RuleTestCase
 				50,
 				'The @covers annotation requires a fully qualified name.',
 			],
+			[
+				'@covers value \DateTimeInterface references an interface.',
+				64,
+			],
 		]);
 	}
 

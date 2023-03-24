@@ -95,6 +95,13 @@ class CoversHelper
 		if ($this->reflectionProvider->hasClass($className)) {
 			$class = $this->reflectionProvider->getClass($className);
 
+			if ($class->isInterface()) {
+				$errors[] = RuleErrorBuilder::message(sprintf(
+					'@covers value %s references an interface.',
+					$fullName
+				))->build();
+			}
+
 			if (isset($method) && $method !== '' && !$class->hasMethod($method)) {
 				$errors[] = RuleErrorBuilder::message(sprintf(
 					'@covers value %s references an invalid method.',
@@ -105,7 +112,6 @@ class CoversHelper
 			return $errors;
 		} elseif (!isset($method) && $this->reflectionProvider->hasFunction(new Name($className, []), null)) {
 			return $errors;
-
 		} else {
 			$error = RuleErrorBuilder::message(sprintf(
 				'@covers value %s references an invalid %s.',

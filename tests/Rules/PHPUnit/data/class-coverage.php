@@ -57,3 +57,10 @@ class CoversNotFullyQualified extends \PHPUnit\Framework\TestCase
 class CoversGlobalFunction extends \PHPUnit\Framework\TestCase
 {
 }
+
+/**
+ * @covers \DateTimeInterface
+ */
+class CoversInterface extends \PHPUnit\Framework\TestCase
+{
+}

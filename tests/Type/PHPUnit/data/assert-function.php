@@ -4,6 +4,7 @@ namespace AssertFunction;
 
 use function PHPStan\Testing\assertType;
 use function PHPUnit\Framework\assertArrayHasKey;
+use function PHPUnit\Framework\assertContainsOnlyInstancesOf;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertObjectHasAttribute;
@@ -41,6 +42,15 @@ class Foo
 	{
 		assertEmpty($a);
 		assertType("0|0.0|''|'0'|array{}|Countable|EmptyIterator|false|null", $a);
+	}
+
+	public function containsOnlyInstancesOf(array $a, \Traversable $b): void
+	{
+		assertContainsOnlyInstancesOf(\stdClass::class, $a);
+		assertType('array<stdClass>', $a);
+
+		assertContainsOnlyInstancesOf(\stdClass::class, $b);
+		assertType('Traversable', $b);
 	}
 
 }

@@ -13,7 +13,9 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
@@ -273,6 +275,28 @@ class AssertTypeSpecifyingExtensionHelper
 				},
 				'ObjectHasAttribute' => static function (Scope $scope, Arg $property, Arg $object): FuncCall {
 					return new FuncCall(new Name('property_exists'), [$object, $property]);
+				},
+				'ContainsOnlyInstancesOf' => static function (Scope $scope, Arg $className, Arg $haystack): Expr {
+					return new Expr\BinaryOp\BooleanOr(
+						new Expr\Instanceof_($haystack->value, new Name('Traversable')),
+						new Identical(
+							$haystack->value,
+							new FuncCall(new Name('array_filter'), [
+								$haystack,
+								new Arg(new Expr\Closure([
+									'static' => true,
+									'params' => [
+										new Param(new Expr\Variable('_')),
+									],
+									'stmts' => [
+										new Stmt\Return_(
+											new FuncCall(new Name('is_a'), [new Arg(new Expr\Variable('_')), $className])
+										),
+									],
+								])),
+							])
+						)
+					);
 				},
 			];
 		}

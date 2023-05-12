@@ -262,8 +262,14 @@ class AssertTypeSpecifyingExtensionHelper
 						]
 					);
 				},
-				'ArrayHasKey' => static function (Scope $scope, Arg $key, Arg $array): FuncCall {
-					return new FuncCall(new Name('array_key_exists'), [$key, $array]);
+				'ArrayHasKey' => static function (Scope $scope, Arg $key, Arg $array): Expr {
+					return new Expr\BinaryOp\BooleanOr(
+						new Expr\BinaryOp\BooleanAnd(
+							new Expr\Instanceof_($array->value, new Name('ArrayAccess')),
+							new Expr\MethodCall($array->value, 'offsetExists', [$key])
+						),
+						new FuncCall(new Name('array_key_exists'), [$key, $array])
+					);
 				},
 				'ObjectHasAttribute' => static function (Scope $scope, Arg $property, Arg $object): FuncCall {
 					return new FuncCall(new Name('property_exists'), [$object, $property]);

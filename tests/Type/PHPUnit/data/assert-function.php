@@ -31,15 +31,21 @@ class Foo
 		assertType(\DateTimeInterface::class, $o);
 	}
 
-	public function arrayHasNumericKey(array $a): void {
+	public function arrayHasNumericKey(array $a, \ArrayAccess $b): void {
 		assertArrayHasKey(0, $a);
 		assertType('array&hasOffset(0)', $a);
+
+		assertArrayHasKey(0, $b);
+		assertType('ArrayAccess', $b);
 	}
 
-	public function arrayHasStringKey(array $a): void
+	public function arrayHasStringKey(array $a, \ArrayAccess $b): void
 	{
 		assertArrayHasKey('key', $a);
 		assertType("array&hasOffset('key')", $a);
+
+		assertArrayHasKey('key', $b);
+		assertType("ArrayAccess", $b);
 	}
 
 	public function objectHasAttribute(object $a): void

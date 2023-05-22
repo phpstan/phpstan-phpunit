@@ -20,6 +20,17 @@ class Foo
 		assertType(self::class, $o);
 	}
 
+	/**
+	 * @template T of object
+	 * @param object $o
+	 * @param class-string<\DateTimeInterface> $class
+	 */
+	public function assertInstanceOfWorksWithTemplate($o, $class): void
+	{
+		assertInstanceOf($class, $o);
+		assertType(\DateTimeInterface::class, $o);
+	}
+
 	public function arrayHasNumericKey(array $a): void {
 		assertArrayHasKey(0, $a);
 		assertType('array&hasOffset(0)', $a);

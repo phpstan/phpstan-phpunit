@@ -16,7 +16,6 @@ class AssertRuleHelper
 	 */
 	public static function isMethodOrStaticCallOnAssert(Node $node, Scope $scope): bool
 	{
-		$testCaseType = new ObjectType('PHPUnit\Framework\Assert');
 		if ($node instanceof Node\Expr\MethodCall) {
 			$calledOnType = $scope->getType($node->var);
 		} elseif ($node instanceof Node\Expr\StaticCall) {
@@ -45,11 +44,9 @@ class AssertRuleHelper
 			return false;
 		}
 
-		if (!$testCaseType->isSuperTypeOf($calledOnType)->yes()) {
-			return false;
-		}
+		$testCaseType = new ObjectType('PHPUnit\Framework\Assert');
 
-		return true;
+		return $testCaseType->isSuperTypeOf($calledOnType)->yes();
 	}
 
 }

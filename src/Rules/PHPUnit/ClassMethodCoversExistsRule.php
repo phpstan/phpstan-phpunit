@@ -62,7 +62,6 @@ class ClassMethodCoversExistsRule implements Rule
 			return [];
 		}
 
-		$errors = [];
 		$classPhpDoc = $classReflection->getResolvedPhpDoc();
 		[$classCovers, $classCoversDefaultClasses] = $this->coversHelper->getCoverAnnotations($classPhpDoc);
 

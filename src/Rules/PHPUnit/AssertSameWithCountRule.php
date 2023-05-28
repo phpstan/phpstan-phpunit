@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use function count;
 
@@ -42,7 +43,7 @@ class AssertSameWithCountRule implements Rule
 			&& $right->name->toLowerString() === 'count'
 		) {
 			return [
-				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
+				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).')->build(),
 			];
 		}
 
@@ -56,7 +57,7 @@ class AssertSameWithCountRule implements Rule
 
 			if ((new ObjectType(Countable::class))->isSuperTypeOf($type)->yes()) {
 				return [
-					'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).',
+					RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).')->build(),
 				];
 			}
 		}

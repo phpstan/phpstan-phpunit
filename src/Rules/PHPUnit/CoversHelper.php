@@ -7,7 +7,7 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleError;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use function array_merge;
 use function explode;
@@ -61,7 +61,7 @@ class CoversHelper
 	}
 
 	/**
-	 * @return RuleError[] errors
+	 * @return list<IdentifierRuleError> errors
 	 */
 	public function processCovers(
 		Node $node,
@@ -73,7 +73,9 @@ class CoversHelper
 		$covers = (string) $phpDocTag->value;
 
 		if ($covers === '') {
-			$errors[] = RuleErrorBuilder::message('@covers value does not specify anything.')->build();
+			$errors[] = RuleErrorBuilder::message('@covers value does not specify anything.')
+				->identifier('phpunit.covers')
+				->build();
 
 			return $errors;
 		}
@@ -99,14 +101,14 @@ class CoversHelper
 				$errors[] = RuleErrorBuilder::message(sprintf(
 					'@covers value %s references an interface.',
 					$fullName
-				))->build();
+				))->identifier('phpunit.coversInterface')->build();
 			}
 
 			if (isset($method) && $method !== '' && !$class->hasMethod($method)) {
 				$errors[] = RuleErrorBuilder::message(sprintf(
 					'@covers value %s references an invalid method.',
 					$fullName
-				))->build();
+				))->identifier('phpunit.coversMethod')->build();
 			}
 		} elseif (isset($method) && $this->reflectionProvider->hasFunction(new Name($method, []), null)) {
 			return $errors;
@@ -117,7 +119,7 @@ class CoversHelper
 				'@covers value %s references an invalid %s.',
 				$fullName,
 				$isMethod ? 'method' : 'class or function'
-			));
+			))->identifier(sprintf('phpunit.covers%s', $isMethod ? 'Method' : ''));
 
 			if (strpos($className, '\\') === false) {
 				$error->tip('The @covers annotation requires a fully qualified name.');

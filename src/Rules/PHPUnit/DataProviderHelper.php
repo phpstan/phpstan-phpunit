@@ -13,7 +13,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MissingMethodFromReflectionException;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleError;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
 use function array_merge;
@@ -130,7 +130,7 @@ class DataProviderHelper
 	}
 
 	/**
-	 * @return RuleError[] errors
+	 * @return list<IdentifierRuleError> errors
 	 */
 	public function processDataProvider(
 		string $dataProviderValue,
@@ -142,23 +142,29 @@ class DataProviderHelper
 	): array
 	{
 		if ($classReflection === null) {
-			$error = RuleErrorBuilder::message(sprintf(
-				'@dataProvider %s related class not found.',
-				$dataProviderValue
-			))->line($lineNumber)->build();
-
-			return [$error];
+			return [
+				RuleErrorBuilder::message(sprintf(
+					'@dataProvider %s related class not found.',
+					$dataProviderValue
+				))
+					->line($lineNumber)
+					->identifier('phpunit.dataProviderClass')
+					->build(),
+			];
 		}
 
 		try {
 			$dataProviderMethodReflection = $classReflection->getNativeMethod($methodName);
 		} catch (MissingMethodFromReflectionException $missingMethodFromReflectionException) {
-			$error = RuleErrorBuilder::message(sprintf(
-				'@dataProvider %s related method not found.',
-				$dataProviderValue
-			))->line($lineNumber)->build();
-
-			return [$error];
+			return [
+				RuleErrorBuilder::message(sprintf(
+					'@dataProvider %s related method not found.',
+					$dataProviderValue
+				))
+					->line($lineNumber)
+					->identifier('phpunit.dataProviderMethod')
+					->build(),
+			];
 		}
 
 		$errors = [];
@@ -168,21 +174,30 @@ class DataProviderHelper
 				'@dataProvider %s related method is used with incorrect case: %s.',
 				$dataProviderValue,
 				$dataProviderMethodReflection->getName()
-			))->line($lineNumber)->build();
+			))
+				->line($lineNumber)
+				->identifier('method.nameCase')
+				->build();
 		}
 
 		if (!$dataProviderMethodReflection->isPublic()) {
 			$errors[] = RuleErrorBuilder::message(sprintf(
 				'@dataProvider %s related method must be public.',
 				$dataProviderValue
-			))->line($lineNumber)->build();
+			))
+				->line($lineNumber)
+				->identifier('phpunit.dataProviderPublic')
+				->build();
 		}
 
 		if ($deprecationRulesInstalled && $this->phpunit10OrNewer && !$dataProviderMethodReflection->isStatic()) {
 			$errors[] = RuleErrorBuilder::message(sprintf(
 				'@dataProvider %s related method must be static in PHPUnit 10 and newer.',
 				$dataProviderValue
-			))->line($lineNumber)->build();
+			))
+				->line($lineNumber)
+				->identifier('phpunit.dataProviderStatic')
+				->build();
 		}
 
 		return $errors;

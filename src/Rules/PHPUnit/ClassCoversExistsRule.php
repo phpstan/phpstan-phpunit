@@ -56,18 +56,18 @@ class ClassCoversExistsRule implements Rule
 			return [];
 		}
 
-		$errors = [];
 		$classPhpDoc = $classReflection->getResolvedPhpDoc();
 		[$classCovers, $classCoversDefaultClasses] = $this->coversHelper->getCoverAnnotations($classPhpDoc);
 
 		if (count($classCoversDefaultClasses) >= 2) {
-			$errors[] = RuleErrorBuilder::message(sprintf(
-				'@coversDefaultClass is defined multiple times.'
-			))->build();
-
-			return $errors;
+			return [
+				RuleErrorBuilder::message(sprintf(
+					'@coversDefaultClass is defined multiple times.'
+				))->identifier('phpunit.coversDuplicate')->build(),
+			];
 		}
 
+		$errors = [];
 		$coversDefaultClass = array_shift($classCoversDefaultClasses);
 
 		if ($coversDefaultClass !== null) {
@@ -76,7 +76,7 @@ class ClassCoversExistsRule implements Rule
 				$errors[] = RuleErrorBuilder::message(sprintf(
 					'@coversDefaultClass references an invalid class %s.',
 					$className
-				))->build();
+				))->identifier('phpunit.coversClass')->build();
 			}
 		}
 

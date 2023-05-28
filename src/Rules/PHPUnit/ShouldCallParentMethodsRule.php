@@ -57,7 +57,7 @@ class ShouldCallParentMethodsRule implements Rule
 			return [
 				RuleErrorBuilder::message(
 					sprintf('Missing call to parent::%s() method.', $methodName)
-				)->build(),
+				)->identifier('phpunit.callParent')->build(),
 			];
 		}
 

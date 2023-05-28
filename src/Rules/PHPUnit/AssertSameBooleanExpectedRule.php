@@ -41,13 +41,13 @@ class AssertSameBooleanExpectedRule implements Rule
 
 		if ($expectedArgumentValue->name->toLowerString() === 'true') {
 			return [
-				RuleErrorBuilder::message('You should use assertTrue() instead of assertSame() when expecting "true"')->build(),
+				RuleErrorBuilder::message('You should use assertTrue() instead of assertSame() when expecting "true"')->identifier('phpunit.assertTrue')->build(),
 			];
 		}
 
 		if ($expectedArgumentValue->name->toLowerString() === 'false') {
 			return [
-				RuleErrorBuilder::message('You should use assertFalse() instead of assertSame() when expecting "false"')->build(),
+				RuleErrorBuilder::message('You should use assertFalse() instead of assertSame() when expecting "false"')->identifier('phpunit.assertFalse')->build(),
 			];
 		}
 

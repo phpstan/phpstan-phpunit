@@ -94,7 +94,7 @@ class ClassMethodCoversExistsRule implements Rule
 			$errors[] = RuleErrorBuilder::message(sprintf(
 				'@coversDefaultClass defined on class method %s.',
 				$node->name
-			))->build();
+			))->identifier('phpunit.covers')->build();
 		}
 
 		foreach ($methodCovers as $covers) {
@@ -102,7 +102,7 @@ class ClassMethodCoversExistsRule implements Rule
 				$errors[] = RuleErrorBuilder::message(sprintf(
 					'Class already @covers %s so the method @covers is redundant.',
 					$covers->value
-				))->build();
+				))->identifier('phpunit.coversDuplicate')->build();
 			}
 
 			$errors = array_merge(

@@ -65,7 +65,7 @@ class MockMethodCallRule implements Rule
 					'Trying to mock an undefined method %s() on class %s.',
 					$method,
 					implode('&', $mockClasses)
-				))->build();
+				))->identifier('phpunit.mockMethod')->build();
 				continue;
 			}
 
@@ -83,7 +83,7 @@ class MockMethodCallRule implements Rule
 				'Trying to mock an undefined method %s() on class %s.',
 				$method,
 				implode('|', $classNames)
-			))->build();
+			))->identifier('phpunit.mockMethod')->build();
 		}
 
 		return $errors;

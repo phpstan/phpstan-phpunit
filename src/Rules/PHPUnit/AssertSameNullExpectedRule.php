@@ -41,7 +41,7 @@ class AssertSameNullExpectedRule implements Rule
 
 		if ($expectedArgumentValue->name->toLowerString() === 'null') {
 			return [
-				RuleErrorBuilder::message('You should use assertNull() instead of assertSame(null, $actual).')->build(),
+				RuleErrorBuilder::message('You should use assertNull() instead of assertSame(null, $actual).')->identifier('phpunit.assertNull')->build(),
 			];
 		}
 

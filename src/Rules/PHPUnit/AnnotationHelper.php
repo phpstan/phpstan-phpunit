@@ -3,7 +3,7 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Comment\Doc;
-use PHPStan\Rules\RuleError;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use function array_key_exists;
 use function in_array;
@@ -30,7 +30,7 @@ class AnnotationHelper
 	];
 
 	/**
-	 * @return RuleError[] errors
+	 * @return list<IdentifierRuleError> errors
 	 */
 	public function processDocComment(Doc $docComment): array
 	{
@@ -57,7 +57,7 @@ class AnnotationHelper
 
 			$errors[] = RuleErrorBuilder::message(
 				'Annotation "' . $matches['annotation'] . '" is invalid, "@' . $matches['property'] . '" should be followed by a space and a value.'
-			)->build();
+			)->identifier('phpunit.invalidPhpDoc')->build();
 		}
 
 		return $errors;

@@ -276,6 +276,21 @@ class AssertTypeSpecifyingExtensionHelper
 				'ObjectHasAttribute' => static function (Scope $scope, Arg $property, Arg $object): FuncCall {
 					return new FuncCall(new Name('property_exists'), [$object, $property]);
 				},
+				'Contains' => static function (Scope $scope, Arg $needle, Arg $haystack): Expr {
+					return new Expr\BinaryOp\BooleanOr(
+						new Expr\Instanceof_($haystack->value, new Name('Traversable')),
+						new FuncCall(new Name('in_array'), [$needle, $haystack, new Arg(new ConstFetch(new Name('true')))])
+					);
+				},
+				'ContainsEquals' => static function (Scope $scope, Arg $needle, Arg $haystack): Expr {
+					return new Expr\BinaryOp\BooleanOr(
+						new Expr\Instanceof_($haystack->value, new Name('Traversable')),
+						new Expr\BinaryOp\BooleanAnd(
+							new Expr\BooleanNot(new Expr\Empty_($haystack->value)),
+							new FuncCall(new Name('in_array'), [$needle, $haystack, new Arg(new ConstFetch(new Name('false')))])
+						)
+					);
+				},
 				'ContainsOnlyInstancesOf' => static function (Scope $scope, Arg $className, Arg $haystack): Expr {
 					return new Expr\BinaryOp\BooleanOr(
 						new Expr\Instanceof_($haystack->value, new Name('Traversable')),

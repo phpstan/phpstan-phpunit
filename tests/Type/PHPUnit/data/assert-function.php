@@ -10,6 +10,7 @@ use function PHPUnit\Framework\assertContainsOnlyInstancesOf;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertObjectHasAttribute;
+use function PHPUnit\Framework\assertObjectHasProperty;
 
 class Foo
 {
@@ -54,6 +55,12 @@ class Foo
 	public function objectHasAttribute(object $a): void
 	{
 		assertObjectHasAttribute('property', $a);
+		assertType("object&hasProperty(property)", $a);
+	}
+
+	public function objectHasProperty(object $a): void
+	{
+		assertObjectHasProperty('property', $a);
 		assertType("object&hasProperty(property)", $a);
 	}
 

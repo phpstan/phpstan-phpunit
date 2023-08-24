@@ -16,6 +16,12 @@ class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 		}
 
 		yield from $this->gatherAssertTypes(__DIR__ . '/data/assert-function.php');
+
+		if (!function_exists('PHPUnit\\Framework\\assertObjectHasProperty')) {
+			return [];
+		}
+
+		yield from $this->gatherAssertTypes(__DIR__ . '/data/assert-function-9.6.11.php');
 	}
 
 	/**

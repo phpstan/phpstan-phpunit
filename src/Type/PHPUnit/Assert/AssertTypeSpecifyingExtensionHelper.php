@@ -276,6 +276,9 @@ class AssertTypeSpecifyingExtensionHelper
 				'ObjectHasAttribute' => static function (Scope $scope, Arg $property, Arg $object): FuncCall {
 					return new FuncCall(new Name('property_exists'), [$object, $property]);
 				},
+				'ObjectHasProperty' => static function (Scope $scope, Arg $property, Arg $object): FuncCall {
+					return new FuncCall(new Name('property_exists'), [$object, $property]);
+				},
 				'Contains' => static function (Scope $scope, Arg $needle, Arg $haystack): Expr {
 					return new Expr\BinaryOp\BooleanOr(
 						new Expr\Instanceof_($haystack->value, new Name('Traversable')),

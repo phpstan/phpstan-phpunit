@@ -23,6 +23,7 @@ use PHPStan\Analyser\TypeSpecifierContext;
 use ReflectionObject;
 use function array_key_exists;
 use function count;
+use function in_array;
 use function strlen;
 use function strpos;
 use function substr;

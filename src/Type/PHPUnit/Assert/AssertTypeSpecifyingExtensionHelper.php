@@ -34,6 +34,12 @@ class AssertTypeSpecifyingExtensionHelper
 	private static $resolvers;
 
 	/**
+	 * Those can specify types correctly, but would produce always-true issue
+	 * @var string[]
+	 */
+	private static $resolversCausingAlwaysTrue = ['ContainsOnlyInstancesOf', 'ContainsEquals', 'Contains'];
+
+	/**
 	 * @param Arg[] $args
 	 */
 	public static function isSupported(
@@ -87,11 +93,14 @@ class AssertTypeSpecifyingExtensionHelper
 		if ($expression === null) {
 			return new SpecifiedTypes([], []);
 		}
+
+		$bypassAlwaysTrueIssue = in_array(self::trimName($name), self::$resolversCausingAlwaysTrue, true);
+
 		return $typeSpecifier->specifyTypesInCondition(
 			$scope,
 			$expression,
 			TypeSpecifierContext::createTruthy(),
-			new Expr\BinaryOp\BooleanAnd($expression, new Expr\Variable('nonsense'))
+			$bypassAlwaysTrueIssue ? new Expr\BinaryOp\BooleanAnd($expression, new Expr\Variable('nonsense')) : null
 		);
 	}
 

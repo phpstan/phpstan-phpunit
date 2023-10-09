@@ -91,7 +91,7 @@ class AssertTypeSpecifyingExtensionHelper
 			$scope,
 			$expression,
 			TypeSpecifierContext::createTruthy(),
-			new Expr\BinaryOp\BooleanAnd($expression, new Expr\Variable(new Name('nonsense')))
+			new Expr\BinaryOp\BooleanAnd($expression, new Expr\Variable('nonsense'))
 		);
 	}
 

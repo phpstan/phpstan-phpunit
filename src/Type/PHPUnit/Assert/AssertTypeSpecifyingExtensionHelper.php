@@ -90,7 +90,8 @@ class AssertTypeSpecifyingExtensionHelper
 		return $typeSpecifier->specifyTypesInCondition(
 			$scope,
 			$expression,
-			TypeSpecifierContext::createTruthy()
+			TypeSpecifierContext::createTruthy(),
+			new Expr\BinaryOp\BooleanAnd($expression, new Expr\Variable(new Name('nonsense')))
 		);
 	}
 

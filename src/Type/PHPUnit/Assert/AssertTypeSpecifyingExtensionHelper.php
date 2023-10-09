@@ -23,6 +23,7 @@ use PHPStan\Analyser\TypeSpecifierContext;
 use ReflectionObject;
 use function array_key_exists;
 use function count;
+use function in_array;
 use function strlen;
 use function strpos;
 use function substr;
@@ -32,6 +33,12 @@ class AssertTypeSpecifyingExtensionHelper
 
 	/** @var Closure[] */
 	private static $resolvers;
+
+	/**
+	 * Those can specify types correctly, but would produce always-true issue
+	 * @var string[]
+	 */
+	private static $resolversCausingAlwaysTrue = ['ContainsOnlyInstancesOf', 'ContainsEquals', 'Contains'];
 
 	/**
 	 * @param Arg[] $args
@@ -87,10 +94,14 @@ class AssertTypeSpecifyingExtensionHelper
 		if ($expression === null) {
 			return new SpecifiedTypes([], []);
 		}
+
+		$bypassAlwaysTrueIssue = in_array(self::trimName($name), self::$resolversCausingAlwaysTrue, true);
+
 		return $typeSpecifier->specifyTypesInCondition(
 			$scope,
 			$expression,
-			TypeSpecifierContext::createTruthy()
+			TypeSpecifierContext::createTruthy(),
+			$bypassAlwaysTrueIssue ? new Expr\BinaryOp\BooleanAnd($expression, new Expr\Variable('nonsense')) : null
 		);
 	}
 

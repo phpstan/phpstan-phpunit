@@ -65,6 +65,13 @@ class FooTestCase extends \PHPUnit\Framework\TestCase
 		$foo->assertSame();
 	}
 
+	public function testAssertContains()
+	{
+		$this->assertContains('not in the list', new \ArrayObject([1]));
+		$this->assertContainsEquals('not in the list', new \ArrayObject([1]));
+		$this->assertNotContains('not in the list', new \ArrayObject([1]));
+	}
+
 	public function testStaticMethodReturnWithSameTypeIsNotReported()
 	{
 		$this->assertSame(self::createSomething('foo'), self::createSomething('foo'));

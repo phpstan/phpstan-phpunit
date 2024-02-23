@@ -139,14 +139,14 @@ class AssertTypeSpecifyingExtensionHelper
 				'Count' => static function (Scope $scope, Arg $expected, Arg $actual): Identical {
 					return new Identical(
 						$expected->value,
-						new FuncCall(new Name('count'), [$actual]),
+						new FuncCall(new Name('count'), [$actual])
 					);
 				},
 				'NotCount' => static function (Scope $scope, Arg $expected, Arg $actual): BooleanNot {
 					return new BooleanNot(
 						new Identical(
 							$expected->value,
-							new FuncCall(new Name('count'), [$actual]),
+							new FuncCall(new Name('count'), [$actual])
 						)
 					);
 				},

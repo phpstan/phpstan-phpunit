@@ -136,6 +136,20 @@ class AssertTypeSpecifyingExtensionHelper
 	{
 		if (self::$resolvers === null) {
 			self::$resolvers = [
+				'Count' => static function (Scope $scope, Arg $expected, Arg $actual): Identical {
+					return new Identical(
+						$expected->value,
+						new FuncCall(new Name('count'), [$actual])
+					);
+				},
+				'NotCount' => static function (Scope $scope, Arg $expected, Arg $actual): BooleanNot {
+					return new BooleanNot(
+						new Identical(
+							$expected->value,
+							new FuncCall(new Name('count'), [$actual])
+						)
+					);
+				},
 				'InstanceOf' => static function (Scope $scope, Arg $class, Arg $object): Instanceof_ {
 					return new Instanceof_(
 						$object->value,

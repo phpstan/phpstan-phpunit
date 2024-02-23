@@ -7,6 +7,8 @@ use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertContains;
 use function PHPUnit\Framework\assertContainsEquals;
 use function PHPUnit\Framework\assertContainsOnlyInstancesOf;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertNotCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertObjectHasAttribute;
@@ -88,6 +90,25 @@ class Foo
 
 		assertContainsOnlyInstancesOf(\stdClass::class, $b);
 		assertType('Traversable', $b);
+	}
+
+	public function count(array $a, \Countable $b): void
+	{
+		assertCount(3, $a);
+		assertType('non-empty-array', $a);
+
+		assertCount(7, $b);
+		assertType('Countable', $b);
+	}
+
+	public function notCount(array $a, array $b): void
+	{
+		assertNotCount(0, $a);
+		assertType('non-empty-array', $a);
+
+		// still might be empty
+		assertNotCount(1, $b);
+		assertType('array', $b);
 	}
 
 }

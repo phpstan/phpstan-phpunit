@@ -9,6 +9,9 @@ parameters:
 			- markTestIncomplete
 			- markTestSkipped
 	stubFiles:
+		- stubs/Assert.stub
+		- stubs/AssertionFailedError.stub
+		- stubs/ExpectationFailedException.stub
 		- stubs/InvocationMocker.stub
 		- stubs/MockBuilder.stub
 		- stubs/MockObject.stub

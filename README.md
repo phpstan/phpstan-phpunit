@@ -22,6 +22,7 @@ It also contains this strict framework-specific rules (can be enabled separately
 * Check that you are not using `assertSame()` with `false` as expected value. `assertFalse()` should be used instead.
 * Check that you are not using `assertSame()` with `null` as expected value. `assertNull()` should be used instead.
 * Check that you are not using `assertSame()` with `count($variable)` as second parameter. `assertCount($variable)` should be used instead.
+  * If you enable [bleeding edge](https://phpstan.org/blog/what-is-bleeding-edge), check that you are not using `assertSame()` with `count($variable)` as first and second parameter. `assertSameSize()`should be used instead.
 
 ## How to document mock objects in phpDocs?
 

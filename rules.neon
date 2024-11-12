@@ -1,11 +1,16 @@
 rules:
 	- PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
 	- PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
-	- PHPStan\Rules\PHPUnit\AssertSameWithCountRule
 	- PHPStan\Rules\PHPUnit\MockMethodCallRule
 	- PHPStan\Rules\PHPUnit\ShouldCallParentMethodsRule
 
 services:
+	-
+		class: PHPStan\Rules\PHPUnit\AssertSameWithCountRule
+		arguments:
+			bleedingEdge: %featureToggles.bleedingEdge%
+		tags:
+			- phpstan.rules.rule
 	- class: PHPStan\Rules\PHPUnit\ClassCoversExistsRule
 	- class: PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule
 	-

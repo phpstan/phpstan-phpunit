@@ -10,6 +10,19 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame(5, count([1, 2, 3]));
 	}
 
+	public function testAssertSameWithCountExpectedWithCount()
+	{
+		$this->assertSame(count([10, 20]), count([1, 2, 3]));
+	}
+
+	public function testAssertSameWithCountExpectedMethodWithCountMethod()
+	{
+		$foo = new \stdClass();
+		$foo->bar = new Bar ();
+
+		$this->assertSame($foo->bar->count(), count([1, 2, 3]));
+	}
+
 	public function testAssertSameWithCountMethodIsOK()
 	{
 		$foo = new \stdClass();
@@ -28,6 +41,24 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 		$foo->bar = new Bar ();
 
 		$this->assertSame(5, $foo->bar->count());
+	}
+
+	public function testAssertSameWithCountExpectedWithCountMethodForCountableVariableIsNot()
+	{
+		$foo = new \stdClass();
+		$foo->bar = new Bar ();
+
+		$this->assertSame(count([10, 20]), $foo->bar->count());
+	}
+
+	public function testAssertSameWithCountExpectedMethodWithCountMethodForCountableVariableIsNot()
+	{
+		$foo = new \stdClass();
+		$foo->bar = new Bar ();
+		$foo2 = new \stdClass();
+		$foo2->bar = new Bar ();
+
+		$this->assertSame($foo2->bar->count(), $foo->bar->count());
 	}
 
 }

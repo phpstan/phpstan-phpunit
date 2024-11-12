@@ -4,6 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use Countable;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
@@ -16,6 +17,14 @@ use function count;
  */
 class AssertSameWithCountRule implements Rule
 {
+
+	/** @var bool */
+	private $bleedingEdge;
+
+	public function __construct(bool $bleedingEdge)
+	{
+		$this->bleedingEdge = $bleedingEdge;
+	}
 
 	public function getNodeType(): string
 	{
@@ -37,11 +46,34 @@ class AssertSameWithCountRule implements Rule
 
 		$right = $node->getArgs()[1]->value;
 
-		if (
-			$right instanceof Node\Expr\FuncCall
-			&& $right->name instanceof Node\Name
-			&& $right->name->toLowerString() === 'count'
-		) {
+		$rightIsCountFuncCall = $this->isCountFuncCall($right);
+		$rightIsCountMethodCall = $this->isCountMethodCall($right) && $this->argIsCountable($right, $scope);
+		if (!($rightIsCountFuncCall || $rightIsCountMethodCall)) {
+			return [];
+		}
+
+		$leftIsCountFuncCall = $leftIsCountMethodCall = false;
+		if ($this->bleedingEdge) {
+			$left = $node->getArgs()[0]->value;
+			$leftIsCountFuncCall = $this->isCountFuncCall($left);
+			$leftIsCountMethodCall = $this->isCountMethodCall($left) && $this->argIsCountable($left, $scope);
+		}
+
+		if ($rightIsCountFuncCall) {
+			if ($leftIsCountFuncCall) {
+				return [
+					RuleErrorBuilder::message('You should use assertSameSize($expected, $variable) instead of assertSame(count($expected), count($variable)).')
+						->identifier('phpunit.assertSameSize')
+						->build(),
+				];
+			} elseif ($leftIsCountMethodCall) {
+				return [
+					RuleErrorBuilder::message('You should use assertSameSize($expected, $variable) instead of assertSame($expected->count(), count($variable)).')
+						->identifier('phpunit.assertSameSize')
+						->build(),
+				];
+			}
+
 			return [
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).')
 					->identifier('phpunit.assertCount')
@@ -49,24 +81,54 @@ class AssertSameWithCountRule implements Rule
 			];
 		}
 
-		if (
-			$right instanceof Node\Expr\MethodCall
-			&& $right->name instanceof Node\Identifier
-			&& $right->name->toLowerString() === 'count'
-			&& count($right->getArgs()) === 0
-		) {
-			$type = $scope->getType($right->var);
-
-			if ((new ObjectType(Countable::class))->isSuperTypeOf($type)->yes()) {
-				return [
-					RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).')
-						->identifier('phpunit.assertCount')
-						->build(),
-				];
-			}
+		if ($leftIsCountFuncCall) {
+			return [
+				RuleErrorBuilder::message('You should use assertSameSize($expected, $variable) instead of assertSame(count($expected), $variable->count()).')
+					->identifier('phpunit.assertSameSize')
+					->build(),
+			];
+		} elseif ($leftIsCountMethodCall) {
+			return [
+				RuleErrorBuilder::message('You should use assertSameSize($expected, $variable) instead of assertSame($expected->count(), $variable->count()).')
+					->identifier('phpunit.assertSameSize')
+					->build(),
+			];
 		}
 
-		return [];
+		return [
+			RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).')
+				->identifier('phpunit.assertCount')
+				->build(),
+		];
+	}
+
+	/**
+	 * @phpstan-assert-if-true Node\Expr\FuncCall $expr
+	 */
+	private function isCountFuncCall(Node\Expr $expr): bool
+	{
+		return $expr instanceof Node\Expr\FuncCall
+			&& $expr->name instanceof Node\Name
+			&& $expr->name->toLowerString() === 'count';
+	}
+
+	/**
+	 * @phpstan-assert-if-true Node\Expr\MethodCall $expr
+	 */
+	private function isCountMethodCall(Node\Expr $expr): bool
+	{
+		return $expr instanceof Node\Expr\MethodCall
+			&& $expr->name instanceof Node\Identifier
+			&& $expr->name->toLowerString() === 'count'
+			&& count($expr->getArgs()) === 0;
+	}
+
+	private function argIsCountable(MethodCall $methodCall, Scope $scope): bool
+	{
+		$type = $scope->getType($methodCall->var);
+		$countableType = new ObjectType(Countable::class);
+
+		return $countableType->isSuperTypeOf($type)->yes();
 	}
 
 }

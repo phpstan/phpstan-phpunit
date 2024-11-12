@@ -13,7 +13,7 @@ class AssertSameWithCountRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new AssertSameWithCountRule();
+		return new AssertSameWithCountRule(true);
 	}
 
 	public function testRule(): void
@@ -24,12 +24,28 @@ class AssertSameWithCountRuleTest extends RuleTestCase
 				10,
 			],
 			[
+				'You should use assertSameSize($expected, $variable) instead of assertSame(count($expected), count($variable)).',
+				15,
+			],
+			[
+				'You should use assertSameSize($expected, $variable) instead of assertSame($expected->count(), count($variable)).',
+				23,
+			],
+			[
 				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
-				22,
+				35,
 			],
 			[
 				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).',
-				30,
+				43,
+			],
+			[
+				'You should use assertSameSize($expected, $variable) instead of assertSame(count($expected), $variable->count()).',
+				51,
+			],
+			[
+				'You should use assertSameSize($expected, $variable) instead of assertSame($expected->count(), $variable->count()).',
+				61,
 			],
 		]);
 	}

@@ -4,6 +4,7 @@ rules:
 	- PHPStan\Rules\PHPUnit\AssertSameWithCountRule
 	- PHPStan\Rules\PHPUnit\ClassCoversExistsRule
 	- PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule
+	- PHPStan\Rules\PHPUnit\ClassNamingRule
 	- PHPStan\Rules\PHPUnit\MockMethodCallRule
 	- PHPStan\Rules\PHPUnit\NoMissingSpaceInClassAnnotationRule
 	- PHPStan\Rules\PHPUnit\NoMissingSpaceInMethodAnnotationRule

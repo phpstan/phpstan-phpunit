@@ -8,7 +8,7 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<ClassCoversExistsRule>
  */
-class ClassCoversExistsRuleTest extends RuleTestCase
+final class ClassCoversExistsRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

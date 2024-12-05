@@ -9,7 +9,7 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<ClassNamingRule>
  */
-class ClassNamingRuleTest extends RuleTestCase
+final class ClassNamingRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

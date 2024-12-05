@@ -9,7 +9,7 @@ use function interface_exists;
 /**
  * @extends RuleTestCase<MockMethodCallRule>
  */
-class MockMethodCallRuleTest extends RuleTestCase
+final class MockMethodCallRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

@@ -8,7 +8,7 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<AssertSameNullExpectedRule>
  */
-class AssertSameNullExpectedRuleTest extends RuleTestCase
+final class AssertSameNullExpectedRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

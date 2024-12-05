@@ -8,7 +8,7 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<ShouldCallParentMethodsRule>
  */
-class ShouldCallParentMethodsRuleTest extends RuleTestCase
+final class ShouldCallParentMethodsRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

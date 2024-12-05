@@ -8,7 +8,7 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<NoMissingSpaceInMethodAnnotationRule>
  */
-class NoMissingSpaceInMethodAnnotationRuleTest extends RuleTestCase
+final class NoMissingSpaceInMethodAnnotationRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

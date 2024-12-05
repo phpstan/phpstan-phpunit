@@ -4,7 +4,7 @@ namespace PHPStan\Type\PHPUnit;
 
 use PHPStan\Testing\TypeInferenceTestCase;
 
-class AssertMethodTypeSpecifyingExtensionTest extends TypeInferenceTestCase
+final class AssertMethodTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 {
 
 	/** @return mixed[] */

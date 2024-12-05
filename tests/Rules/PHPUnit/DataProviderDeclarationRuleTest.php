@@ -9,7 +9,7 @@ use PHPStan\Type\FileTypeMapper;
 /**
  * @extends RuleTestCase<DataProviderDeclarationRule>
  */
-class DataProviderDeclarationRuleTest extends RuleTestCase
+final class DataProviderDeclarationRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

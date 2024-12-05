@@ -9,7 +9,7 @@ use PHPStan\Testing\RuleTestCase;
 /**
  * @extends RuleTestCase<ImpossibleCheckTypeMethodCallRule>
  */
-class AssertSameMethodDifferentTypesRuleTest extends RuleTestCase
+final class AssertSameMethodDifferentTypesRuleTest extends RuleTestCase
 {
 
 	protected function getRule(): Rule

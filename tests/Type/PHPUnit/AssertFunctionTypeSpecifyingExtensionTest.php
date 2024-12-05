@@ -5,7 +5,7 @@ namespace PHPStan\Type\PHPUnit;
 use PHPStan\Testing\TypeInferenceTestCase;
 use function function_exists;
 
-class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
+final class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 {
 
 	/** @return mixed[] */

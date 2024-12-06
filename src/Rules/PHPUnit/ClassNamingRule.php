@@ -10,7 +10,8 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\TestCase;
 use function sprintf;
-use function str_ends_with;
+use function strlen;
+use function substr_compare;
 
 /**
  * @implements Rule<Node\Stmt\Class_>
@@ -36,8 +37,7 @@ class ClassNamingRule implements Rule
 			return [];
 		}
 
-		$className = $node->namespacedName->name;
-		$class = $this->reflectionProvider->getClass($className);
+		$class = $this->reflectionProvider->getClass($node->namespacedName->toString());
 
 		if (!$class->isSubclassOf(TestCase::class)) {
 			return [];
@@ -48,7 +48,7 @@ class ClassNamingRule implements Rule
 		if ($class->isAbstract()) {
 			$this->requireSuffix(
 				$errors,
-				$className,
+				$class->getName(),
 				'TestCase',
 				'Abstract test case class, \'%s\', should be named ending in \'%s\'.',
 			);
@@ -58,7 +58,7 @@ class ClassNamingRule implements Rule
 
 		$this->requireSuffix(
 			$errors,
-			$className,
+			$class->getName(),
 			'Test',
 			'Concrete test class, \'%s\', should be named ending in \'%s\'.',
 		);
@@ -66,7 +66,7 @@ class ClassNamingRule implements Rule
 		if (!$class->isFinal()) {
 			$errors[] = RuleErrorBuilder::message(sprintf(
 				'Concrete test class, \'%s\', should be declared final.',
-				$className,
+				$class->getName(),
 			))->identifier('phpunit.naming')->build();
 		}
 
@@ -75,19 +75,37 @@ class ClassNamingRule implements Rule
 
 	/**
 	 * @param list<IdentifierRuleError> $errors
+	 * @param class-string $className
+	 * @param non-empty-string $suffix
 	 */
 	private function requireSuffix(array &$errors, string $className, string $suffix, string $messageFormat): void
 	{
-		if (str_ends_with($className, $suffix)) {
+		if ($this->hasSuffix($className, $suffix)) {
 			return;
 		}
 
-		// @todo Case sensitivity??
 		$errors[] = RuleErrorBuilder::message(sprintf(
 			$messageFormat,
 			$className,
 			$suffix,
 		))->identifier('phpunit.naming')->build();
+	}
+
+	/**
+	 * Checks if class name has the given suffix.
+	 *
+	 * Comparison is case insensitive.
+	 *
+	 * @param class-string $className
+	 * @param non-empty-string $suffix
+	 */
+	private function hasSuffix(string $className, string $suffix): bool
+	{
+		$classNameLen = strlen($className);
+		$suffixLen = strlen($suffix);
+
+		return $suffixLen < $classNameLen
+			&& substr_compare($className, $suffix, -$suffixLen, $suffixLen, true) === 0;
 	}
 
 }

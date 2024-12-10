@@ -2,6 +2,7 @@ rules:
 	- PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
 	- PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
 	- PHPStan\Rules\PHPUnit\AssertSameWithCountRule
+	- PHPStan\Rules\PHPUnit\AssertEqualsIsDiscouragedRule
 	- PHPStan\Rules\PHPUnit\ClassCoversExistsRule
 	- PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule
 	- PHPStan\Rules\PHPUnit\MockMethodCallRule

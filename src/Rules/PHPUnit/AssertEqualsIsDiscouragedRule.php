@@ -18,6 +18,15 @@ use function strtolower;
 class AssertEqualsIsDiscouragedRule implements Rule
 {
 
+	private bool $strictRulesInstalled;
+
+	public function __construct(
+		bool $strictRulesInstalled
+	)
+	{
+		$this->strictRulesInstalled = $strictRulesInstalled;
+	}
+
 	public function getNodeType(): string
 	{
 		return NodeAbstract::class;
@@ -25,6 +34,10 @@ class AssertEqualsIsDiscouragedRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
+		if (!$this->strictRulesInstalled) {
+			return [];
+		}
+
 		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
 			return [];
 		}

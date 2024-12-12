@@ -2,7 +2,6 @@ rules:
 	- PHPStan\Rules\PHPUnit\AssertSameBooleanExpectedRule
 	- PHPStan\Rules\PHPUnit\AssertSameNullExpectedRule
 	- PHPStan\Rules\PHPUnit\AssertSameWithCountRule
-	- PHPStan\Rules\PHPUnit\AssertEqualsIsDiscouragedRule
 	- PHPStan\Rules\PHPUnit\ClassCoversExistsRule
 	- PHPStan\Rules\PHPUnit\ClassMethodCoversExistsRule
 	- PHPStan\Rules\PHPUnit\MockMethodCallRule
@@ -16,5 +15,12 @@ services:
 		arguments:
 			checkFunctionNameCase: %checkFunctionNameCase%
 			deprecationRulesInstalled: %deprecationRulesInstalled%
+		tags:
+			- phpstan.rules.rule
+
+	-
+		class: PHPStan\Rules\PHPUnit\AssertEqualsIsDiscouragedRule
+		arguments:
+			strictRulesInstalled: %strictRulesInstalled%
 		tags:
 			- phpstan.rules.rule

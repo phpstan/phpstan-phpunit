@@ -32,7 +32,7 @@ final class AssertEqualsIsDiscouragedRuleTest extends RuleTestCase
 
 	protected function getRule(): Rule
 	{
-		return new AssertEqualsIsDiscouragedRule(true);
+		return new AssertEqualsIsDiscouragedRule();
 	}
 
 }

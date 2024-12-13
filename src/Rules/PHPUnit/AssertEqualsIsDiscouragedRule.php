@@ -3,7 +3,7 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
-use PhpParser\NodeAbstract;
+use PhpParser\Node\Expr\CallLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -13,14 +13,14 @@ use function count;
 use function strtolower;
 
 /**
- * @implements Rule<NodeAbstract>
+ * @implements Rule<CallLike>
  */
 class AssertEqualsIsDiscouragedRule implements Rule
 {
 
 	public function getNodeType(): string
 	{
-		return NodeAbstract::class;
+		return CallLike::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array

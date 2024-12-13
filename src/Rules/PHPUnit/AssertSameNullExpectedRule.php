@@ -3,22 +3,22 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use function count;
 
 /**
- * @implements Rule<NodeAbstract>
+ * @implements Rule<CallLike>
  */
 class AssertSameNullExpectedRule implements Rule
 {
 
 	public function getNodeType(): string
 	{
-		return NodeAbstract::class;
+		return CallLike::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array

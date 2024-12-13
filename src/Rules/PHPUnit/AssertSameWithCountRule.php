@@ -4,7 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use Countable;
 use PhpParser\Node;
-use PhpParser\NodeAbstract;
+use PhpParser\Node\Expr\CallLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -12,14 +12,14 @@ use PHPStan\Type\ObjectType;
 use function count;
 
 /**
- * @implements Rule<NodeAbstract>
+ * @implements Rule<CallLike>
  */
 class AssertSameWithCountRule implements Rule
 {
 
 	public function getNodeType(): string
 	{
-		return NodeAbstract::class;
+		return CallLike::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array

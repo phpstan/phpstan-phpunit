@@ -27,6 +27,9 @@ final class AssertEqualsIsDiscouragedRuleTest extends RuleTestCase
 			[self::ERROR_MESSAGE, 29],
 			[self::ERROR_MESSAGE, 30],
 			[self::ERROR_MESSAGE, 32],
+			[self::ERROR_MESSAGE, 37],
+			[self::ERROR_MESSAGE, 38],
+			[self::ERROR_MESSAGE, 39],
 		]);
 	}
 

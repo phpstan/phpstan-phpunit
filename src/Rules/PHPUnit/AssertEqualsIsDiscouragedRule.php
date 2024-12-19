@@ -10,6 +10,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\GeneralizePrecision;
 use PHPStan\Type\TypeCombinator;
 use function count;
+use function in_array;
 use function strtolower;
 
 /**
@@ -32,7 +33,10 @@ class AssertEqualsIsDiscouragedRule implements Rule
 		if (count($node->getArgs()) < 2) {
 			return [];
 		}
-		if (!$node->name instanceof Node\Identifier || strtolower($node->name->name) !== 'assertequals') {
+		if (
+			!$node->name instanceof Node\Identifier
+			|| !in_array(strtolower($node->name->name), ['assertequals', 'assertnotequals'], true)
+		) {
 			return [];
 		}
 

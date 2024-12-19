@@ -33,5 +33,11 @@ final class AssertSameOverAssertEqualsRule extends TestCase
 		$this->assertEquals([], []);
 		$this->assertEquals(new Exception(), new Exception());
 		static::assertEquals(new Exception(), new Exception());
+
+		$this->assertNotEquals($string, $string);
+		$this->assertNotEquals($integer, $integer);
+		$this->assertNotEquals($boolean, $boolean);
+		$this->assertNotSame(5, $integer);
+		static::assertNotSame(5, $integer);
 	}
 }

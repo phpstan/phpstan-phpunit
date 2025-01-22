@@ -55,6 +55,14 @@ class AssertEqualsIsDiscouragedRule implements Rule
 			&& ($leftType->isSuperTypeOf($rightType)->yes())
 			&& ($rightType->isSuperTypeOf($leftType)->yes())
 		) {
+			if (strtolower($node->name->name) === 'assertnotequals') {
+				return [
+					RuleErrorBuilder::message(
+						'You should use assertNotSame() instead of assertNotEquals(), because both values are scalars of the same type',
+					)->identifier('phpunit.assertEquals')->build(),
+				];
+			}
+
 			return [
 				RuleErrorBuilder::message(
 					'You should use assertSame() instead of assertEquals(), because both values are scalars of the same type',

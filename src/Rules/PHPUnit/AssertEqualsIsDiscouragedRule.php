@@ -11,6 +11,7 @@ use PHPStan\Type\GeneralizePrecision;
 use PHPStan\Type\TypeCombinator;
 use function count;
 use function in_array;
+use function sprintf;
 use function strtolower;
 
 /**
@@ -55,17 +56,13 @@ class AssertEqualsIsDiscouragedRule implements Rule
 			&& ($leftType->isSuperTypeOf($rightType)->yes())
 			&& ($rightType->isSuperTypeOf($leftType)->yes())
 		) {
-			if (strtolower($node->name->name) === 'assertnotequals') {
-				return [
-					RuleErrorBuilder::message(
-						'You should use assertNotSame() instead of assertNotEquals(), because both values are scalars of the same type',
-					)->identifier('phpunit.assertEquals')->build(),
-				];
-			}
-
 			return [
 				RuleErrorBuilder::message(
-					'You should use assertSame() instead of assertEquals(), because both values are scalars of the same type',
+					sprintf(
+						'You should use %s() instead of %s(), because both values are scalars of the same type',
+						strtolower($node->name->name) === 'assertnotequals' ? 'assertNotSame' : 'assertSame',
+						$node->name->name,
+					),
 				)->identifier('phpunit.assertEquals')->build(),
 			];
 		}

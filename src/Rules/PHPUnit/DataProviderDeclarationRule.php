@@ -52,7 +52,7 @@ class DataProviderDeclarationRule implements Rule
 	{
 		$classReflection = $scope->getClassReflection();
 
-		if ($classReflection === null || !$classReflection->isSubclassOf(TestCase::class)) {
+		if ($classReflection === null || !$classReflection->is(TestCase::class)) {
 			return [];
 		}
 

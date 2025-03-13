@@ -76,7 +76,7 @@ class DataProviderHelper
 				}
 
 				$dataProviderMethod = $this->parseDataProviderAnnotationValue($scope, $dataProviderValue);
-				$dataProviderMethod[] = $node->getLine();
+				$dataProviderMethod[] = $node->getStartLine();
 
 				yield $dataProviderValue => $dataProviderMethod;
 			}
@@ -257,7 +257,7 @@ class DataProviderHelper
 			sprintf('%s::%s', $className, $methodNameArg->value) => [
 				$dataProviderClassReflection,
 				$methodNameArg->value,
-				$attribute->getLine(),
+				$attribute->getStartLine(),
 			],
 		];
 	}
@@ -279,7 +279,7 @@ class DataProviderHelper
 			$methodNameArg->value => [
 				$classReflection,
 				$methodNameArg->value,
-				$attribute->getLine(),
+				$attribute->getStartLine(),
 			],
 		];
 	}

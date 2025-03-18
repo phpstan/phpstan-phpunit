@@ -33,7 +33,7 @@ class NoMissingSpaceInClassAnnotationRule implements Rule
 	public function processNode(Node $node, Scope $scope): array
 	{
 		$classReflection = $scope->getClassReflection();
-		if ($classReflection === null || $classReflection->isSubclassOf(TestCase::class) === false) {
+		if ($classReflection === null || $classReflection->is(TestCase::class) === false) {
 			return [];
 		}
 

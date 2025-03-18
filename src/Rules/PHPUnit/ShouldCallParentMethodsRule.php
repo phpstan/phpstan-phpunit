@@ -33,7 +33,7 @@ class ShouldCallParentMethodsRule implements Rule
 			return [];
 		}
 
-		if (!$scope->getClassReflection()->isSubclassOf(TestCase::class)) {
+		if (!$scope->getClassReflection()->is(TestCase::class)) {
 			return [];
 		}
 

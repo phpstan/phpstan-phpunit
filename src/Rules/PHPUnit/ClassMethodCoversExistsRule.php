@@ -56,7 +56,7 @@ class ClassMethodCoversExistsRule implements Rule
 			return [];
 		}
 
-		if (!$classReflection->isSubclassOf(TestCase::class)) {
+		if (!$classReflection->is(TestCase::class)) {
 			return [];
 		}
 

@@ -50,7 +50,7 @@ class ClassCoversExistsRule implements Rule
 	{
 		$classReflection = $node->getClassReflection();
 
-		if (!$classReflection->isSubclassOf(TestCase::class)) {
+		if (!$classReflection->is(TestCase::class)) {
 			return [];
 		}
 

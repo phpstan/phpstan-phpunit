@@ -2,8 +2,6 @@
 
 namespace Dummy;
 
-use Rules\Methods\data\Foo;
-
 /**
  * @backupGlobals
  * @backupGlobals enabled

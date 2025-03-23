@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace PHPStan\Rules;
+namespace PHPStan\Rules\Methods;
 
-use PHPStan\Rules\Methods\CallMethodsRule;
+use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
 /**
@@ -27,7 +27,7 @@ class CallMethodsRuleTest extends RuleTestCase
 	public static function getAdditionalConfigFiles(): array
 	{
 		return [
-			__DIR__ . '/../../extension.neon',
+			__DIR__ . '/../../../extension.neon',
 		];
 	}
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rules\data;
+namespace Bug222;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

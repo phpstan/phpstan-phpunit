@@ -2,6 +2,8 @@
 
 namespace Dummy;
 
+use Rules\Methods\data\Foo;
+
 class InvalidMethodCoversAnnotation extends \PHPUnit\Framework\TestCase
 {
 	/**

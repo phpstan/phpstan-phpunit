@@ -101,6 +101,7 @@ jobs:
           - "^9.5"
           - "^10.5"
           - "^11.5"
+          - "^12.0.9"
         exclude:
           - php-version: "7.4"
             phpunit-version: "^10.5"
@@ -112,6 +113,14 @@ jobs:
             phpunit-version: "^11.5"
           - php-version: "8.1"
             phpunit-version: "^11.5"
+          - php-version: "7.4"
+            phpunit-version: "^12.0.9"
+          - php-version: "8.0"
+            phpunit-version: "^12.0.9"
+          - php-version: "8.1"
+            phpunit-version: "^12.0.9"
+          - php-version: "8.2"
+            phpunit-version: "^12.0.9"
 
     steps:
       - name: "Checkout"
@@ -158,6 +167,7 @@ jobs:
           - "^9.5"
           - "^10.5"
           - "^11.5"
+          - "^12.0.9"
         exclude:
           - php-version: "7.4"
             phpunit-version: "^10.5"
@@ -169,6 +179,14 @@ jobs:
             phpunit-version: "^11.5"
           - php-version: "8.1"
             phpunit-version: "^11.5"
+          - php-version: "7.4"
+            phpunit-version: "^12.0.9"
+          - php-version: "8.0"
+            phpunit-version: "^12.0.9"
+          - php-version: "8.1"
+            phpunit-version: "^12.0.9"
+          - php-version: "8.2"
+            phpunit-version: "^12.0.9"
 
     steps:
       - name: "Checkout"

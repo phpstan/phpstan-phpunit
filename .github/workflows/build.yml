@@ -97,6 +97,21 @@ jobs:
         dependencies:
           - "lowest"
           - "highest"
+        phpunit-version:
+          - "^9.5"
+          - "^10.5"
+          - "^11.5"
+        exclude:
+          - php-version: "7.4"
+            phpunit-version: "^10.5"
+          - php-version: "8.0"
+            phpunit-version: "^10.5"
+          - php-version: "7.4"
+            phpunit-version: "^11.5"
+          - php-version: "8.0"
+            phpunit-version: "^11.5"
+          - php-version: "8.1"
+            phpunit-version: "^11.5"
 
     steps:
       - name: "Checkout"
@@ -107,6 +122,9 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
+
+      - name: "Require specific PHPUnit version"
+        run: "composer require --dev phpunit/phpunit:${{ matrix.phpunit-version }}"
 
       - name: "Install lowest dependencies"
         if: ${{ matrix.dependencies == 'lowest' }}
@@ -136,6 +154,21 @@ jobs:
         dependencies:
           - "lowest"
           - "highest"
+        phpunit-version:
+          - "^9.5"
+          - "^10.5"
+          - "^11.5"
+        exclude:
+          - php-version: "7.4"
+            phpunit-version: "^10.5"
+          - php-version: "8.0"
+            phpunit-version: "^10.5"
+          - php-version: "7.4"
+            phpunit-version: "^11.5"
+          - php-version: "8.0"
+            phpunit-version: "^11.5"
+          - php-version: "8.1"
+            phpunit-version: "^11.5"
 
     steps:
       - name: "Checkout"
@@ -148,6 +181,9 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           extensions: mbstring
           tools: composer:v2
+
+      - name: "Require specific PHPUnit version"
+        run: "composer require --dev phpunit/phpunit:${{ matrix.phpunit-version }}"
 
       - name: "Install lowest dependencies"
         if: ${{ matrix.dependencies == 'lowest' }}

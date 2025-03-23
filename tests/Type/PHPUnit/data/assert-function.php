@@ -53,12 +53,6 @@ class Foo
 		assertType("ArrayAccess", $b);
 	}
 
-	public function objectHasAttribute(object $a): void
-	{
-		assertObjectHasAttribute('property', $a);
-		assertType("object&hasProperty(property)", $a);
-	}
-
 	public function testEmpty($a): void
 	{
 		assertEmpty($a);

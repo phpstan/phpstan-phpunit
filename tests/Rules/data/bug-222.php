@@ -15,6 +15,20 @@ class Foo extends TestCase
 			->method('get')
 			->with(24)
 			->willReturn('24');
+
+		$mockService
+			->method('get')
+			->with(24)
+			->willReturn('24');
+
+		$mockService
+			->expects($this->exactly(1))
+			->method('get')
+			->willReturn('24');
+
+		$mockService
+			->method('get')
+			->willReturn('24');
 	}
 
 }

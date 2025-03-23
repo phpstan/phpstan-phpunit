@@ -12,20 +12,6 @@
          failOnWarning="true"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xml"
 >
-    <coverage>
-        <include>
-            <directory suffix=".php">./src</directory>
-        </include>
-        <report>
-            <clover outputFile="tests/tmp/clover.xml"/>
-            <text
-                outputFile="php://stdout"
-                showUncoveredFiles="true"
-                showOnlySummary="true"
-            />
-        </report>
-    </coverage>
-
     <testsuites>
         <testsuite name="PHPStan for PHPUnit">
             <directory suffix="Test.php">tests</directory>

@@ -5,9 +5,10 @@ namespace PHPStan\Rules\PHPUnit;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
+use PHPStan\Type\Type;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use function array_filter;
@@ -47,44 +48,58 @@ class MockMethodCallRule implements Rule
 			$method = $constantString->getValue();
 			$type = $scope->getType($node->var);
 
-			if (
-				(
-					in_array(MockObject::class, $type->getObjectClassNames(), true)
-					|| in_array(Stub::class, $type->getObjectClassNames(), true)
-				)
-				&& !$type->hasMethod($method)->yes()
-			) {
-				$mockClasses = array_filter($type->getObjectClassNames(), static fn (string $class): bool => $class !== MockObject::class && $class !== Stub::class);
-				if (count($mockClasses) === 0) {
-					continue;
-				}
-
-				$errors[] = RuleErrorBuilder::message(sprintf(
-					'Trying to mock an undefined method %s() on class %s.',
-					$method,
-					implode('&', $mockClasses),
-				))->identifier('phpunit.mockMethod')->build();
+			$error = $this->checkCallOnType($type, $method);
+			if ($error !== null) {
+				$errors[] = $error;
 				continue;
 			}
 
-			$mockedClassObject = $type->getTemplateType(InvocationMocker::class, 'TMockedClass');
-			if ($mockedClassObject->hasMethod($method)->yes()) {
+			if (!$node->var instanceof MethodCall) {
 				continue;
 			}
 
-			$classNames = $mockedClassObject->getObjectClassNames();
-			if (count($classNames) === 0) {
+			if (!$node->var->name instanceof Node\Identifier) {
 				continue;
 			}
 
-			$errors[] = RuleErrorBuilder::message(sprintf(
-				'Trying to mock an undefined method %s() on class %s.',
-				$method,
-				implode('|', $classNames),
-			))->identifier('phpunit.mockMethod')->build();
+			if ($node->var->name->toLowerString() !== 'expects') {
+				continue;
+			}
+
+			$varType = $scope->getType($node->var->var);
+			$error = $this->checkCallOnType($varType, $method);
+			if ($error === null) {
+				continue;
+			}
+
+			$errors[] = $error;
 		}
 
 		return $errors;
+	}
+
+	private function checkCallOnType(Type $type, string $method): ?IdentifierRuleError
+	{
+		if (
+			(
+				in_array(MockObject::class, $type->getObjectClassNames(), true)
+				|| in_array(Stub::class, $type->getObjectClassNames(), true)
+			)
+			&& !$type->hasMethod($method)->yes()
+		) {
+			$mockClasses = array_filter($type->getObjectClassNames(), static fn (string $class): bool => $class !== MockObject::class && $class !== Stub::class);
+			if (count($mockClasses) === 0) {
+				return null;
+			}
+
+			return RuleErrorBuilder::message(sprintf(
+				'Trying to mock an undefined method %s() on class %s.',
+				$method,
+				implode('&', $mockClasses),
+			))->identifier('phpunit.mockMethod')->build();
+		}
+
+		return null;
 	}
 
 }

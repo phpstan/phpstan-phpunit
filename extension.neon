@@ -12,7 +12,6 @@ parameters:
 		- stubs/Assert.stub
 		- stubs/AssertionFailedError.stub
 		- stubs/ExpectationFailedException.stub
-		- stubs/InvocationMocker.stub
 		- stubs/MockBuilder.stub
 		- stubs/MockObject.stub
 		- stubs/Stub.stub
@@ -43,15 +42,7 @@ services:
 		tags:
 			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension
 	-
-		class: PHPStan\Type\PHPUnit\InvocationMockerDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
 		class: PHPStan\Type\PHPUnit\MockBuilderDynamicReturnTypeExtension
-		tags:
-			- phpstan.broker.dynamicMethodReturnTypeExtension
-	-
-		class: PHPStan\Type\PHPUnit\MockObjectDynamicReturnTypeExtension
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-

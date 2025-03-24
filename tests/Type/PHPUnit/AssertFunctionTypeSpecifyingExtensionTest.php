@@ -3,6 +3,7 @@
 namespace PHPStan\Type\PHPUnit;
 
 use PHPStan\Testing\TypeInferenceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use function function_exists;
 
 class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
@@ -26,6 +27,7 @@ class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 	 * @dataProvider dataFileAsserts
 	 * @param mixed ...$args
 	 */
+	#[DataProvider('dataFileAsserts')]
 	public function testFileAsserts(
 		string $assertType,
 		string $file,

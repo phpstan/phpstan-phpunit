@@ -9,3 +9,8 @@ includes:
 parameters:
 	excludePaths:
 		- tests/*/data/*
+	ignoreErrors:
+		-
+			message: '#^Attribute class PHPUnit\\Framework\\Attributes\\DataProvider does not exist\.$#'
+			identifier: attribute.notFound
+			reportUnmatched: false

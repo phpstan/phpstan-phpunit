@@ -4,6 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<MockMethodCallRule>
@@ -38,6 +39,9 @@ class MockMethodCallRuleTest extends RuleTestCase
 
 	public function testBug227(): void
 	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped('Test requires PHP 8.0.');
+		}
 		$this->analyse([__DIR__ . '/data/bug-227.php'], []);
 	}
 

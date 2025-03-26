@@ -36,6 +36,11 @@ class MockMethodCallRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/mock-method-call.php'], $expectedErrors);
 	}
 
+	public function testBug227(): void
+	{
+		$this->analyse([__DIR__ . '/data/bug-227.php'], []);
+	}
+
 	/**
 	 * @return string[]
 	 */

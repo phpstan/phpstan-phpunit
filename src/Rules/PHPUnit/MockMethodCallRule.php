@@ -48,7 +48,7 @@ class MockMethodCallRule implements Rule
 			$method = $constantString->getValue();
 			$type = $scope->getType($node->var);
 
-			$error = $this->checkCallOnType($type, $method);
+			$error = $this->checkCallOnType($scope, $type, $method);
 			if ($error !== null) {
 				$errors[] = $error;
 				continue;
@@ -67,7 +67,7 @@ class MockMethodCallRule implements Rule
 			}
 
 			$varType = $scope->getType($node->var->var);
-			$error = $this->checkCallOnType($varType, $method);
+			$error = $this->checkCallOnType($scope, $varType, $method);
 			if ($error === null) {
 				continue;
 			}
@@ -78,14 +78,16 @@ class MockMethodCallRule implements Rule
 		return $errors;
 	}
 
-	private function checkCallOnType(Type $type, string $method): ?IdentifierRuleError
+	private function checkCallOnType(Scope $scope, Type $type, string $method): ?IdentifierRuleError
 	{
+		$methodReflection = $scope->getMethodReflection($type, $method);
+		if ($methodReflection !== null) {
+			return null;
+		}
+
 		if (
-			(
-				in_array(MockObject::class, $type->getObjectClassNames(), true)
-				|| in_array(Stub::class, $type->getObjectClassNames(), true)
-			)
-			&& !$type->hasMethod($method)->yes()
+			in_array(MockObject::class, $type->getObjectClassNames(), true)
+			|| in_array(Stub::class, $type->getObjectClassNames(), true)
 		) {
 			$mockClasses = array_filter($type->getObjectClassNames(), static fn (string $class): bool => $class !== MockObject::class && $class !== Stub::class);
 			if (count($mockClasses) === 0) {

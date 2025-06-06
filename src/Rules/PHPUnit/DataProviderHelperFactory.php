@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use PHPStan\Parser\Parser;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
@@ -18,10 +19,17 @@ class DataProviderHelperFactory
 
 	private FileTypeMapper $fileTypeMapper;
 
-	public function __construct(ReflectionProvider $reflectionProvider, FileTypeMapper $fileTypeMapper)
+	private Parser $parser;
+
+	public function __construct(
+		ReflectionProvider $reflectionProvider,
+		FileTypeMapper $fileTypeMapper,
+		Parser $parser
+	)
 	{
 		$this->reflectionProvider = $reflectionProvider;
 		$this->fileTypeMapper = $fileTypeMapper;
+		$this->parser = $parser;
 	}
 
 	public function create(): DataProviderHelper
@@ -49,7 +57,7 @@ class DataProviderHelperFactory
 			}
 		}
 
-		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $phpUnit10OrNewer);
+		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $phpUnit10OrNewer);
 	}
 
 }

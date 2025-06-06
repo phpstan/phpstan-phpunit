@@ -54,6 +54,8 @@ services:
 		factory: @PHPStan\Rules\PHPUnit\DataProviderHelperFactory::create()
 	-
 		class: PHPStan\Rules\PHPUnit\DataProviderHelperFactory
+		arguments:
+			parser: @defaultAnalysisParser
 
 conditionalTags:
 	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:

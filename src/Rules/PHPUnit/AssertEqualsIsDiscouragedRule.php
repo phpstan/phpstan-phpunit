@@ -31,6 +31,10 @@ class AssertEqualsIsDiscouragedRule implements Rule
 			return [];
 		}
 
+		if ($node->isFirstClassCallable()) {
+			return [];
+		}
+
 		if (count($node->getArgs()) < 2) {
 			return [];
 		}

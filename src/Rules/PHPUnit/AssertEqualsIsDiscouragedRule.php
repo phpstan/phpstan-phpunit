@@ -60,14 +60,27 @@ class AssertEqualsIsDiscouragedRule implements Rule
 			&& ($leftType->isSuperTypeOf($rightType)->yes())
 			&& ($rightType->isSuperTypeOf($leftType)->yes())
 		) {
+			$correctName = strtolower($node->name->name) === 'assertnotequals' ? 'assertNotSame' : 'assertSame';
 			return [
 				RuleErrorBuilder::message(
 					sprintf(
 						'You should use %s() instead of %s(), because both values are scalars of the same type',
-						strtolower($node->name->name) === 'assertnotequals' ? 'assertNotSame' : 'assertSame',
+						$correctName,
 						$node->name->name,
 					),
-				)->identifier('phpunit.assertEquals')->build(),
+				)->identifier('phpunit.assertEquals')
+					->fixNode($node, static function (CallLike $node) use ($correctName) {
+						if ($node instanceof Node\Expr\MethodCall) {
+							$node->name = new Node\Identifier($correctName);
+						}
+
+						if ($node instanceof Node\Expr\StaticCall) {
+							$node->name = new Node\Identifier($correctName);
+						}
+
+						return $node;
+					})
+					->build(),
 			];
 		}
 

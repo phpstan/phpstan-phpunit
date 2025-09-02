@@ -11,7 +11,7 @@ This extension provides following features:
 
 * `createMock()`, `getMockForAbstractClass()` and `getMockFromWsdl()` methods return an intersection type (see the [detailed explanation of intersection types](https://phpstan.org/blog/union-types-vs-intersection-types)) of the mock object and the mocked class so that both methods from the mock object (like `expects`) and from the mocked class are available on the object.
 * `getMock()` called on `MockBuilder` is also supported.
-* Interprets `Foo|PHPUnit_Framework_MockObject_MockObject` in phpDoc so that it results in an intersection type instead of a union type.
+* Interprets `Foo|MockObject` in phpDoc so that it results in an intersection type instead of a union type.
 * Defines early terminating method calls for the `PHPUnit\Framework\TestCase` class to prevent undefined variable errors.
 * Specifies types of expressions passed to various `assert` methods like `assertInstanceOf`, `assertTrue`, `assertInternalType` etc.
 * Combined with PHPStan's level 4, it points out always-true and always-false asserts like `assertTrue(true)` etc.
@@ -27,18 +27,15 @@ It also contains this strict framework-specific rules (can be enabled separately
 
 ## How to document mock objects in phpDocs?
 
-If you need to configure the mock even after you assign it to a property or return it from a method, you should add `PHPUnit_Framework_MockObject_MockObject` to the phpDoc:
+If you need to configure the mock even after you assign it to a property or return it from a method, you should add `\PHPUnit\Framework\MockObject\MockObject` to the type:
 
 ```php
-/**
- * @return Foo&PHPUnit_Framework_MockObject_MockObject
- */
-private function createFooMock()
+private function createFooMock(): Foo&\PHPUnit\Framework\MockObject\MockObject
 {
 	return $this->createMock(Foo::class);
 }
 
-public function testSomething()
+public function testSomething(): void
 {
 	$fooMock = $this->createFooMock();
 	$fooMock->method('doFoo')->will($this->returnValue('test'));
@@ -46,22 +43,33 @@ public function testSomething()
 }
 ```
 
-Please note that the correct syntax for intersection types is `Foo&PHPUnit_Framework_MockObject_MockObject`. `Foo|PHPUnit_Framework_MockObject_MockObject` is also supported, but only for ecosystem and legacy reasons.
+If you cannot use native intersection types yet, you can use PHPDoc instead.
+
+```php
+/**
+ * @return Foo&\PHPUnit\Framework\MockObject\MockObject
+ */
+private function createFooMock(): Foo
+{
+	return $this->createMock(Foo::class);
+}
+```
+
+Please note that the correct syntax for intersection types is `Foo&\PHPUnit\Framework\MockObject\MockObject`. `Foo|\PHPUnit\Framework\MockObject\MockObject` is also supported, but only for ecosystem and legacy reasons.
 
 If the mock is fully configured and only the methods of the mocked class are supposed to be called on the value, it's fine to typehint only the mocked class:
 
 ```php
-/** @var Foo */
-private $foo;
+private Foo $foo;
 
-protected function setUp()
+protected function setUp(): void
 {
 	$fooMock = $this->createMock(Foo::class);
 	$fooMock->method('doFoo')->will($this->returnValue('test'));
 	$this->foo = $fooMock;
 }
 
-public function testSomething()
+public function testSomething(): void
 {
 	$this->foo->doFoo();
 	// $this->foo->method() and expects() can no longer be called

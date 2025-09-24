@@ -285,7 +285,7 @@ class DataProviderHelper
 	}
 
 	/**
-	 * @return array<string, array{(ClassReflection|null), string, int}>|null
+	 * @return array<string, array{ClassReflection, string, int}>|null
 	 */
 	private function parseDataProviderAttribute(Attribute $attribute, ClassReflection $classReflection): ?array
 	{

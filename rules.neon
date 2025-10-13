@@ -8,6 +8,7 @@ rules:
 	- PHPStan\Rules\PHPUnit\NoMissingSpaceInClassAnnotationRule
 	- PHPStan\Rules\PHPUnit\NoMissingSpaceInMethodAnnotationRule
 	- PHPStan\Rules\PHPUnit\ShouldCallParentMethodsRule
+	- PHPStan\Rules\PHPUnit\DataProviderDataRule
 
 conditionalTags:
 	PHPStan\Rules\PHPUnit\AssertEqualsIsDiscouragedRule:

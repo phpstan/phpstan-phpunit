@@ -49,6 +49,12 @@ services:
 		class: PHPStan\Rules\PHPUnit\CoversHelper
 	-
 		class: PHPStan\Rules\PHPUnit\AnnotationHelper
+
+	-
+		class: PHPStan\Rules\PHPUnit\TestMethodsHelper
+		arguments:
+			parser: @defaultAnalysisParser
+
 	-
 		class: PHPStan\Rules\PHPUnit\PHPUnitVersionDetector
 

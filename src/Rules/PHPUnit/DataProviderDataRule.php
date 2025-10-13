@@ -17,11 +17,15 @@ class DataProviderDataRule implements Rule
 {
 	private ReflectionProvider $reflectionProvider;
 
+	private TestMethodsHelper $testMethodsHelper;
+
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
+		TestMethodsHelper $testMethodsHelper,
 	)
 	{
 		$this->reflectionProvider = $reflectionProvider;
+		$this->testMethodsHelper = $testMethodsHelper;
 	}
 
 	public function getNodeType(): string
@@ -58,7 +62,22 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		// XXX check whether the method is used as a data provider
+		$testsWithProvider = [];
+		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection);
+		foreach($testMethods as $testMethod)
+		{
+			foreach($this->testMethodsHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [$providerMethod])
+			{
+				if ($providerMethod === $method->getName()) {
+					$testsWithProvider[] = $testMethod;
+					continue 2;
+				}
+			}
+		}
+
+		if (count($testsWithProvider) === 0) {
+			return [];
+		}
 
 		foreach($node->expr->items as $item) {
 			if (!$item->value instanceof Node\Expr\Array_) {
@@ -69,7 +88,7 @@ class DataProviderDataRule implements Rule
 			$var = new Node\Expr\New_(new Node\Name($classReflection->getName()));
 			$scope->invokeNodeCallback(new Node\Expr\MethodCall(
 				$var,
-				'testTrim',
+				$testsWithProvider[0]->getName(),
 				$args,
 				['startLine' => $item->getStartLine()]
 			));

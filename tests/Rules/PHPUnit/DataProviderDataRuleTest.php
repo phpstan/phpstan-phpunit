@@ -10,10 +10,12 @@ use PHPStan\Rules\Methods\MethodCallCheck;
 use PHPStan\Rules\NullsafeCheck;
 use PHPStan\Rules\PhpDoc\UnresolvableTypeHelper;
 use PHPStan\Rules\PHPUnit\DataProviderDataRule;
+use PHPStan\Rules\PHPUnit\TestMethodsHelper;
 use PHPStan\Rules\Properties\PropertyReflectionFinder;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleLevelHelper;
 use PHPStan\Testing\RuleTestCase;
+use PHPStan\Type\FileTypeMapper;
 
 /**
  * @extends RuleTestCase<DataProviderDataRule>
@@ -30,7 +32,8 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 		return new CompositeRule(new DirectRegistry([
 			new DataProviderDataRule(
-				$reflectionProvider
+				$reflectionProvider,
+				new TestMethodsHelper($reflectionProvider, self::getContainer()->getByType(FileTypeMapper::class), self::getContainer()->getService('defaultAnalysisParser'))
 			),
 			new CallMethodsRule(
 				new MethodCallCheck($reflectionProvider, $ruleLevelHelper, true, true),

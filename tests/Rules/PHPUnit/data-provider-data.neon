@@ -1,0 +1,5 @@
+includes:
+	- ../../../extension.neon
+
+rules:
+	- PHPStan\Rules\Methods\CallMethodsRule

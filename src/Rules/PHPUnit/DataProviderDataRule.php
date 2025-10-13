@@ -6,6 +6,7 @@ use LogicException;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\TestCase;
 
@@ -14,6 +15,15 @@ use PHPUnit\Framework\TestCase;
  */
 class DataProviderDataRule implements Rule
 {
+	private ReflectionProvider $reflectionProvider;
+
+	public function __construct(
+		ReflectionProvider $reflectionProvider,
+	)
+	{
+		$this->reflectionProvider = $reflectionProvider;
+	}
+
 	public function getNodeType(): string
 	{
 		return Node\Stmt\Return_::class;
@@ -40,27 +50,29 @@ class DataProviderDataRule implements Rule
 
 		$classReflection = $scope->getClassReflection();
 
-		if ($classReflection === null || !$classReflection->is(TestCase::class)) {
+		if (
+			$classReflection === null
+			|| !$classReflection->is(TestCase::class)
+			|| $classReflection->isAbstract()
+		) {
 			return [];
 		}
 
 		// XXX check whether the method is used as a data provider
 
-		if (method_exists($scope, 'invokeNodeCallback')) {
-			foreach($node->expr->items as $item) {
-				if (!$item->value instanceof Node\Expr\Array_) {
-					return [];
-				}
-
-				$args = $this->arrayItemsToArgs($item->value);
-				$var = new Node\Expr\New_(new Node\Name('test'));
-				$scope->invokeNodeCallback(new Node\Expr\MethodCall(
-					$var,
-					'testTrim',
-					$args,
-					['startLine' => $item->getStartLine()]
-				));
+		foreach($node->expr->items as $item) {
+			if (!$item->value instanceof Node\Expr\Array_) {
+				return [];
 			}
+
+			$args = $this->arrayItemsToArgs($item->value);
+			$var = new Node\Expr\New_(new Node\Name($classReflection->getName()));
+			$scope->invokeNodeCallback(new Node\Expr\MethodCall(
+				$var,
+				'testTrim',
+				$args,
+				['startLine' => $item->getStartLine()]
+			));
 		}
 
 		return [];

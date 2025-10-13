@@ -54,7 +54,12 @@ class DataProviderDataRule implements Rule
 
 				$args = $this->arrayItemsToArgs($item->value);
 				$var = new Node\Expr\New_(new Node\Name('test'));
-				$scope->invokeNodeCallback(new Node\Expr\MethodCall($var, 'testTrim', $args));
+				$scope->invokeNodeCallback(new Node\Expr\MethodCall(
+					$var,
+					'testTrim',
+					$args,
+					['startLine' => $item->getStartLine()]
+				));
 			}
 		}
 

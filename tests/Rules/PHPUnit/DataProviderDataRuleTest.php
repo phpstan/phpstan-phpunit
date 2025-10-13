@@ -35,10 +35,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 				$reflectionProvider,
 				new TestMethodsHelper($reflectionProvider, self::getContainer()->getByType(FileTypeMapper::class), self::getContainer()->getService('defaultAnalysisParser'))
 			),
-			new CallMethodsRule(
-				new MethodCallCheck($reflectionProvider, $ruleLevelHelper, true, true),
-				new FunctionCallParametersCheck($ruleLevelHelper, new NullsafeCheck(), new UnresolvableTypeHelper(), new PropertyReflectionFinder(), true, true, true, true),
-			)
+			self::getContainer()->getByType(CallMethodsRule::class)
 		]));
 	}
 

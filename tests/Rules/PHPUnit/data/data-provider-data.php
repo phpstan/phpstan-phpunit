@@ -13,7 +13,7 @@ class FooTest extends TestCase
 	{
 	}
 
-	public function aProvider(): array /** @phpstan-ignore missingType.iterableValue */
+	public function aProvider(): array
 	{
 		return [
 			[

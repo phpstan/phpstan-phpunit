@@ -18,7 +18,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 
 /**
- * @extends RuleTestCase<DataProviderDataRule>
+ * @extends RuleTestCase<CompositeRule>
  */
 class DataProviderDataRuleTest extends RuleTestCase
 {
@@ -27,12 +27,8 @@ class DataProviderDataRuleTest extends RuleTestCase
 	{
 		$reflectionProvider = $this->createReflectionProvider();
 
-		$ruleLevelHelper = new RuleLevelHelper($reflectionProvider, true, false, true, true, false, false, true);
-
-
 		return new CompositeRule(new DirectRegistry([
 			new DataProviderDataRule(
-				$reflectionProvider,
 				new TestMethodsHelper($reflectionProvider, self::getContainer()->getByType(FileTypeMapper::class), self::getContainer()->getService('defaultAnalysisParser'))
 			),
 			self::getContainer()->getByType(CallMethodsRule::class)

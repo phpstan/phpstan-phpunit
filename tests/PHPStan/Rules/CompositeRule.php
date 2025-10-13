@@ -6,7 +6,10 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use function get_class;
 
-class CompositeRule implements Rule
+/**
+ * @implements Rule<Node>
+ */
+final class CompositeRule implements Rule
 {
 
 	private DirectRegistry $registry;

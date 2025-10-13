@@ -16,16 +16,12 @@ use function count;
 class DataProviderDataRule implements Rule
 {
 
-	private ReflectionProvider $reflectionProvider;
-
 	private TestMethodsHelper $testMethodsHelper;
 
 	public function __construct(
-		ReflectionProvider $reflectionProvider,
 		TestMethodsHelper $testMethodsHelper
 	)
 	{
-		$this->reflectionProvider = $reflectionProvider;
 		$this->testMethodsHelper = $testMethodsHelper;
 	}
 
@@ -80,10 +76,14 @@ class DataProviderDataRule implements Rule
 
 		foreach ($node->expr->items as $item) {
 			if (!$item->value instanceof Node\Expr\Array_) {
-				return [];
+				continue;
 			}
 
 			$args = $this->arrayItemsToArgs($item->value);
+			if ($args === null) {
+				continue;
+			}
+
 			$var = new Node\Expr\New_(new Node\Name($classReflection->getName()));
 			$scope->invokeNodeCallback(new Node\Expr\MethodCall(
 				$var,

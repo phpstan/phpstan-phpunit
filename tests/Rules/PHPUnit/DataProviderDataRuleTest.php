@@ -59,7 +59,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 	public static function getAdditionalConfigFiles(): array
 	{
 		return [
-			__DIR__ . '/data-provider-data.neon',
+			__DIR__ . '/../../../extension.neon',
 		];
 	}
 }

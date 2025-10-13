@@ -2,26 +2,27 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use LogicException;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\TestCase;
+use function count;
 
 /**
  * @implements Rule<Node\Stmt\Return_>
  */
 class DataProviderDataRule implements Rule
 {
+
 	private ReflectionProvider $reflectionProvider;
 
 	private TestMethodsHelper $testMethodsHelper;
 
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
-		TestMethodsHelper $testMethodsHelper,
+		TestMethodsHelper $testMethodsHelper
 	)
 	{
 		$this->reflectionProvider = $reflectionProvider;
@@ -64,10 +65,8 @@ class DataProviderDataRule implements Rule
 
 		$testsWithProvider = [];
 		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection);
-		foreach($testMethods as $testMethod)
-		{
-			foreach($this->testMethodsHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [$providerMethod])
-			{
+		foreach ($testMethods as $testMethod) {
+			foreach ($this->testMethodsHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [$providerMethod]) {
 				if ($providerMethod === $method->getName()) {
 					$testsWithProvider[] = $testMethod;
 					continue 2;
@@ -79,7 +78,7 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		foreach($node->expr->items as $item) {
+		foreach ($node->expr->items as $item) {
 			if (!$item->value instanceof Node\Expr\Array_) {
 				return [];
 			}
@@ -90,7 +89,7 @@ class DataProviderDataRule implements Rule
 				$var,
 				$testsWithProvider[0]->getName(),
 				$args,
-				['startLine' => $item->getStartLine()]
+				['startLine' => $item->getStartLine()],
 			));
 		}
 
@@ -100,10 +99,11 @@ class DataProviderDataRule implements Rule
 	/**
 	 * @return array<Node\Arg>
 	 */
-	private function arrayItemsToArgs(Node\Expr\Array_ $array): ?array {
+	private function arrayItemsToArgs(Node\Expr\Array_ $array): ?array
+	{
 		$args = [];
 
-		foreach($array->items as $item) {
+		foreach ($array->items as $item) {
 			// XXX named args
 			$value = $item->value;
 

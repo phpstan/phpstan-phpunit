@@ -1,14 +1,18 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace PHPStan\Rules;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use function get_class;
 
-class CompositeRule implements Rule {
+class CompositeRule implements Rule
+{
+
 	private DirectRegistry $registry;
 
-	public function __construct(DirectRegistry $ruleRegisty) {
+	public function __construct(DirectRegistry $ruleRegisty)
+	{
 		$this->registry = $ruleRegisty;
 	}
 
@@ -31,4 +35,5 @@ class CompositeRule implements Rule {
 
 		return $errors;
 	}
+
 }

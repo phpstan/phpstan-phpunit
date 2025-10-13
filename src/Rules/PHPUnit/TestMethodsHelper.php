@@ -2,26 +2,19 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use PHPStan\Node\ClassMethod;
 use PHPStan\Parser\Parser;
-use PHPStan\PhpDoc\ResolvedPhpDocBlock;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\IdentifierRuleError;
-use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
 use ReflectionMethod;
-use function array_merge;
-use function explode;
-use function sprintf;
-use function strpos;
+use function count;
+use function str_starts_with;
+use function strtolower;
 
 final class TestMethodsHelper
 {
+
 	private ReflectionProvider $reflectionProvider;
 
 	private FileTypeMapper $fileTypeMapper;
@@ -45,7 +38,7 @@ final class TestMethodsHelper
 	public function getTestMethods(ClassReflection $class): array
 	{
 		$testMethods = [];
-		foreach($class->getNativeReflection()->getMethods() as $reflectionMethod) {
+		foreach ($class->getNativeReflection()->getMethods() as $reflectionMethod) {
 			if (str_starts_with(strtolower($reflectionMethod->getName()), 'test')) {
 				$testMethods[] = $reflectionMethod;
 				continue;
@@ -54,9 +47,11 @@ final class TestMethodsHelper
 			// todo: detect tests with @test annotation
 
 			$testAttributes = $reflectionMethod->getAttributes('PHPUnit\Framework\Attribute\Test');
-			if ($testAttributes !== []) {
-				$testMethods[] = $reflectionMethod;
+			if ($testAttributes === []) {
+				continue;
 			}
+
+			$testMethods[] = $reflectionMethod;
 		}
 
 		return $testMethods;
@@ -66,9 +61,9 @@ final class TestMethodsHelper
 	 * @return iterable<array{string}>
 	 */
 	public function getDataProviderMethods(
-		Scope                            $scope,
+		Scope $scope,
 		ReflectionMethod $node,
-		ClassReflection                  $classReflection
+		ClassReflection $classReflection
 	): iterable
 	{
 		/*

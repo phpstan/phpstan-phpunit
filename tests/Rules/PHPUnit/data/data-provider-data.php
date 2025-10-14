@@ -315,3 +315,24 @@ class TestValidVariadic extends TestCase
 		];
 	}
 }
+
+class TestInValidVariadic extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $si): void
+	{
+	}
+
+	/** @dataProvider aProvider */
+	public function testFoo(string $s, string ...$moreS): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return [
+			["hello", "world", "foo", "bar"],
+			[123]
+		];
+	}
+}

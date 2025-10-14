@@ -114,6 +114,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Parameter #2 $input of method DataProviderDataTest\YieldFromExpr::testFoo() expects string, true given.',
 				277,
 			],
+			[
+				'Parameter #1 $si of method DataProviderDataTest\TestInValidVariadic::testBar() expects int, string given.',
+				333,
+			],
+			[
+				'Parameter #1 $s of method DataProviderDataTest\TestInValidVariadic::testFoo() expects string, int given.',
+				333,
+			],
 		]);
 	}
 

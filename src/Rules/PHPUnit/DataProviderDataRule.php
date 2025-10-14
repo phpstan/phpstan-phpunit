@@ -142,9 +142,27 @@ class DataProviderDataRule implements Rule
 	{
 		$args = [];
 
-		foreach ($array->getValueTypes() as $valueType) {
-			// XXX named args
-			$arg = new Node\Arg(new TypeExpr($valueType));
+		$keyTypes = $array->getKeyTypes();
+		foreach ($array->getValueTypes() as $i => $valueType) {
+			$key = $keyTypes[$i]->getConstantStrings();
+			if (count($key) > 1) {
+				return null;
+			}
+
+			if (count($key) === 0) {
+				$arg = new Node\Arg(new TypeExpr($valueType));
+				$args[] = $arg;
+				continue;
+
+			}
+
+			$arg = new Node\Arg(
+				new TypeExpr($valueType),
+				false,
+				false,
+				[],
+				new Node\Identifier($key[0]->getValue()),
+			);
 			$args[] = $arg;
 		}
 

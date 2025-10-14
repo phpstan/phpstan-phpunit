@@ -99,8 +99,16 @@ class DataProviderDataRuleTest extends RuleTestCase
 				172,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\UnionTypeReturnTest::testWithAnnotation() expects string, int given.',
+				'Parameter #2 $input of method DataProviderDataTest\UnionTypeReturnTest::testFoo() expects string, int given.',
 				216,
+			],
+			[
+				'Parameter $input of method DataProviderDataTest\NamedArgsInProvider::testFoo() expects string, int given.',
+				255,
+			],
+			[
+				'Parameter $input of method DataProviderDataTest\NamedArgsInProvider::testFoo() expects string, false given.',
+				255,
 			],
 		]);
 	}

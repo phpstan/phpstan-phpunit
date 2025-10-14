@@ -17,7 +17,12 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$reflection = $this->createReflectionProvider();
 
 		return new DataProviderDeclarationRule(
-			new DataProviderHelper($reflection, self::getContainer()->getByType(FileTypeMapper::class), self::getContainer()->getService('defaultAnalysisParser'), true),
+			new DataProviderHelper(
+				$reflection,
+				self::getContainer()->getByType(FileTypeMapper::class),
+				self::getContainer()->getService('defaultAnalysisParser'),
+				true
+			),
 			true,
 			true
 		);

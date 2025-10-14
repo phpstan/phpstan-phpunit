@@ -12,7 +12,7 @@ use function file_get_contents;
 use function is_file;
 use function json_decode;
 
-class DataProviderHelperFactory
+class TestMethodsHelperFactory
 {
 
 	private ReflectionProvider $reflectionProvider;
@@ -36,9 +36,9 @@ class DataProviderHelperFactory
 		$this->PHPUnitVersionDetector = $PHPUnitVersionDetector;
 	}
 
-	public function create(): DataProviderHelper
+	public function create(): TestMethodsHelper
 	{
-		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $this->PHPUnitVersionDetector->isPHPUnit10OrNewer());
+		return new TestMethodsHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $this->PHPUnitVersionDetector->isPHPUnit10OrNewer());
 	}
 
 }

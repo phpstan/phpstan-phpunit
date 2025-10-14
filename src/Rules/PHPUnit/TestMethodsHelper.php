@@ -21,15 +21,19 @@ final class TestMethodsHelper
 
 	private Parser $parser;
 
+	private bool $phpunit10OrNewer;
+
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
 		FileTypeMapper $fileTypeMapper,
-		Parser $parser
+		Parser $parser,
+		bool $phpunit10OrNewer,
 	)
 	{
 		$this->reflectionProvider = $reflectionProvider;
 		$this->fileTypeMapper = $fileTypeMapper;
 		$this->parser = $parser;
+		$this->phpunit10OrNewer = $phpunit10OrNewer;
 	}
 
 	/**
@@ -64,12 +68,9 @@ final class TestMethodsHelper
 				}
 			}
 
-			// todo: detect tests with @test annotation
-
-			// XXX
-			//if (!$this->phpunit10OrNewer) {
-			//	return;
-			//}
+			if (!$this->phpunit10OrNewer) {
+				continue;
+			}
 
 			$testAttributes = $reflectionMethod->getAttributes('PHPUnit\Framework\Attributes\Test');
 			if ($testAttributes === []) {

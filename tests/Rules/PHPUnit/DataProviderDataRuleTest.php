@@ -11,6 +11,7 @@ use PHPStan\Rules\NullsafeCheck;
 use PHPStan\Rules\PhpDoc\UnresolvableTypeHelper;
 use PHPStan\Rules\PHPUnit\DataProviderDataRule;
 use PHPStan\Rules\PHPUnit\DataProviderHelper;
+use PHPStan\Rules\PHPUnit\PHPUnitVersionDetector;
 use PHPStan\Rules\PHPUnit\TestMethodsHelper;
 use PHPStan\Rules\Properties\PropertyReflectionFinder;
 use PHPStan\Rules\Rule;
@@ -30,8 +31,19 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 		return new CompositeRule(new DirectRegistry([
 			new DataProviderDataRule(
-				new TestMethodsHelper($reflectionProvider, self::getContainer()->getByType(FileTypeMapper::class), self::getContainer()->getService('defaultAnalysisParser')),
-				new DataProviderHelper($reflectionProvider, self::getContainer()->getByType(FileTypeMapper::class), self::getContainer()->getService('defaultAnalysisParser'), true),
+				new TestMethodsHelper(
+					$reflectionProvider,
+					self::getContainer()->getByType(FileTypeMapper::class),
+					self::getContainer()->getService('defaultAnalysisParser'),
+					true
+				),
+				new DataProviderHelper(
+					$reflectionProvider,
+					self::getContainer()->getByType(FileTypeMapper::class),
+					self::getContainer()->getService('defaultAnalysisParser'),
+					true
+				),
+
 			),
 			self::getContainer()->getByType(CallMethodsRule::class)
 		]));

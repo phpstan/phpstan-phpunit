@@ -4,9 +4,10 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\Expr\TypeExpr;
 use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
 use PHPStan\Rules\Rule;
-use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPUnit\Framework\TestCase;
 use function array_slice;
 use function count;
@@ -40,22 +41,28 @@ class DataProviderDataRule implements Rule
 	public function processNode(Node $node, Scope $scope): array
 	{
 		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
-			if (!$node->expr instanceof Node\Expr\Array_) {
+			$exprType = $scope->getType($node->expr);
+			if (!$exprType->isConstantArray()->yes()) {
 				return [];
 			}
 
-			$arrayExprs = [];
-			foreach ($node->expr->items as $item) {
-				if (!$item->value instanceof Node\Expr\Array_) {
-					return [];
+			$constArrays = $exprType->getConstantArrays();
+			$constantArrays = [];
+			foreach ($constArrays as $constArray) {
+				foreach ($constArray->getValueTypes() as $valueType) {
+					if (!$valueType->isConstantArray()->yes()) {
+						return [];
+					}
+					$constantArrays[] = $valueType;
 				}
-				$arrayExprs[] = $item->value;
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {
-			if (!$node->value instanceof Node\Expr\Array_) {
+			$exprType = $scope->getType($node->value);
+			if (!$exprType->isConstantArray()->yes()) {
 				return [];
 			}
-			$arrayExprs = [$node->value];
+
+			$constantArrays = $exprType->getConstantArrays();
 		} else {
 			return [];
 		}
@@ -105,8 +112,8 @@ class DataProviderDataRule implements Rule
 		}
 
 		foreach ($testsWithProvider as $testMethod) {
-			foreach ($arrayExprs as $arrayExpr) {
-				$args = $this->arrayItemsToArgs($arrayExpr);
+			foreach ($constantArrays as $constantArray) {
+				$args = $this->arrayItemsToArgs($constantArray);
 				if ($args === null) {
 					continue;
 				}
@@ -120,7 +127,7 @@ class DataProviderDataRule implements Rule
 					$var,
 					$testMethod->getName(),
 					$args,
-					['startLine' => $arrayExpr->getStartLine()],
+					['startLine' => $node->getStartLine()],
 				));
 			}
 		}
@@ -131,15 +138,13 @@ class DataProviderDataRule implements Rule
 	/**
 	 * @return array<Node\Arg>
 	 */
-	private function arrayItemsToArgs(Node\Expr\Array_ $array): ?array
+	private function arrayItemsToArgs(ConstantArrayType $array): ?array
 	{
 		$args = [];
 
-		foreach ($array->items as $item) {
+		foreach ($array->getValueTypes() as $valueType) {
 			// XXX named args
-			$value = $item->value;
-
-			$arg = new Node\Arg($value);
+			$arg = new Node\Arg(new TypeExpr($valueType));
 			$args[] = $arg;
 		}
 

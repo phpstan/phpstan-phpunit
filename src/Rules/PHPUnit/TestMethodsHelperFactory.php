@@ -2,13 +2,10 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PHPStan\Parser\Parser;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 
 class TestMethodsHelperFactory
 {
-
 
 	private FileTypeMapper $fileTypeMapper;
 

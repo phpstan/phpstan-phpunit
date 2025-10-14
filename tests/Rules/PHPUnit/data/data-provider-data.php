@@ -186,3 +186,33 @@ class DifferentArgumentCountWithReusedDataprovider extends TestCase
 	}
 }
 
+
+class UnionTypeReturnTest extends TestCase
+{
+
+	/** @dataProvider aProvider */
+	public function testWithAnnotation(string $expectedResult, string $input): void
+	{
+	}
+
+	public function aProvider(): array
+	{
+		$arr = [
+			[
+				'Hello World',
+				" Hello World \n"
+			]
+		];
+
+		if (rand(0,1)) {
+			$arr = [
+				[
+					'Hello World',
+					123
+				]
+			];
+		}
+
+		return $arr;
+	}
+}

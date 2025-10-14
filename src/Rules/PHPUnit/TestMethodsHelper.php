@@ -3,10 +3,8 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Analyser\Scope;
-use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 use ReflectionMethod;
 use function str_starts_with;

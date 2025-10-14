@@ -255,3 +255,41 @@ class NamedArgsInProvider extends TestCase
 		return $arr;
 	}
 }
+
+
+class YieldFromExpr extends TestCase
+{
+
+	/** @dataProvider aProvider */
+	public function testFoo(string $expectedResult, string $input): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		yield [
+			'Hello World',
+			" Hello World \n",
+		];
+
+		yield from $this->moreData();
+
+		yield [
+			'Hello World',
+			true,
+		];
+	}
+
+	/**
+	 * @return array{array{'Hello World', 123}}
+	 */
+	private function moreData(): array
+	{
+		return [
+			[
+				'Hello World',
+				123,
+			]
+		];
+	}
+}

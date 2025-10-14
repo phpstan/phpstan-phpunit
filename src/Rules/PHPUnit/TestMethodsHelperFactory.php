@@ -5,12 +5,6 @@ namespace PHPStan\Rules\PHPUnit;
 use PHPStan\Parser\Parser;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
-use PHPUnit\Framework\TestCase;
-use function dirname;
-use function explode;
-use function file_get_contents;
-use function is_file;
-use function json_decode;
 
 class TestMethodsHelperFactory
 {

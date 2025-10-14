@@ -8,6 +8,7 @@ use PHPStan\Node\Expr\TypeExpr;
 use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\TestCase;
 use function array_slice;
 use function count;
@@ -54,7 +55,7 @@ class DataProviderDataRule implements Rule
 			$constantArrays = [];
 			foreach ($constArrays as $constArray) {
 				foreach ($constArray->getValueTypes() as $valueType) {
-					foreach($valueType->getConstantArrays() as $constValueArray) {
+					foreach ($valueType->getConstantArrays() as $constValueArray) {
 						$constantArrays[] = $constValueArray;
 					}
 				}
@@ -129,9 +130,8 @@ class DataProviderDataRule implements Rule
 					$args = array_slice($args, 0, min($testMethod->getNumberOfParameters(), $maxNumberOfParameters));
 				}
 
-				$var = new Node\Expr\New_(new Node\Name($classReflection->getName()));
 				$scope->invokeNodeCallback(new Node\Expr\MethodCall(
-					$var,
+					new TypeExpr(new ObjectType($classReflection->getName())),
 					$testMethod->getName(),
 					$args,
 					['startLine' => $node->getStartLine()],

@@ -27,7 +27,7 @@ class DataProviderHelperFactory
 		ReflectionProvider $reflectionProvider,
 		FileTypeMapper $fileTypeMapper,
 		Parser $parser,
-		PHPUnitVersionDetector $PHPUnitVersionDetector,
+		PHPUnitVersionDetector $PHPUnitVersionDetector
 	)
 	{
 		$this->reflectionProvider = $reflectionProvider;

@@ -27,7 +27,7 @@ final class TestMethodsHelper
 		ReflectionProvider $reflectionProvider,
 		FileTypeMapper $fileTypeMapper,
 		Parser $parser,
-		bool $phpunit10OrNewer,
+		bool $phpunit10OrNewer
 	)
 	{
 		$this->reflectionProvider = $reflectionProvider;

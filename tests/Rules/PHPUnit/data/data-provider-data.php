@@ -59,7 +59,7 @@ class BarTest extends TestCase
 	}
 }
 
-class YieldingTest extends TestCase
+class YieldTest extends TestCase
 {
 
 	/** @dataProvider yieldProvider */
@@ -86,6 +86,33 @@ class YieldingTest extends TestCase
 				'Hello World',
 				false,
 			];
+	}
+}
+
+class YieldFromTest extends TestCase
+{
+
+	/** @dataProvider yieldProvider */
+	public function testYieldFrom(string $expectedResult, string $input): void
+	{
+	}
+
+	public function yieldProvider(): iterable
+	{
+		yield from [
+			[
+				'Hello World',
+				" Hello World \n",
+			],
+			[
+				'Hello World',
+				123,
+			],
+			[
+				'Hello World',
+				false,
+			]
+		];
 	}
 }
 

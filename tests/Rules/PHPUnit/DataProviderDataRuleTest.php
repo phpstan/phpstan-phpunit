@@ -57,12 +57,20 @@ class DataProviderDataRuleTest extends RuleTestCase
 				54,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\YieldingTest::testYield() expects string, int given.',
+				'Parameter #2 $input of method DataProviderDataTest\YieldTest::testYield() expects string, int given.',
 				79,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\YieldingTest::testYield() expects string, false given.',
+				'Parameter #2 $input of method DataProviderDataTest\YieldTest::testYield() expects string, false given.',
 				85,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::testYieldFrom() expects string, int given.',
+				107,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::testYieldFrom() expects string, false given.',
+				111,
 			],
 		]);
 	}

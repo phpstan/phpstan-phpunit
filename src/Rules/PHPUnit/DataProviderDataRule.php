@@ -36,7 +36,7 @@ class DataProviderDataRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if ($node instanceof Node\Stmt\Return_) {
+		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
 			if (!$node->expr instanceof Node\Expr\Array_) {
 				return [];
 			}

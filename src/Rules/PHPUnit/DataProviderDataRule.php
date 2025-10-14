@@ -61,6 +61,10 @@ class DataProviderDataRule implements Rule
 				}
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {
+			if ($node->value === null) {
+				return [];
+			}
+
 			$exprType = $scope->getType($node->value);
 			if (!$exprType->isConstantArray()->yes()) {
 				return [];

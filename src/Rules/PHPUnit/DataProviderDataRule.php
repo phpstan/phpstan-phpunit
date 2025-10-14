@@ -83,10 +83,6 @@ class DataProviderDataRule implements Rule
 		}
 
 		$method = $scope->getFunction();
-		if ($method === null) {
-			return [];
-		}
-
 		$classReflection = $scope->getClassReflection();
 		if (
 			$classReflection === null

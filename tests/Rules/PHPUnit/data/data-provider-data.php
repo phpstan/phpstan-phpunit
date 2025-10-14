@@ -293,3 +293,25 @@ class YieldFromExpr extends TestCase
 		];
 	}
 }
+
+class TestValidVariadic extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(string $s): void
+	{
+	}
+
+	/** @dataProvider aProvider */
+	public function testFoo(string $s, string ...$moreS): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return [
+			["hello", "world", "foo", "bar"],
+			["hi", "ho"],
+			["nope"]
+		];
+	}
+}

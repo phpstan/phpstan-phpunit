@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rules\PHPUnit;
+namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Testing\CompositeRule;
 use PHPStan\Rules\Methods\CallMethodsRule;

@@ -5,7 +5,6 @@ namespace PHPStan\Rules\PHPUnit;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\Expr\TypeExpr;
-use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ObjectType;
@@ -84,12 +83,11 @@ class DataProviderDataRule implements Rule
 		}
 
 		$method = $scope->getFunction();
-		if (!$method instanceof PhpMethodFromParserNodeReflection) {
+		if ($method === null) {
 			return [];
 		}
 
 		$classReflection = $scope->getClassReflection();
-
 		if (
 			$classReflection === null
 			|| !$classReflection->is(TestCase::class)

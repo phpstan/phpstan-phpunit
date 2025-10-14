@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use function count;
 
 /**
- * @implements Rule<Node\Stmt\Return_>
+ * @implements Rule<Node>
  */
 class DataProviderDataRule implements Rule
 {

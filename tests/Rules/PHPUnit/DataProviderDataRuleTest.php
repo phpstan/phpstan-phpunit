@@ -2,20 +2,12 @@
 
 namespace Rules\PHPUnit;
 
-use PHPStan\Rules\CompositeRule;
-use PHPStan\Rules\DirectRegistry;
-use PHPStan\Rules\FunctionCallParametersCheck;
+use PHPStan\Testing\CompositeRule;
 use PHPStan\Rules\Methods\CallMethodsRule;
-use PHPStan\Rules\Methods\MethodCallCheck;
-use PHPStan\Rules\NullsafeCheck;
-use PHPStan\Rules\PhpDoc\UnresolvableTypeHelper;
 use PHPStan\Rules\PHPUnit\DataProviderDataRule;
 use PHPStan\Rules\PHPUnit\DataProviderHelper;
-use PHPStan\Rules\PHPUnit\PHPUnitVersionDetector;
 use PHPStan\Rules\PHPUnit\TestMethodsHelper;
-use PHPStan\Rules\Properties\PropertyReflectionFinder;
 use PHPStan\Rules\Rule;
-use PHPStan\Rules\RuleLevelHelper;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 
@@ -29,7 +21,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 	{
 		$reflectionProvider = $this->createReflectionProvider();
 
-		return new CompositeRule(new DirectRegistry([
+		return new CompositeRule([
 			new DataProviderDataRule(
 				new TestMethodsHelper(
 					self::getContainer()->getByType(FileTypeMapper::class),
@@ -44,7 +36,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 			),
 			self::getContainer()->getByType(CallMethodsRule::class)
-		]));
+		]);
 	}
 
 	public function testRule(): void

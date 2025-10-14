@@ -115,12 +115,28 @@ class DataProviderDataRuleTest extends RuleTestCase
 				277,
 			],
 			[
-				'Parameter #1 $si of method DataProviderDataTest\TestInValidVariadic::testBar() expects int, string given.',
+				'Parameter #1 $si of method DataProviderDataTest\TestInvalidVariadic::testBar() expects int, string given.',
 				333,
 			],
 			[
-				'Parameter #1 $s of method DataProviderDataTest\TestInValidVariadic::testFoo() expects string, int given.',
+				'Parameter #1 $s of method DataProviderDataTest\TestInvalidVariadic::testFoo() expects string, int given.',
 				333,
+			],
+			[
+				'Parameter #1 $si of method DataProviderDataTest\TestInvalidVariadic2::testBar() expects int, string given.',
+				355,
+			],
+			[
+				'Parameter #2 ...$moreS of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects int, string given.',
+				355,
+			],
+			[
+				'Parameter #4 ...$moreS of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects int, string given.',
+				355,
+			],
+			[
+				'Parameter #1 $s of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects string, int given.',
+				355,
 			],
 		]);
 	}

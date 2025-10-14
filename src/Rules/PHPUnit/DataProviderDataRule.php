@@ -40,24 +40,31 @@ class DataProviderDataRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
+		if ($scope->getFunction() === null) {
+			return [];
+		}
+		if ($scope->isInAnonymousFunction()) {
+			return [];
+		}
+
 		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
 			if ($node->expr === null) {
 				return [];
 			}
 
-			$exprType = $scope->getType($node->expr);
-			if (!$exprType->isConstantArray()->yes()) {
-				return [];
-			}
-
-			$constArrays = $exprType->getConstantArrays();
 			$constantArrays = [];
-			foreach ($constArrays as $constArray) {
-				foreach ($constArray->getValueTypes() as $valueType) {
-					foreach ($valueType->getConstantArrays() as $constValueArray) {
-						$constantArrays[] = $constValueArray;
+			$exprType = $scope->getType($node->expr);
+			$exprConstArrays = $exprType->getConstantArrays();
+			if ($exprConstArrays !== []) {
+				foreach ($exprConstArrays as $constArray) {
+					foreach ($constArray->getValueTypes() as $valueType) {
+						foreach ($valueType->getConstantArrays() as $constValueArray) {
+							$constantArrays[] = $constValueArray;
+						}
 					}
 				}
+			} else {
+				$constantArrays = $exprType->getIterableValueType()->getConstantArrays();
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {
 			if ($node->value === null) {
@@ -74,11 +81,7 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		if ($scope->getFunction() === null) {
-			return [];
-		}
-
-		if ($scope->isInAnonymousFunction()) {
+		if ($constantArrays === []) {
 			return [];
 		}
 

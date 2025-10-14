@@ -138,6 +138,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Parameter #1 $s of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects string, int given.',
 				355,
 			],
+			[
+				'Unknown parameter $foo in call to method DataProviderDataTest\TestIterable::testBar().',
+				371,
+			],
+			[
+				'Missing parameter $si (int) in call to method DataProviderDataTest\TestIterable::testBar().',
+				371,
+			],
 		]);
 	}
 

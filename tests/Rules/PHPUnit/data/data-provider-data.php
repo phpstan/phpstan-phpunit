@@ -358,3 +358,23 @@ class TestInvalidVariadic2 extends TestCase
 		];
 	}
 }
+
+class TestIterable extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $si): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return $this->data();
+	}
+
+	/**
+	 * @return iterable<array{foo: string}>
+	 */
+	public function data(): iterable
+	{
+	}
+}

@@ -50,6 +50,9 @@ services:
 	-
 		class: PHPStan\Rules\PHPUnit\AnnotationHelper
 	-
+		class: PHPStan\Rules\PHPUnit\PHPUnitVersionDetector
+
+	-
 		class: PHPStan\Rules\PHPUnit\DataProviderHelper
 		factory: @PHPStan\Rules\PHPUnit\DataProviderHelperFactory::create()
 	-

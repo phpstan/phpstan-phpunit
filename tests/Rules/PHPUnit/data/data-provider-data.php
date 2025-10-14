@@ -121,3 +121,32 @@ class YieldFromTest extends TestCase
 	}
 }
 
+class DifferentArgumentCount extends TestCase
+{
+
+	/**
+	 * @dataProvider yieldProvider
+	 */
+	public function testFoo(string $expectedResult, string $input): void
+	{
+	}
+
+	public function yieldProvider(): iterable
+	{
+		yield from [
+			[
+				'Hello World',
+				" Hello World \n",
+			],
+			[
+				'Hello World',
+				'abc',
+				123,
+			],
+			[
+				'Hello World',
+			]
+		];
+	}
+}
+

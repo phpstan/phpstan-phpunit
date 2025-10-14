@@ -84,6 +84,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::myTestMethod() expects string, false given.',
 				116,
 			],
+			[
+				'Method DataProviderDataTest\DifferentArgumentCount::testFoo() invoked with 3 parameters, 2 required.',
+				141,
+			],
+			[
+				'Method DataProviderDataTest\DifferentArgumentCount::testFoo() invoked with 1 parameter, 2 required.',
+				146,
+			],
 		]);
 	}
 

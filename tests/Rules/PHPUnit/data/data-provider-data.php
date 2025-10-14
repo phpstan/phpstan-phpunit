@@ -9,7 +9,34 @@ class FooTest extends TestCase
 {
 
 	#[DataProvider('aProvider')]
-	public function testTrim(string $expectedResult, string $input): void
+	public function testWithAttribute(string $expectedResult, string $input): void
+	{
+	}
+
+	static public function aProvider(): array
+	{
+		return [
+			[
+				'Hello World',
+				" Hello World \n",
+			],
+			[
+				'Hello World',
+				123,
+			],
+			[
+				'Hello World',
+				false,
+			],
+		];
+	}
+}
+
+class BarTest extends TestCase
+{
+
+	/** @dataProvider aProvider */
+	public function testWithAnnotation(string $expectedResult, string $input): void
 	{
 	}
 

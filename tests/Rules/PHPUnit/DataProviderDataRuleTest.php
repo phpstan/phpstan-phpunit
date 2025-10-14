@@ -41,12 +41,20 @@ class DataProviderDataRuleTest extends RuleTestCase
 	{
 		$this->analyse([__DIR__ . '/data/data-provider-data.php'], [
 			[
-				'Parameter #2 $input of method DataProviderDataTest\FooTest::testTrim() expects string, int given.',
+				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, int given.',
 				23,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\FooTest::testTrim() expects string, false given.',
+				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, false given.',
 				27,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\BarTest::testWithAnnotation() expects string, int given.',
+				50,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\BarTest::testWithAnnotation() expects string, false given.',
+				54,
 			],
 		]);
 	}

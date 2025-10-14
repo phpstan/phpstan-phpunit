@@ -41,6 +41,10 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped();
+		}
+
 		$this->analyse([__DIR__ . '/data/data-provider-data.php'], [
 			[
 				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, int given.',

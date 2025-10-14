@@ -54,10 +54,9 @@ class DataProviderDataRule implements Rule
 			$constantArrays = [];
 			foreach ($constArrays as $constArray) {
 				foreach ($constArray->getValueTypes() as $valueType) {
-					if (!$valueType->isConstantArray()->yes()) {
-						return [];
+					foreach($valueType->getConstantArrays() as $constValueArray) {
+						$constantArrays[] = $constValueArray;
 					}
-					$constantArrays[] = $valueType;
 				}
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {

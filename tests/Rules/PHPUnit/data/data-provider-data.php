@@ -3,6 +3,7 @@
 namespace DataProviderDataTest;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class FooTest extends TestCase
@@ -62,8 +63,9 @@ class BarTest extends TestCase
 class YieldTest extends TestCase
 {
 
-	/** @dataProvider yieldProvider */
-	public function testYield(string $expectedResult, string $input): void
+	#[DataProvider('yieldProvider')]
+	#[Test]
+	public function myTestMethod(string $expectedResult, string $input): void
 	{
 	}
 
@@ -92,8 +94,11 @@ class YieldTest extends TestCase
 class YieldFromTest extends TestCase
 {
 
-	/** @dataProvider yieldProvider */
-	public function testYieldFrom(string $expectedResult, string $input): void
+	/**
+	 * @dataProvider yieldProvider
+	 * @test
+	 */
+	public function myTestMethod(string $expectedResult, string $input): void
 	{
 	}
 

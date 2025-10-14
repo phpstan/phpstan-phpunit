@@ -2,7 +2,9 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use PHPStan\Analyser\Scope;
 use PHPStan\Parser\Parser;
+use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
@@ -33,18 +35,43 @@ final class TestMethodsHelper
 	/**
 	 * @return array<ReflectionMethod>
 	 */
-	public function getTestMethods(ClassReflection $class): array
+	public function getTestMethods(ClassReflection $classReflection, Scope $scope): array
 	{
 		$testMethods = [];
-		foreach ($class->getNativeReflection()->getMethods() as $reflectionMethod) {
+		foreach ($classReflection->getNativeReflection()->getMethods() as $reflectionMethod) {
+			if (!$reflectionMethod->isPublic()) {
+				continue;
+			}
+
 			if (str_starts_with(strtolower($reflectionMethod->getName()), 'test')) {
 				$testMethods[] = $reflectionMethod;
 				continue;
 			}
 
+			$docComment = $reflectionMethod->getDocComment();
+			if ($docComment !== false) {
+				$methodPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
+					$scope->getFile(),
+					$classReflection->getName(),
+					$scope->isInTrait() ? $scope->getTraitReflection()->getName() : null,
+					$reflectionMethod->getName(),
+					$docComment,
+				);
+
+				if ($this->hasTestAnnotation($methodPhpDoc)) {
+					$testMethods[] = $reflectionMethod;
+					continue;
+				}
+			}
+
 			// todo: detect tests with @test annotation
 
-			$testAttributes = $reflectionMethod->getAttributes('PHPUnit\Framework\Attribute\Test');
+			// XXX
+			//if (!$this->phpunit10OrNewer) {
+			//	return;
+			//}
+
+			$testAttributes = $reflectionMethod->getAttributes('PHPUnit\Framework\Attributes\Test');
 			if ($testAttributes === []) {
 				continue;
 			}
@@ -53,6 +80,24 @@ final class TestMethodsHelper
 		}
 
 		return $testMethods;
+	}
+
+	private function hasTestAnnotation(?ResolvedPhpDocBlock $phpDoc): bool
+	{
+		if ($phpDoc === null) {
+			return false;
+		}
+
+		$phpDocNodes = $phpDoc->getPhpDocNodes();
+
+		foreach ($phpDocNodes as $docNode) {
+			$tags = $docNode->getTagsByName('@test');
+			if ($tags !== []) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

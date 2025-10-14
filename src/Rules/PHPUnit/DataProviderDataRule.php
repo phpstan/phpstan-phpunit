@@ -81,7 +81,7 @@ class DataProviderDataRule implements Rule
 		}
 
 		$testsWithProvider = [];
-		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection);
+		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection, $scope);
 		foreach ($testMethods as $testMethod) {
 			foreach ($this->dataProviderHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [, $providerMethodName]) {
 				if ($providerMethodName === $method->getName()) {

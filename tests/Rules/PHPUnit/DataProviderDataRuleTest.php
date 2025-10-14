@@ -42,35 +42,35 @@ class DataProviderDataRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/data-provider-data.php'], [
 			[
 				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, int given.',
-				23,
+				24,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, false given.',
-				27,
+				28,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\BarTest::testWithAnnotation() expects string, int given.',
-				50,
+				51,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\BarTest::testWithAnnotation() expects string, false given.',
-				54,
+				55,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\YieldTest::testYield() expects string, int given.',
-				79,
+				'Parameter #2 $input of method DataProviderDataTest\YieldTest::myTestMethod() expects string, int given.',
+				81,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\YieldTest::testYield() expects string, false given.',
-				85,
+				'Parameter #2 $input of method DataProviderDataTest\YieldTest::myTestMethod() expects string, false given.',
+				87,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::testYieldFrom() expects string, int given.',
-				107,
+				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::myTestMethod() expects string, int given.',
+				112,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::testYieldFrom() expects string, false given.',
-				111,
+				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::myTestMethod() expects string, false given.',
+				116,
 			],
 		]);
 	}

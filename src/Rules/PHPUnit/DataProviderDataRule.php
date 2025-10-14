@@ -5,7 +5,6 @@ namespace PHPStan\Rules\PHPUnit;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\TestCase;
 use function count;
@@ -18,11 +17,15 @@ class DataProviderDataRule implements Rule
 
 	private TestMethodsHelper $testMethodsHelper;
 
+	private DataProviderHelper $dataProviderHelper;
+
 	public function __construct(
-		TestMethodsHelper $testMethodsHelper
+		TestMethodsHelper $testMethodsHelper,
+		DataProviderHelper $dataProviderHelper
 	)
 	{
 		$this->testMethodsHelper = $testMethodsHelper;
+		$this->dataProviderHelper = $dataProviderHelper;
 	}
 
 	public function getNodeType(): string
@@ -62,8 +65,8 @@ class DataProviderDataRule implements Rule
 		$testsWithProvider = [];
 		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection);
 		foreach ($testMethods as $testMethod) {
-			foreach ($this->testMethodsHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [$providerMethod]) {
-				if ($providerMethod === $method->getName()) {
+			foreach ($this->dataProviderHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [, $providerMethodName]) {
+				if ($providerMethodName === $method->getName()) {
 					$testsWithProvider[] = $testMethod;
 					continue 2;
 				}

@@ -41,6 +41,10 @@ class DataProviderDataRule implements Rule
 	public function processNode(Node $node, Scope $scope): array
 	{
 		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
+			if ($node->expr === null) {
+				return [];
+			}
+
 			$exprType = $scope->getType($node->expr);
 			if (!$exprType->isConstantArray()->yes()) {
 				return [];

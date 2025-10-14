@@ -27,3 +27,6 @@ services:
 
 	-
 		class: PHPStan\Rules\PHPUnit\AssertEqualsIsDiscouragedRule
+
+	-
+		class: PHPStan\Rules\PHPUnit\DataProviderDataRule

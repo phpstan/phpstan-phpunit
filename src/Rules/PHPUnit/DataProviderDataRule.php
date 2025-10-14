@@ -106,10 +106,6 @@ class DataProviderDataRule implements Rule
 
 		foreach ($testsWithProvider as $testMethod) {
 			foreach ($arrayExprs as $arrayExpr) {
-				if (!$arrayExpr instanceof Node\Expr\Array_) {
-					throw new ShouldNotHappenException();
-				}
-
 				$args = $this->arrayItemsToArgs($arrayExpr);
 				if ($args === null) {
 					continue;

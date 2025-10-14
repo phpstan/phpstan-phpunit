@@ -9,30 +9,23 @@ use PHPStan\Type\FileTypeMapper;
 class TestMethodsHelperFactory
 {
 
-	private ReflectionProvider $reflectionProvider;
 
 	private FileTypeMapper $fileTypeMapper;
-
-	private Parser $parser;
 
 	private PHPUnitVersionDetector $PHPUnitVersionDetector;
 
 	public function __construct(
-		ReflectionProvider $reflectionProvider,
 		FileTypeMapper $fileTypeMapper,
-		Parser $parser,
 		PHPUnitVersionDetector $PHPUnitVersionDetector
 	)
 	{
-		$this->reflectionProvider = $reflectionProvider;
 		$this->fileTypeMapper = $fileTypeMapper;
-		$this->parser = $parser;
 		$this->PHPUnitVersionDetector = $PHPUnitVersionDetector;
 	}
 
 	public function create(): TestMethodsHelper
 	{
-		return new TestMethodsHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $this->PHPUnitVersionDetector->isPHPUnit10OrNewer());
+		return new TestMethodsHelper($this->fileTypeMapper, $this->PHPUnitVersionDetector->isPHPUnit10OrNewer());
 	}
 
 }

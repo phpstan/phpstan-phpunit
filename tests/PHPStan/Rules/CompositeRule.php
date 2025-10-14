@@ -8,6 +8,8 @@ use function get_class;
 
 /**
  * @implements Rule<Node>
+ *
+ * @api
  */
 final class CompositeRule implements Rule
 {

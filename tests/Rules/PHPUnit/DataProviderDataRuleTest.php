@@ -32,9 +32,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 		return new CompositeRule(new DirectRegistry([
 			new DataProviderDataRule(
 				new TestMethodsHelper(
-					$reflectionProvider,
 					self::getContainer()->getByType(FileTypeMapper::class),
-					self::getContainer()->getService('defaultAnalysisParser'),
 					true
 				),
 				new DataProviderHelper(

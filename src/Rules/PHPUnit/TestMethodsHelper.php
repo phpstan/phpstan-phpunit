@@ -15,24 +15,16 @@ use function strtolower;
 final class TestMethodsHelper
 {
 
-	private ReflectionProvider $reflectionProvider;
-
 	private FileTypeMapper $fileTypeMapper;
-
-	private Parser $parser;
 
 	private bool $phpunit10OrNewer;
 
 	public function __construct(
-		ReflectionProvider $reflectionProvider,
 		FileTypeMapper $fileTypeMapper,
-		Parser $parser,
 		bool $phpunit10OrNewer
 	)
 	{
-		$this->reflectionProvider = $reflectionProvider;
 		$this->fileTypeMapper = $fileTypeMapper;
-		$this->parser = $parser;
 		$this->phpunit10OrNewer = $phpunit10OrNewer;
 	}
 
@@ -72,7 +64,7 @@ final class TestMethodsHelper
 				continue;
 			}
 
-			$testAttributes = $reflectionMethod->getAttributes('PHPUnit\Framework\Attributes\Test');
+			$testAttributes = $reflectionMethod->getAttributes('PHPUnit\Framework\Attributes\Test'); // @phpstan-ignore argument.type
 			if ($testAttributes === []) {
 				continue;
 			}

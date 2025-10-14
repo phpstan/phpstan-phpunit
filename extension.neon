@@ -58,8 +58,6 @@ services:
 		factory: @PHPStan\Rules\PHPUnit\TestMethodsHelperFactory::create()
 	-
 		class: PHPStan\Rules\PHPUnit\TestMethodsHelperFactory
-		arguments:
-			parser: @defaultAnalysisParser
 
 	-
 		class: PHPStan\Rules\PHPUnit\PHPUnitVersionDetector

@@ -150,3 +150,39 @@ class DifferentArgumentCount extends TestCase
 	}
 }
 
+class DifferentArgumentCountWithReusedDataprovider extends TestCase
+{
+
+	/**
+	 * @dataProvider yieldProvider
+	 */
+	public function testFoo(string $expectedResult, string $input): void
+	{
+	}
+
+	/**
+	 * @dataProvider yieldProvider
+	 */
+	public function testBar(string $expectedResult): void
+	{
+	}
+
+	public function yieldProvider(): iterable
+	{
+		yield from [
+			[
+				'Hello World',
+				" Hello World \n",
+			],
+			[
+				'Hello World',
+				'abc',
+				123,
+			],
+			[
+				'Hello World',
+			]
+		];
+	}
+}
+

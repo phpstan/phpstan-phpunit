@@ -8,7 +8,10 @@ use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 use PHPUnit\Framework\TestCase;
+use function array_slice;
 use function count;
+use function max;
+use function min;
 
 /**
  * @implements Rule<Node>
@@ -95,23 +98,35 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		foreach ($arrayExprs as $arrayExpr) {
-			if (!$arrayExpr instanceof Node\Expr\Array_) {
-				throw new ShouldNotHappenException();
-			}
+		$maxNumberOfParameters = 0;
+		$trimArgs = count($testsWithProvider) > 1;
+		foreach ($testsWithProvider as $testMethod) {
+			$maxNumberOfParameters = max($maxNumberOfParameters, $testMethod->getNumberOfParameters());
+		}
 
-			$args = $this->arrayItemsToArgs($arrayExpr);
-			if ($args === null) {
-				continue;
-			}
+		foreach ($testsWithProvider as $testMethod) {
+			foreach ($arrayExprs as $arrayExpr) {
+				if (!$arrayExpr instanceof Node\Expr\Array_) {
+					throw new ShouldNotHappenException();
+				}
 
-			$var = new Node\Expr\New_(new Node\Name($classReflection->getName()));
-			$scope->invokeNodeCallback(new Node\Expr\MethodCall(
-				$var,
-				$testsWithProvider[0]->getName(),
-				$args,
-				['startLine' => $arrayExpr->getStartLine()],
-			));
+				$args = $this->arrayItemsToArgs($arrayExpr);
+				if ($args === null) {
+					continue;
+				}
+
+				if ($trimArgs && $maxNumberOfParameters !== $testMethod->getNumberOfParameters()) {
+					$args = array_slice($args, 0, min($testMethod->getNumberOfParameters(), $maxNumberOfParameters));
+				}
+
+				$var = new Node\Expr\New_(new Node\Name($classReflection->getName()));
+				$scope->invokeNodeCallback(new Node\Expr\MethodCall(
+					$var,
+					$testMethod->getName(),
+					$args,
+					['startLine' => $arrayExpr->getStartLine()],
+				));
+			}
 		}
 
 		return [];

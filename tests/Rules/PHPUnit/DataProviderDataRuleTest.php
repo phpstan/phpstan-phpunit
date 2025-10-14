@@ -92,6 +92,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Method DataProviderDataTest\DifferentArgumentCount::testFoo() invoked with 1 parameter, 2 required.',
 				146,
 			],
+			[
+				'Method DataProviderDataTest\DifferentArgumentCountWithReusedDataprovider::testFoo() invoked with 3 parameters, 2 required.',
+				177,
+			],
+			[
+				'Method DataProviderDataTest\DifferentArgumentCountWithReusedDataprovider::testFoo() invoked with 1 parameter, 2 required.',
+				182,
+			],
 		]);
 	}
 

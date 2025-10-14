@@ -24,6 +24,7 @@ use ReflectionMethod;
 use function array_merge;
 use function count;
 use function explode;
+use function method_exists;
 use function preg_match;
 use function sprintf;
 
@@ -274,7 +275,14 @@ class DataProviderHelper
 	 */
 	private function yieldDataProviderAttributes($node, ClassReflection $classReflection): iterable
 	{
-		if ($node instanceof ReflectionMethod) {
+		if (
+			$node instanceof ReflectionMethod
+		) {
+			/** @phpstan-ignore function.alreadyNarrowedType */
+			if (!method_exists($node, 'getAttributes')) {
+				return;
+			}
+
 			foreach ($node->getAttributes('PHPUnit\Framework\Attributes\DataProvider') as $attr) {
 				$args = $attr->getArguments();
 				if (count($args) !== 1) {

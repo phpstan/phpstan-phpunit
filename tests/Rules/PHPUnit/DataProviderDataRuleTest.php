@@ -146,6 +146,18 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Missing parameter $si (int) in call to method DataProviderDataTest\TestIterable::testBar().',
 				371,
 			],
+			[
+				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testBar() expects int, int|string given.',
+				401,
+			],
+			[
+				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testFoo() expects int, int|string given.',
+				401,
+			],
+			[
+				'Parameter #1 $s1 of method DataProviderDataTest\TestArrayIterator::testFooBar() expects string, int|string given.',
+				401,
+			],
 		]);
 	}
 

@@ -378,3 +378,31 @@ class TestIterable extends TestCase
 	{
 	}
 }
+
+class TestArrayIterator extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $i): void
+	{
+	}
+
+	/** @dataProvider aProvider */
+	public function testFoo(int $i, string $si): void
+	{
+	}
+
+	/** @dataProvider aProvider */
+	public function testFooBar(string $s1, string $s2): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return new \ArrayIterator([
+			[1],
+			[2, "hello"],
+			["no"],
+			["no", "yes"],
+		]);
+	}
+}

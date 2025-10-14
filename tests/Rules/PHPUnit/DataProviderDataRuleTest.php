@@ -35,7 +35,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 				),
 
 			),
-			self::getContainer()->getByType(CallMethodsRule::class)
+			self::getContainer()->getByType(CallMethodsRule::class) /** @phpstan-ignore phpstanApi.classConstant */
 		]);
 	}
 

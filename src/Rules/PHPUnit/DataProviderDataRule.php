@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodFromParserNodeReflection;
 use PHPStan\Rules\Rule;
+use PHPStan\ShouldNotHappenException;
 use PHPUnit\Framework\TestCase;
 use function count;
 
@@ -30,12 +31,29 @@ class DataProviderDataRule implements Rule
 
 	public function getNodeType(): string
 	{
-		return Node\Stmt\Return_::class;
+		return Node::class;
 	}
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if (!$node->expr instanceof Node\Expr\Array_) {
+		if ($node instanceof Node\Stmt\Return_) {
+			if (!$node->expr instanceof Node\Expr\Array_) {
+				return [];
+			}
+
+			$arrayExprs = [];
+			foreach ($node->expr->items as $item) {
+				if (!$item->value instanceof Node\Expr\Array_) {
+					return [];
+				}
+				$arrayExprs[] = $item->value;
+			}
+		} elseif ($node instanceof Node\Expr\Yield_) {
+			if (!$node->value instanceof Node\Expr\Array_) {
+				return [];
+			}
+			$arrayExprs = [$node->value];
+		} else {
 			return [];
 		}
 
@@ -77,12 +95,12 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		foreach ($node->expr->items as $item) {
-			if (!$item->value instanceof Node\Expr\Array_) {
-				continue;
+		foreach ($arrayExprs as $arrayExpr) {
+			if (!$arrayExpr instanceof Node\Expr\Array_) {
+				throw new ShouldNotHappenException();
 			}
 
-			$args = $this->arrayItemsToArgs($item->value);
+			$args = $this->arrayItemsToArgs($arrayExpr);
 			if ($args === null) {
 				continue;
 			}
@@ -92,7 +110,7 @@ class DataProviderDataRule implements Rule
 				$var,
 				$testsWithProvider[0]->getName(),
 				$args,
-				['startLine' => $item->getStartLine()],
+				['startLine' => $arrayExpr->getStartLine()],
 			));
 		}
 

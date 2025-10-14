@@ -56,6 +56,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Parameter #2 $input of method DataProviderDataTest\BarTest::testWithAnnotation() expects string, false given.',
 				54,
 			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\YieldingTest::testYield() expects string, int given.',
+				79,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\YieldingTest::testYield() expects string, false given.',
+				85,
+			],
 		]);
 	}
 

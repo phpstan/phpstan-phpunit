@@ -426,3 +426,23 @@ class TestArrayIterator extends TestCase
 		]);
 	}
 }
+
+class TestWrongTypedIterable extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $si): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return $this->data();
+	}
+
+	/**
+	 * @return iterable<array<string>>
+	 */
+	public function data(): iterable
+	{
+	}
+}

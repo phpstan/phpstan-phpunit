@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\Expr\TypeExpr;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPUnit\Framework\TestCase;
 use function array_slice;
 use function count;
@@ -47,7 +47,7 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		$constantArrays = [];
+		$arraysTypes = [];
 		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
 			if ($node->expr === null) {
 				return [];
@@ -58,13 +58,17 @@ class DataProviderDataRule implements Rule
 			foreach ($exprConstArrays as $constArray) {
 				foreach ($constArray->getValueTypes() as $valueType) {
 					foreach ($valueType->getConstantArrays() as $constValueArray) {
-						$constantArrays[] = $constValueArray;
+						$arraysTypes[] = $constValueArray;
 					}
 				}
 			}
 
-			if ($constantArrays === []) {
-				$constantArrays = $exprType->getIterableValueType()->getConstantArrays();
+			if ($arraysTypes === []) {
+				$arraysTypes = $exprType->getIterableValueType()->getConstantArrays();
+			}
+
+			if ($arraysTypes === []) {
+				$arraysTypes = $exprType->getIterableValueType()->getArrays();
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {
 			if ($node->value === null) {
@@ -72,10 +76,10 @@ class DataProviderDataRule implements Rule
 			}
 
 			$exprType = $scope->getType($node->value);
-			$constantArrays = $exprType->getConstantArrays();
+			$arraysTypes = $exprType->getConstantArrays();
 		}
 
-		if ($constantArrays === []) {
+		if ($arraysTypes === []) {
 			return [];
 		}
 
@@ -111,14 +115,16 @@ class DataProviderDataRule implements Rule
 		}
 
 		foreach ($testsWithProvider as $testMethod) {
-			foreach ($constantArrays as $constantArray) {
-				$args = $this->arrayItemsToArgs($constantArray);
+			$numberOfParameters = $testMethod->getNumberOfParameters();
+
+			foreach ($arraysTypes as $arraysType) {
+				$args = $this->arrayItemsToArgs($arraysType, $numberOfParameters);
 				if ($args === null) {
 					continue;
 				}
 
-				if ($trimArgs && $maxNumberOfParameters !== $testMethod->getNumberOfParameters()) {
-					$args = array_slice($args, 0, min($testMethod->getNumberOfParameters(), $maxNumberOfParameters));
+				if ($trimArgs && $maxNumberOfParameters !== $numberOfParameters) {
+					$args = array_slice($args, 0, min($numberOfParameters, $maxNumberOfParameters));
 				}
 
 				$scope->invokeNodeCallback(new Node\Expr\MethodCall(
@@ -136,12 +142,26 @@ class DataProviderDataRule implements Rule
 	/**
 	 * @return array<Node\Arg>
 	 */
-	private function arrayItemsToArgs(ConstantArrayType $array): ?array
+	private function arrayItemsToArgs(Type $array, int $numberOfParameters): ?array
 	{
 		$args = [];
 
-		$keyTypes = $array->getKeyTypes();
-		foreach ($array->getValueTypes() as $i => $valueType) {
+		$constArrays = $array->getConstantArrays();
+		if ($constArrays !== [] && count($constArrays) === 1) {
+			$keyTypes = $constArrays[0]->getKeyTypes();
+			$valueTypes = $constArrays[0]->getValueTypes();
+		} elseif ($array->isArray()->yes()) {
+			$keyTypes = [];
+			$valueTypes = [];
+			for ($i = 0; $i < $numberOfParameters; ++$i) {
+				$keyTypes[$i] = $array->getIterableKeyType();
+				$valueTypes[$i] = $array->getIterableValueType();
+			}
+		} else {
+			return null;
+		}
+
+		foreach ($valueTypes as $i => $valueType) {
 			$key = $keyTypes[$i]->getConstantStrings();
 			if (count($key) > 1) {
 				return null;

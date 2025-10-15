@@ -47,12 +47,12 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
+		$constantArrays = [];
 		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
 			if ($node->expr === null) {
 				return [];
 			}
 
-			$constantArrays = [];
 			$exprType = $scope->getType($node->expr);
 			$exprConstArrays = $exprType->getConstantArrays();
 			foreach ($exprConstArrays as $constArray) {
@@ -72,13 +72,7 @@ class DataProviderDataRule implements Rule
 			}
 
 			$exprType = $scope->getType($node->value);
-			if (!$exprType->isConstantArray()->yes()) {
-				return [];
-			}
-
 			$constantArrays = $exprType->getConstantArrays();
-		} else {
-			return [];
 		}
 
 		if ($constantArrays === []) {

@@ -64,10 +64,6 @@ class DataProviderDataRule implements Rule
 			}
 
 			if ($arraysTypes === []) {
-				$arraysTypes = $exprType->getIterableValueType()->getConstantArrays();
-			}
-
-			if ($arraysTypes === []) {
 				$arraysTypes = $exprType->getIterableValueType()->getArrays();
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {

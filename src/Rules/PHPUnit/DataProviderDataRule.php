@@ -55,15 +55,15 @@ class DataProviderDataRule implements Rule
 			$constantArrays = [];
 			$exprType = $scope->getType($node->expr);
 			$exprConstArrays = $exprType->getConstantArrays();
-			if ($exprConstArrays !== []) {
-				foreach ($exprConstArrays as $constArray) {
-					foreach ($constArray->getValueTypes() as $valueType) {
-						foreach ($valueType->getConstantArrays() as $constValueArray) {
-							$constantArrays[] = $constValueArray;
-						}
+			foreach ($exprConstArrays as $constArray) {
+				foreach ($constArray->getValueTypes() as $valueType) {
+					foreach ($valueType->getConstantArrays() as $constValueArray) {
+						$constantArrays[] = $constValueArray;
 					}
 				}
-			} else {
+			}
+
+			if ($constantArrays === []) {
 				$constantArrays = $exprType->getIterableValueType()->getConstantArrays();
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {

@@ -139,24 +139,24 @@ class DataProviderDataRuleTest extends RuleTestCase
 				355,
 			],
 			[
-				'Unknown parameter $foo in call to method DataProviderDataTest\TestIterable::testBar().',
+				'Unknown parameter $foo in call to method DataProviderDataTest\TestArrayShapeIterable::testBar().',
 				371,
 			],
 			[
-				'Missing parameter $si (int) in call to method DataProviderDataTest\TestIterable::testBar().',
+				'Missing parameter $si (int) in call to method DataProviderDataTest\TestArrayShapeIterable::testBar().',
 				371,
 			],
 			[
 				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testBar() expects int, int|string given.',
-				401,
+				421,
 			],
 			[
 				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testFoo() expects int, int|string given.',
-				401,
+				421,
 			],
 			[
 				'Parameter #1 $s1 of method DataProviderDataTest\TestArrayIterator::testFooBar() expects string, int|string given.',
-				401,
+				421,
 			],
 		]);
 	}

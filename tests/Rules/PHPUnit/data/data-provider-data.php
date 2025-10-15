@@ -359,7 +359,7 @@ class TestInvalidVariadic2 extends TestCase
 	}
 }
 
-class TestIterable extends TestCase
+class TestArrayShapeIterable extends TestCase
 {
 	/** @dataProvider aProvider */
 	public function testBar(int $si): void
@@ -373,6 +373,26 @@ class TestIterable extends TestCase
 
 	/**
 	 * @return iterable<array{foo: string}>
+	 */
+	public function data(): iterable
+	{
+	}
+}
+
+class TestTypedIterable extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $si): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return $this->data();
+	}
+
+	/**
+	 * @return iterable<array<int>>
 	 */
 	public function data(): iterable
 	{

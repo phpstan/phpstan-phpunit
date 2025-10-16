@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use PhpParser\Node;
 use PHPStan\Testing\CompositeRule;
 use PHPStan\Rules\Methods\CallMethodsRule;
 use PHPStan\Rules\PHPUnit\DataProviderDataRule;
@@ -21,7 +22,8 @@ class DataProviderDataRuleTest extends RuleTestCase
 	{
 		$reflectionProvider = $this->createReflectionProvider();
 
-		return new CompositeRule([
+		/** @var list<Rule<Node>> $rules */
+		$rules = [
 			new DataProviderDataRule(
 				new TestMethodsHelper(
 					self::getContainer()->getByType(FileTypeMapper::class),
@@ -36,7 +38,9 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 			),
 			self::getContainer()->getByType(CallMethodsRule::class) /** @phpstan-ignore phpstanApi.classConstant */
-		]);
+		];
+
+		return new CompositeRule($rules);
 	}
 
 	public function testRule(): void

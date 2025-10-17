@@ -163,6 +163,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Parameter #1 $si of method DataProviderDataTest\TestWrongTypedIterable::testBar() expects int, string given.',
 				439,
 			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, int given.',
+				461,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, false given.',
+				461,
+			],
 		]);
 	}
 

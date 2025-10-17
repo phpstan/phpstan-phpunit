@@ -84,7 +84,6 @@ class DataProviderDataRule implements Rule
 		if (
 			$classReflection === null
 			|| !$classReflection->is(TestCase::class)
-			|| $classReflection->isAbstract()
 		) {
 			return [];
 		}

@@ -446,3 +446,31 @@ class TestWrongTypedIterable extends TestCase
 	{
 	}
 }
+
+
+abstract class AbstractBaseTest extends TestCase
+{
+
+	#[DataProvider('aProvider')]
+	public function testWithAttribute(string $expectedResult, string $input): void
+	{
+	}
+
+	static public function aProvider(): array
+	{
+		return [
+			[
+				'Hello World',
+				" Hello World \n",
+			],
+			[
+				'Hello World',
+				123,
+			],
+			[
+				'Hello World',
+				false,
+			],
+		];
+	}
+}

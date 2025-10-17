@@ -93,7 +93,7 @@ class DataProviderDataRule implements Rule
 		foreach ($testsWithProvider as $testMethod) {
 			$numberOfParameters = $testMethod->getNumberOfParameters();
 
-			foreach ($arraysTypes as $arraysType) {
+			foreach ($arraysTypes as [$startLine, $arraysType]) {
 				$args = $this->arrayItemsToArgs($arraysType, $numberOfParameters);
 				if ($args === null) {
 					continue;
@@ -107,7 +107,7 @@ class DataProviderDataRule implements Rule
 					new TypeExpr(new ObjectType($classReflection->getName())),
 					$testMethod->getName(),
 					$args,
-					['startLine' => $node->getStartLine()],
+					['startLine' => $startLine],
 				));
 			}
 		}
@@ -165,11 +165,38 @@ class DataProviderDataRule implements Rule
 
 	/**
 	 * @param Node\Stmt\Return_|Node\Expr\Yield_|Node\Expr\YieldFrom $node
-	 * @return array<Type>
+	 *
+	 * @return list<list{int, Type}>
 	 */
 	private function buildArrayTypesFromNode(Node $node, Scope $scope): array
 	{
 		$arraysTypes = [];
+
+		// special case for providers only containing static data, so we get more precise error lines
+		if ($node instanceof Node\Stmt\Return_ && $node->expr instanceof Node\Expr\Array_) {
+			foreach ($node->expr->items as $item) {
+				if (!$item->value instanceof Node\Expr\Array_) {
+					$arraysTypes = [];
+					break;
+				}
+
+				$constArrays = $scope->getType($item->value)->getConstantArrays();
+				if ($constArrays === []) {
+					$arraysTypes = [];
+					break;
+				}
+
+				foreach ($constArrays as $constArray) {
+					$arraysTypes[] = [$item->value->getStartLine(), $constArray];
+				}
+			}
+
+			if ($arraysTypes !== []) {
+				return $arraysTypes;
+			}
+		}
+
+		// general case with less precise error message lines
 		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
 			if ($node->expr === null) {
 				return [];
@@ -180,13 +207,15 @@ class DataProviderDataRule implements Rule
 			foreach ($exprConstArrays as $constArray) {
 				foreach ($constArray->getValueTypes() as $valueType) {
 					foreach ($valueType->getConstantArrays() as $constValueArray) {
-						$arraysTypes[] = $constValueArray;
+						$arraysTypes[] = [$node->getStartLine(), $constValueArray];
 					}
 				}
 			}
 
 			if ($arraysTypes === []) {
-				$arraysTypes = $exprType->getIterableValueType()->getArrays();
+				foreach ($exprType->getIterableValueType()->getArrays() as $arrayType) {
+					$arraysTypes[] = [$node->getStartLine(), $arrayType];
+				}
 			}
 		} elseif ($node instanceof Node\Expr\Yield_) {
 			if ($node->value === null) {
@@ -194,7 +223,9 @@ class DataProviderDataRule implements Rule
 			}
 
 			$exprType = $scope->getType($node->value);
-			$arraysTypes = $exprType->getConstantArrays();
+			foreach ($exprType->getConstantArrays() as $constValueArray) {
+				$arraysTypes[] = [$node->getStartLine(), $constValueArray];
+			}
 		}
 
 		return $arraysTypes;

@@ -49,19 +49,19 @@ class DataProviderDataRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/data-provider-data.php'], [
 			[
 				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, int given.',
-				19,
+				24,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, false given.',
-				19,
+				28,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\BarTest::testWithAnnotation() expects string, int given.',
-				46,
+				51,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\BarTest::testWithAnnotation() expects string, false given.',
-				46,
+				55,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\YieldTest::myTestMethod() expects string, int given.',
@@ -117,27 +117,27 @@ class DataProviderDataRuleTest extends RuleTestCase
 			],
 			[
 				'Parameter #1 $si of method DataProviderDataTest\TestInvalidVariadic::testBar() expects int, string given.',
-				333,
+				334,
 			],
 			[
 				'Parameter #1 $s of method DataProviderDataTest\TestInvalidVariadic::testFoo() expects string, int given.',
-				333,
+				335,
 			],
 			[
 				'Parameter #1 $si of method DataProviderDataTest\TestInvalidVariadic2::testBar() expects int, string given.',
-				355,
+				356,
 			],
 			[
 				'Parameter #2 ...$moreS of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects int, string given.',
-				355,
+				356,
 			],
 			[
 				'Parameter #4 ...$moreS of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects int, string given.',
-				355,
+				356,
 			],
 			[
 				'Parameter #1 $s of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects string, int given.',
-				355,
+				357,
 			],
 			[
 				'Unknown parameter $foo in call to method DataProviderDataTest\TestArrayShapeIterable::testBar().',
@@ -165,11 +165,11 @@ class DataProviderDataRuleTest extends RuleTestCase
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, int given.',
-				461,
+				466,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, false given.',
-				461,
+				470,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionTypeReturnTest::testFoo() expects string, int given.',

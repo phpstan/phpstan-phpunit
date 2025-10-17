@@ -173,7 +173,10 @@ class DataProviderDataRule implements Rule
 		$arraysTypes = [];
 
 		// special case for providers only containing static data, so we get more precise error lines
-		if ($node instanceof Node\Stmt\Return_ && $node->expr instanceof Node\Expr\Array_) {
+		if (
+			($node instanceof Node\Stmt\Return_ && $node->expr instanceof Node\Expr\Array_)
+			|| ($node instanceof Node\Expr\YieldFrom && $node->expr instanceof Node\Expr\Array_)
+		) {
 			foreach ($node->expr->items as $item) {
 				if (!$item->value instanceof Node\Expr\Array_) {
 					$arraysTypes = [];

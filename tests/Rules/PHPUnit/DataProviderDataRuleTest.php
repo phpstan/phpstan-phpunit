@@ -73,27 +73,27 @@ class DataProviderDataRuleTest extends RuleTestCase
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::myTestMethod() expects string, int given.',
-				107,
+				112,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\YieldFromTest::myTestMethod() expects string, false given.',
-				107,
+				116,
 			],
 			[
 				'Method DataProviderDataTest\DifferentArgumentCount::testFoo() invoked with 3 parameters, 2 required.',
-				136,
+				141,
 			],
 			[
 				'Method DataProviderDataTest\DifferentArgumentCount::testFoo() invoked with 1 parameter, 2 required.',
-				136,
+				146,
 			],
 			[
 				'Method DataProviderDataTest\DifferentArgumentCountWithReusedDataprovider::testFoo() invoked with 3 parameters, 2 required.',
-				172,
+				177,
 			],
 			[
 				'Method DataProviderDataTest\DifferentArgumentCountWithReusedDataprovider::testFoo() invoked with 1 parameter, 2 required.',
-				172,
+				182,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\UnionTypeReturnTest::testFoo() expects string, int given.',

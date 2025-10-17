@@ -333,7 +333,7 @@ class TestArrayShapeIterable extends TestCase
 	}
 
 	/**
-	 * @return iterable<array{foo: string}>
+	 * @return iterable<array{si: string}>
 	 */
 	public function data(): iterable
 	{

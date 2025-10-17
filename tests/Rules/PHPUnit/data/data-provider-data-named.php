@@ -44,3 +44,24 @@ class NamedArgsInProvider extends TestCase
 		return $arr;
 	}
 }
+
+
+class TestArrayShapeIterable extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $si): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return $this->data();
+	}
+
+	/**
+	 * @return iterable<array{wrong: string}>
+	 */
+	public function data(): iterable
+	{
+	}
+}

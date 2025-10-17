@@ -128,11 +128,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 				318,
 			],
 			[
-				'Unknown parameter $foo in call to method DataProviderDataTest\TestArrayShapeIterable::testBar().',
-				332,
-			],
-			[
-				'Missing parameter $si (int) in call to method DataProviderDataTest\TestArrayShapeIterable::testBar().',
+				'Parameter $si of method DataProviderDataTest\TestArrayShapeIterable::testBar() expects int, string given.',
 				332,
 			],
 			[
@@ -192,6 +188,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 			[
 				'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
 				44
+			],
+			[
+				'Unknown parameter $wrong in call to method DataProviderDataTestPhp8\TestArrayShapeIterable::testBar().',
+				58
+			],
+			[
+				'Missing parameter $si (int) in call to method DataProviderDataTestPhp8\TestArrayShapeIterable::testBar().',
+				58
 			],
 		]);
 	}

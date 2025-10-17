@@ -474,3 +474,105 @@ abstract class AbstractBaseTest extends TestCase
 		];
 	}
 }
+
+
+class ConstantArrayUnionTypeReturnTest extends TestCase
+{
+
+	/** @dataProvider aProvider */
+	public function testFoo(string $expectedResult, string $input): void
+	{
+	}
+
+	public function aProvider(): array
+	{
+		if (rand(0,1)) {
+			$arr = [
+				[
+					'Hello World',
+					123
+				]
+			];
+		} else {
+			$arr = [
+				[
+					'Hello World',
+					" Hello World \n"
+				]
+			];
+		}
+
+		return $arr;
+	}
+}
+
+class ConstantArrayDifferentLengthUnionTypeReturnTest extends TestCase
+{
+
+	/** @dataProvider aProvider */
+	public function testFoo(string $expectedResult, string $input): void
+	{
+	}
+
+	public function aProvider(): array
+	{
+		if (rand(0,1)) {
+			$arr = [
+				[
+					'Hello World',
+					123
+				]
+			];
+		} elseif (rand(0,1)) {
+			$arr = [
+				[
+					'Hello World',
+					'Hello World',
+				]
+			];
+		} else {
+			$arr = [
+				[
+					'Hello World',
+					" Hello World \n",
+					" Too much \n",
+				]
+			];
+		}
+
+		return $arr;
+	}
+}
+
+class ConstantArrayUnionWithDifferentValueTypeReturnTest extends TestCase
+{
+
+	/** @dataProvider aProvider */
+	public function testFoo(string $expectedResult, string $input): void
+	{
+	}
+
+	public function aProvider(): array
+	{
+		if (rand(0,1)) {
+			$arr = [
+				[
+					'Hellooo',
+					' World',
+				]
+			];
+		} else {
+			$a = rand(0,1) ? 'Hello' : 'World';
+			$b = rand(0,1) ? " Hello World \n" : 123;
+
+			$arr = [
+				[
+					$a,
+					$b
+				]
+			];
+		}
+
+		return $arr;
+	}
+}

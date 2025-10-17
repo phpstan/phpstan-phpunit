@@ -171,6 +171,22 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, false given.',
 				461,
 			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionTypeReturnTest::testFoo() expects string, int given.',
+				505,
+			],
+			[
+				'Method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() invoked with 3 parameters, 2 required.',
+				543,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() expects string, int given.',
+				543,
+			],
+			[
+				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionWithDifferentValueTypeReturnTest::testFoo() expects string, int|string given.',
+				576,
+			],
 		]);
 	}
 

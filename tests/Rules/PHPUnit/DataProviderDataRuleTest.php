@@ -42,10 +42,6 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
-		if (PHP_VERSION_ID < 80000) {
-			self::markTestSkipped();
-		}
-
 		$this->analyse([__DIR__ . '/data/data-provider-data.php'], [
 			[
 				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, int given.',
@@ -100,95 +96,106 @@ class DataProviderDataRuleTest extends RuleTestCase
 				216,
 			],
 			[
-				'Parameter $input of method DataProviderDataTest\NamedArgsInProvider::testFoo() expects string, int given.',
-				255,
-			],
-			[
-				'Parameter $input of method DataProviderDataTest\NamedArgsInProvider::testFoo() expects string, false given.',
-				255,
-			],
-			[
 				'Parameter #2 $input of method DataProviderDataTest\YieldFromExpr::testFoo() expects string, int given.',
-				275,
+				236,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\YieldFromExpr::testFoo() expects string, true given.',
-				277,
+				238,
 			],
 			[
 				'Parameter #1 $si of method DataProviderDataTest\TestInvalidVariadic::testBar() expects int, string given.',
-				334,
+				295,
 			],
 			[
 				'Parameter #1 $s of method DataProviderDataTest\TestInvalidVariadic::testFoo() expects string, int given.',
-				335,
+				296,
 			],
 			[
 				'Parameter #1 $si of method DataProviderDataTest\TestInvalidVariadic2::testBar() expects int, string given.',
-				356,
+				317,
 			],
 			[
 				'Parameter #2 ...$moreS of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects int, string given.',
-				356,
+				317,
 			],
 			[
 				'Parameter #4 ...$moreS of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects int, string given.',
-				356,
+				317,
 			],
 			[
 				'Parameter #1 $s of method DataProviderDataTest\TestInvalidVariadic2::testFoo() expects string, int given.',
-				357,
+				318,
 			],
 			[
 				'Unknown parameter $foo in call to method DataProviderDataTest\TestArrayShapeIterable::testBar().',
-				371,
+				332,
 			],
 			[
 				'Missing parameter $si (int) in call to method DataProviderDataTest\TestArrayShapeIterable::testBar().',
-				371,
+				332,
 			],
 			[
 				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testBar() expects int, int|string given.',
-				421,
+				382,
 			],
 			[
 				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testFoo() expects int, int|string given.',
-				421,
+				382,
 			],
 			[
 				'Parameter #1 $s1 of method DataProviderDataTest\TestArrayIterator::testFooBar() expects string, int|string given.',
-				421,
+				382,
 			],
 			[
 				'Parameter #1 $si of method DataProviderDataTest\TestWrongTypedIterable::testBar() expects int, string given.',
-				439,
+				400,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, int given.',
-				466,
+				427,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, false given.',
-				470,
+				431,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionTypeReturnTest::testFoo() expects string, int given.',
-				505,
+				466,
 			],
 			[
 				'Method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() invoked with 3 parameters, 2 required.',
-				543,
+				504,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() expects string, int given.',
-				543,
+				504,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionWithDifferentValueTypeReturnTest::testFoo() expects string, int|string given.',
-				576,
+				537,
 			],
 		]);
 	}
+
+	public function testRulePhp8(): void
+	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped();
+		}
+
+		$this->analyse([__DIR__ . '/data/data-provider-data-named.php'], [
+			[
+				'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
+				44
+			],
+			[
+				'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
+				44
+			],
+		]);
+	}
+
 
 	public function testVariadicMethod(): void
 	{

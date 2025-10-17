@@ -40,18 +40,18 @@ class DataProviderDataRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if ($scope->getFunction() === null) {
-			return [];
-		}
-		if ($scope->isInAnonymousFunction()) {
-			return [];
-		}
-
 		if (
 			!$node instanceof Node\Stmt\Return_
 			&& !$node instanceof Node\Expr\Yield_
 			&& !$node instanceof Node\Expr\YieldFrom
 		) {
+			return [];
+		}
+
+		if ($scope->getFunction() === null) {
+			return [];
+		}
+		if ($scope->isInAnonymousFunction()) {
 			return [];
 		}
 

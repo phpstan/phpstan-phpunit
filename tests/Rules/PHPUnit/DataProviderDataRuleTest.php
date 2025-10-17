@@ -190,6 +190,44 @@ class DataProviderDataRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testVariadicMethod(): void
+	{
+		$this->analyse([__DIR__ . '/data/data-provider-variadic-method.php'], [
+			[
+				'Method DataProviderVariadicMethod\FooTest::testProvide2() invoked with 1 parameter, at least 2 required.',
+				12,
+			],
+			[
+				'Parameter #1 $a of method DataProviderVariadicMethod\FooTest::testProvide() expects int, string given.',
+				13,
+			],
+			[
+				'Method DataProviderVariadicMethod\FooTest::testProvide2() invoked with 1 parameter, at least 2 required.',
+				13,
+			],
+			[
+				'Parameter #1 $a of method DataProviderVariadicMethod\FooTest::testProvide2() expects int, string given.',
+				13,
+			],
+			[
+				'Parameter #2 ...$rest of method DataProviderVariadicMethod\FooTest::testProvide() expects string, int given.',
+				15,
+			],
+			[
+				'Parameter #3 ...$rest of method DataProviderVariadicMethod\FooTest::testProvide() expects string, int given.',
+				15,
+			],
+			[
+				'Parameter #2 $two of method DataProviderVariadicMethod\FooTest::testProvide2() expects string, int given.',
+				15,
+			],
+			[
+				'Parameter #3 ...$rest of method DataProviderVariadicMethod\FooTest::testProvide2() expects string, int given.',
+				15,
+			],
+		]);
+	}
+
 	/**
 	 * @return string[]
 	 */

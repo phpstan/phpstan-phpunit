@@ -128,48 +128,44 @@ class DataProviderDataRuleTest extends RuleTestCase
 				318,
 			],
 			[
-				'Parameter $si of method DataProviderDataTest\TestArrayShapeIterable::testBar() expects int, string given.',
-				332,
-			],
-			[
 				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testBar() expects int, int|string given.',
-				382,
+				362,
 			],
 			[
 				'Parameter #1 $i of method DataProviderDataTest\TestArrayIterator::testFoo() expects int, int|string given.',
-				382,
+				362,
 			],
 			[
 				'Parameter #1 $s1 of method DataProviderDataTest\TestArrayIterator::testFooBar() expects string, int|string given.',
-				382,
+				362,
 			],
 			[
 				'Parameter #1 $si of method DataProviderDataTest\TestWrongTypedIterable::testBar() expects int, string given.',
-				400,
+				380,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, int given.',
-				427,
+				407,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\AbstractBaseTest::testWithAttribute() expects string, false given.',
-				431,
+				411,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionTypeReturnTest::testFoo() expects string, int given.',
-				466,
+				446,
 			],
 			[
 				'Method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() invoked with 3 parameters, 2 required.',
-				504,
+				484,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() expects string, int given.',
-				504,
+				484,
 			],
 			[
 				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionWithDifferentValueTypeReturnTest::testFoo() expects string, int|string given.',
-				537,
+				517,
 			],
 		]);
 	}
@@ -190,12 +186,16 @@ class DataProviderDataRuleTest extends RuleTestCase
 				44
 			],
 			[
-				'Unknown parameter $wrong in call to method DataProviderDataTestPhp8\TestArrayShapeIterable::testBar().',
+				'Unknown parameter $wrong in call to method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar().',
 				58
 			],
 			[
-				'Missing parameter $si (int) in call to method DataProviderDataTestPhp8\TestArrayShapeIterable::testBar().',
+				'Missing parameter $si (int) in call to method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar().',
 				58
+			],
+			[
+				'Parameter $si of method DataProviderDataTestPhp8\TestWrongTypeInArrayShapeIterable::testBar() expects int, string given.',
+				79
 			],
 		]);
 	}

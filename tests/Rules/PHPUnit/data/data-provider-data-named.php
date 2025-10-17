@@ -46,7 +46,7 @@ class NamedArgsInProvider extends TestCase
 }
 
 
-class TestArrayShapeIterable extends TestCase
+class TestWrongOffsetNameArrayShapeIterable extends TestCase
 {
 	/** @dataProvider aProvider */
 	public function testBar(int $si): void
@@ -60,6 +60,48 @@ class TestArrayShapeIterable extends TestCase
 
 	/**
 	 * @return iterable<array{wrong: string}>
+	 */
+	public function data(): iterable
+	{
+	}
+}
+
+
+class TestWrongTypeInArrayShapeIterable extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $si): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return $this->data();
+	}
+
+	/**
+	 * @return iterable<array{si: string}>
+	 */
+	public function data(): iterable
+	{
+	}
+}
+
+
+class TestValidArrayShapeIterable extends TestCase
+{
+	/** @dataProvider aProvider */
+	public function testBar(int $si): void
+	{
+	}
+
+	public function aProvider(): iterable
+	{
+		return $this->data();
+	}
+
+	/**
+	 * @return iterable<array{si: int}>
 	 */
 	public function data(): iterable
 	{

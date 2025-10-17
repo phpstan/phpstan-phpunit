@@ -320,26 +320,6 @@ class TestInvalidVariadic2 extends TestCase
 	}
 }
 
-class TestArrayShapeIterable extends TestCase
-{
-	/** @dataProvider aProvider */
-	public function testBar(int $si): void
-	{
-	}
-
-	public function aProvider(): iterable
-	{
-		return $this->data();
-	}
-
-	/**
-	 * @return iterable<array{si: string}>
-	 */
-	public function data(): iterable
-	{
-	}
-}
-
 class TestTypedIterable extends TestCase
 {
 	/** @dataProvider aProvider */

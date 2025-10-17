@@ -228,6 +228,28 @@ class DataProviderDataRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testTrimmingArgs(): void
+	{
+		$this->analyse([__DIR__ . '/data/data-provider-trimming-args.php'], [
+			[
+				'Method DataProviderTrimmingArgs\FooTest::testProvide() invoked with 2 parameters, 1 required.',
+				12,
+			],
+			[
+				'Method DataProviderTrimmingArgs\FooTest::testProvide2() invoked with 2 parameters, 1 required.',
+				12,
+			],
+			[
+				'Method DataProviderTrimmingArgs\FooTest::testProvide() invoked with 2 parameters, 1 required.',
+				13,
+			],
+			[
+				'Method DataProviderTrimmingArgs\FooTest::testProvide2() invoked with 2 parameters, 1 required.',
+				13,
+			],
+		]);
+	}
+
 	/**
 	 * @return string[]
 	 */

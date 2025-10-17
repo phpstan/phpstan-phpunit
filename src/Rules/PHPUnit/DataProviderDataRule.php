@@ -47,34 +47,15 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		$arraysTypes = [];
-		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
-			if ($node->expr === null) {
-				return [];
-			}
-
-			$exprType = $scope->getType($node->expr);
-			$exprConstArrays = $exprType->getConstantArrays();
-			foreach ($exprConstArrays as $constArray) {
-				foreach ($constArray->getValueTypes() as $valueType) {
-					foreach ($valueType->getConstantArrays() as $constValueArray) {
-						$arraysTypes[] = $constValueArray;
-					}
-				}
-			}
-
-			if ($arraysTypes === []) {
-				$arraysTypes = $exprType->getIterableValueType()->getArrays();
-			}
-		} elseif ($node instanceof Node\Expr\Yield_) {
-			if ($node->value === null) {
-				return [];
-			}
-
-			$exprType = $scope->getType($node->value);
-			$arraysTypes = $exprType->getConstantArrays();
+		if (
+			!$node instanceof Node\Stmt\Return_
+			&& !$node instanceof Node\Expr\Yield_
+			&& !$node instanceof Node\Expr\YieldFrom
+		) {
+			return [];
 		}
 
+		$arraysTypes = $this->buildArrayTypesFromNode($node, $scope);
 		if ($arraysTypes === []) {
 			return [];
 		}
@@ -180,6 +161,43 @@ class DataProviderDataRule implements Rule
 		}
 
 		return $args;
+	}
+
+	/**
+	 * @param Node\Stmt\Return_|Node\Expr\Yield_|Node\Expr\YieldFrom $node
+	 * @return array<Type>
+	 */
+	private function buildArrayTypesFromNode(Node $node, Scope $scope): array
+	{
+		$arraysTypes = [];
+		if ($node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\YieldFrom) {
+			if ($node->expr === null) {
+				return [];
+			}
+
+			$exprType = $scope->getType($node->expr);
+			$exprConstArrays = $exprType->getConstantArrays();
+			foreach ($exprConstArrays as $constArray) {
+				foreach ($constArray->getValueTypes() as $valueType) {
+					foreach ($valueType->getConstantArrays() as $constValueArray) {
+						$arraysTypes[] = $constValueArray;
+					}
+				}
+			}
+
+			if ($arraysTypes === []) {
+				$arraysTypes = $exprType->getIterableValueType()->getArrays();
+			}
+		} elseif ($node instanceof Node\Expr\Yield_) {
+			if ($node->value === null) {
+				return [];
+			}
+
+			$exprType = $scope->getType($node->value);
+			$arraysTypes = $exprType->getConstantArrays();
+		}
+
+		return $arraysTypes;
 	}
 
 }

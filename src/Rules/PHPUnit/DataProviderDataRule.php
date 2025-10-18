@@ -13,6 +13,7 @@ use function array_slice;
 use function count;
 use function max;
 use function min;
+use const PHP_INT_MAX;
 
 /**
  * @implements Rule<Node>

@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use function array_slice;
 use function count;
 use function max;
-use function min;
 use const PHP_INT_MAX;
 
 /**
@@ -116,7 +115,7 @@ class DataProviderDataRule implements Rule
 					&& !$testMethod->isVariadic()
 					&& $numberOfParameters !== $maxNumberOfParameters
 				) {
-					$args = array_slice($args, 0, min($numberOfParameters, $maxNumberOfParameters));
+					$args = array_slice($args, 0, $numberOfParameters);
 				}
 
 				$scope->invokeNodeCallback(new Node\Expr\MethodCall(

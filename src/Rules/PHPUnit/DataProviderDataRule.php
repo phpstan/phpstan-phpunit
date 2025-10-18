@@ -85,18 +85,19 @@ class DataProviderDataRule implements Rule
 		}
 
 		$trimArgs = false;
+		$maxNumberOfParameters = $testsWithProvider[0]->getNumberOfParameters();
 		if (count($testsWithProvider) > 1) {
-			$maxNumberOfParameters = $testsWithProvider[0]->getNumberOfParameters();
 			foreach ($testsWithProvider as $testMethod) {
-				if ($testMethod->isVariadic()) {
-					$trimArgs = true;
-					break;
-				}
-
 				if ($maxNumberOfParameters !== $testMethod->getNumberOfParameters()) {
 					$trimArgs = true;
-					break;
 				}
+
+				if ($testMethod->isVariadic()) {
+					$trimArgs = true;
+					$maxNumberOfParameters = PHP_INT_MAX;
+				}
+
+				$maxNumberOfParameters = max($maxNumberOfParameters, $testMethod->getNumberOfParameters());
 			}
 		}
 
@@ -104,13 +105,17 @@ class DataProviderDataRule implements Rule
 			$numberOfParameters = $testMethod->getNumberOfParameters();
 
 			foreach ($arraysTypes as [$startLine, $arraysType]) {
-				$args = $this->arrayItemsToArgs($arraysType, $numberOfParameters);
+				$args = $this->arrayItemsToArgs($arraysType, $maxNumberOfParameters);
 				if ($args === null) {
 					continue;
 				}
 
-				if (!$testMethod->isVariadic() && $trimArgs) {
-					$args = array_slice($args, 0, $numberOfParameters);
+				if (
+					$trimArgs
+					&& !$testMethod->isVariadic()
+					&& $numberOfParameters !== $maxNumberOfParameters
+				) {
+					$args = array_slice($args, 0, min($numberOfParameters, $maxNumberOfParameters));
 				}
 
 				$scope->invokeNodeCallback(new Node\Expr\MethodCall(

@@ -89,6 +89,7 @@ class DataProviderDataRule implements Rule
 			foreach ($testsWithProvider as $testMethod) {
 				if ($testMethod->isVariadic()) {
 					$maxNumberOfParameters = PHP_INT_MAX;
+					break;
 				}
 
 				$maxNumberOfParameters = max($maxNumberOfParameters, $testMethod->getNumberOfParameters());

@@ -84,10 +84,20 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		$maxNumberOfParameters = 0;
-		$trimArgs = count($testsWithProvider) > 1;
-		foreach ($testsWithProvider as $testMethod) {
-			$maxNumberOfParameters = max($maxNumberOfParameters, $testMethod->getNumberOfParameters());
+		$trimArgs = false;
+		if (count($testsWithProvider) > 1) {
+			$maxNumberOfParameters = $testsWithProvider[0]->getNumberOfParameters();
+			foreach ($testsWithProvider as $testMethod) {
+				if ($testMethod->isVariadic()) {
+					$trimArgs = true;
+					break;
+				}
+
+				if ($maxNumberOfParameters !== $testMethod->getNumberOfParameters()) {
+					$trimArgs = true;
+					break;
+				}
+			}
 		}
 
 		foreach ($testsWithProvider as $testMethod) {
@@ -99,8 +109,8 @@ class DataProviderDataRule implements Rule
 					continue;
 				}
 
-				if ($trimArgs && $maxNumberOfParameters !== $numberOfParameters) {
-					$args = array_slice($args, 0, min($numberOfParameters, $maxNumberOfParameters));
+				if (!$testMethod->isVariadic() && $trimArgs) {
+					$args = array_slice($args, 0, $numberOfParameters);
 				}
 
 				$scope->invokeNodeCallback(new Node\Expr\MethodCall(

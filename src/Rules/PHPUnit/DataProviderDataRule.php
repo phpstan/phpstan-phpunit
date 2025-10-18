@@ -84,16 +84,10 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		$trimArgs = false;
 		$maxNumberOfParameters = $testsWithProvider[0]->getNumberOfParameters();
 		if (count($testsWithProvider) > 1) {
 			foreach ($testsWithProvider as $testMethod) {
-				if ($maxNumberOfParameters !== $testMethod->getNumberOfParameters()) {
-					$trimArgs = true;
-				}
-
 				if ($testMethod->isVariadic()) {
-					$trimArgs = true;
 					$maxNumberOfParameters = PHP_INT_MAX;
 				}
 
@@ -111,8 +105,7 @@ class DataProviderDataRule implements Rule
 				}
 
 				if (
-					$trimArgs
-					&& !$testMethod->isVariadic()
+					!$testMethod->isVariadic()
 					&& $numberOfParameters !== $maxNumberOfParameters
 				) {
 					$args = array_slice($args, 0, $numberOfParameters);

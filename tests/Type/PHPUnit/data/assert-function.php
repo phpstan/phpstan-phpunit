@@ -11,7 +11,6 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertNotCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertObjectHasAttribute;
 
 class Foo
 {
@@ -51,6 +50,12 @@ class Foo
 
 		assertArrayHasKey('key', $b);
 		assertType("ArrayAccess", $b);
+	}
+
+	public function arrayHasExprKey(int $index, array $a): void
+	{
+		assertArrayHasKey($index, $a);
+		assertType("non-empty-array", $a);
 	}
 
 	public function testEmpty($a): void

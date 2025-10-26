@@ -7,6 +7,7 @@ includes:
 	- phpstan-baseline.neon
 
 parameters:
+	level: 8
 	reportUnmatchedIgnoredErrors: false
 
 	resultCachePath: tmp/resultCache.php

@@ -262,6 +262,14 @@ jobs:
           > infection.json5
           cat infection.json5 | jq
 
+      - name: "Cache Result cache"
+        uses: actions/cache@v4
+        with:
+          path: ./tmp
+          key: "result-cache-v1-${{ matrix.php-version }}-${{ github.run_id }}"
+          restore-keys: |
+            result-cache-v1-${{ matrix.php-version }}-
+
       - name: "Run infection"
         run: |
           git fetch --depth=1 origin $GITHUB_BASE_REF

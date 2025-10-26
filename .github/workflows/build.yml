@@ -236,15 +236,10 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v5
 
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
+      - uses: ./build-infection/.github/actions/setup-php
         with:
-          coverage: "pcov"
           php-version: "${{ matrix.php-version }}"
-          tools: pecl, infection:0.31.7
           extensions: mbstring
-          ini-file: development
-          ini-values: memory_limit=-1
 
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"

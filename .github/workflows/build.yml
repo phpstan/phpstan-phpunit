@@ -236,6 +236,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v5
 
+      - name: "Checkout build-infection"
+        uses: actions/checkout@v5
+        with:
+          repository: "phpstan/build-infection"
+          path: "build-infection"
+          ref: "1.x"
+
       - uses: ./build-infection/.github/actions/setup-php
         with:
           php-version: "${{ matrix.php-version }}"
@@ -243,13 +250,6 @@ jobs:
 
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"
-
-      - name: "Checkout build-infection"
-        uses: actions/checkout@v5
-        with:
-          repository: "phpstan/build-infection"
-          path: "build-infection"
-          ref: "1.x"
 
       - name: "Install build-infection dependencies"
         working-directory: "build-infection"

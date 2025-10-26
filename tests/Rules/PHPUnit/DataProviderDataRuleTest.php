@@ -258,6 +258,10 @@ class DataProviderDataRuleTest extends RuleTestCase
 				'Method DataProviderTrimmingArgs\FooTest::testProvide2() invoked with 2 parameters, 1 required.',
 				13,
 			],
+			[
+				'Parameter #6 ...$m of method DataProviderTrimmingArgs\BazTest::testProvide() expects int, string given.',
+				90,
+			],
 		]);
 	}
 

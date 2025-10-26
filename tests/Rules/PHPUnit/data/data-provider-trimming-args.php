@@ -64,3 +64,31 @@ class BarTest extends TestCase
 	}
 
 }
+
+class BazTest extends TestCase
+{
+
+	/**
+	 * @dataProvider dataProvide
+	 */
+	public function testProvide(int $i, int $j, int $k, int ...$m): void
+	{
+
+	}
+
+	/**
+	 * @dataProvider dataProvide
+	 */
+	public function testProvide2(int $i, int $j, int $k, int $m, int $n): void
+	{
+
+	}
+
+	public function dataProvide(): array
+	{
+		return [
+			[1, 2, 3, 4, 5, 'foo'],
+		];
+	}
+
+}

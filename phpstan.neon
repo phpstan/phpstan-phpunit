@@ -9,6 +9,8 @@ includes:
 parameters:
 	reportUnmatchedIgnoredErrors: false
 
+	resultCachePath: tmp/resultCache.php
+
 	excludePaths:
 		- tests/*/data/*
 	ignoreErrors:

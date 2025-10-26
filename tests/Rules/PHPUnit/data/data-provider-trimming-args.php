@@ -30,3 +30,37 @@ class FooTest extends TestCase
 	}
 
 }
+
+class BarTest extends TestCase
+{
+
+	/**
+	 * @return array<array<string>>
+	 */
+	public function getData(): array
+	{
+		return [];
+	}
+
+	public function dataProvide(): array
+	{
+		return $this->getData();
+	}
+
+	/**
+	 * @dataProvider dataProvide
+	 */
+	public function testProvide(string ...$arg): void
+	{
+
+	}
+
+	/**
+	 * @dataProvider dataProvide
+	 */
+	public function testProvide2(string $arg): void
+	{
+
+	}
+
+}

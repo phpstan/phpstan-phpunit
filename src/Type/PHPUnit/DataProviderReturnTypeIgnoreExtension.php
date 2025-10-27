@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PHPStan\Analyser\Error;
 use PHPStan\Analyser\IgnoreErrorExtension;
 use PHPStan\Analyser\Scope;
-use PHPStan\Node\InClassMethodNode;
 use PHPStan\Rules\PHPUnit\DataProviderHelper;
 use PHPStan\Rules\PHPUnit\TestMethodsHelper;
 
@@ -28,7 +27,7 @@ final class DataProviderReturnTypeIgnoreExtension implements IgnoreErrorExtensio
 
 	public function shouldIgnore(Error $error, Node $node, Scope $scope): bool
 	{
-		if (! $node instanceof InClassMethodNode) { // @phpstan-ignore phpstanApi.instanceofAssumption
+		if (!$scope->isInClass()) {
 			return false;
 		}
 
@@ -36,8 +35,12 @@ final class DataProviderReturnTypeIgnoreExtension implements IgnoreErrorExtensio
 			return false;
 		}
 
-		$classReflection = $node->getClassReflection();
-		$methodReflection = $node->getMethodReflection();
+		$methodReflection = $scope->getFunction();
+		if ($methodReflection === null) {
+			return false;
+		}
+
+		$classReflection = $scope->getClassReflection();
 		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection, $scope);
 		foreach ($testMethods as $testMethod) {
 			foreach ($this->dataProviderHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [, $providerMethodName]) {

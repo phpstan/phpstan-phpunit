@@ -22,13 +22,16 @@ class DataProviderReturnTypeIgnoreExtensionTest extends RuleTestCase {
 		$this->analyse([__DIR__ . '/data/data-provider-iterable-value.php'], [
 			[
 				'Method DataProviderIterableValueTest\Foo::notADataProvider() return type has no value type specified in iterable type iterable.',
-				32
+				32,
+				'See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type'
 			],
 		]);
 	}
 
 	static public function getAdditionalConfigFiles(): array
 	{
-		return [__DIR__ . '/../../../extension.neon'];
+		return [
+			__DIR__ . '/data/data-provider-iterable-value.neon'
+		];
 	}
 }

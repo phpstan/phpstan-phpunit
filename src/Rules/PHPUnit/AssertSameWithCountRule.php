@@ -24,13 +24,16 @@ class AssertSameWithCountRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
+		if (!$node instanceof Node\Expr\MethodCall && ! $node instanceof Node\Expr\StaticCall) {
+			return [];
+		}
 		if (count($node->getArgs()) < 2) {
 			return [];
 		}
 		if ($node->isFirstClassCallable()) {
 			return [];
 		}
-		if (!$node->name instanceof Node\Identifier || $node->name->toLowerString() !== 'assertsame') {
+		if (!$node->name instanceof Node\Identifier	|| $node->name->toLowerString() !== 'assertsame') {
 			return [];
 		}
 

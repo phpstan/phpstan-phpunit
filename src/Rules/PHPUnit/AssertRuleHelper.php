@@ -11,9 +11,6 @@ use function strtolower;
 class AssertRuleHelper
 {
 
-	/**
-	 * @phpstan-assert-if-true Node\Expr\MethodCall|Node\Expr\StaticCall $node
-	 */
 	public static function isMethodOrStaticCallOnAssert(Node $node, Scope $scope): bool
 	{
 		if ($node instanceof Node\Expr\MethodCall) {

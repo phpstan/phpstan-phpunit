@@ -1,6 +1,7 @@
 parameters:
 	phpunit:
 		convertUnionToIntersectionType: true
+		checkDataProviderData: %featureToggles.bleedingEdge%
 	additionalConstructors:
 		- PHPUnit\Framework\TestCase::setUp
 	earlyTerminatingMethodCalls:
@@ -24,6 +25,7 @@ parameters:
 parametersSchema:
 	phpunit: structure([
 		convertUnionToIntersectionType: bool()
+		checkDataProviderData: bool(),
 	])
 
 services:
@@ -67,6 +69,11 @@ services:
 		arguments:
 			parser: @defaultAnalysisParser
 
+	-
+		class: PHPStan\Type\PHPUnit\DataProviderReturnTypeIgnoreExtension
+
 conditionalTags:
 	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:
 		phpstan.phpDoc.typeNodeResolverExtension: %phpunit.convertUnionToIntersectionType%
+	PHPStan\Type\PHPUnit\DataProviderReturnTypeIgnoreExtension:
+		phpstan.ignoreErrorExtension: %phpunit.checkDataProviderData%

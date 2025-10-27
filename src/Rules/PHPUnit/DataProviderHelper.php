@@ -53,23 +53,23 @@ class DataProviderHelper
 	}
 
 	/**
-	 * @param ReflectionMethod|ClassMethod $node
+	 * @param ReflectionMethod|ClassMethod $testMethod
 	 *
 	 * @return iterable<array{ClassReflection|null, string, int}>
 	 */
 	public function getDataProviderMethods(
 		Scope $scope,
-		$node,
+		$testMethod,
 		ClassReflection $classReflection
 	): iterable
 	{
-		yield from $this->yieldDataProviderAnnotations($node, $scope, $classReflection);
+		yield from $this->yieldDataProviderAnnotations($testMethod, $scope, $classReflection);
 
 		if (!$this->phpunit10OrNewer) {
 			return;
 		}
 
-		yield from $this->yieldDataProviderAttributes($node, $classReflection);
+		yield from $this->yieldDataProviderAttributes($testMethod, $classReflection);
 	}
 
 	/**

@@ -1,0 +1,6 @@
+parameters:
+	phpunit:
+		checkDataProviderData: true
+
+includes:
+	- ../../../../extension.neon

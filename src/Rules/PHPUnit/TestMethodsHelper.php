@@ -6,6 +6,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\FileTypeMapper;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use function str_starts_with;
 use function strtolower;
@@ -31,6 +32,10 @@ final class TestMethodsHelper
 	 */
 	public function getTestMethods(ClassReflection $classReflection, Scope $scope): array
 	{
+		if (!$classReflection->is(TestCase::class)) {
+			return [];
+		}
+
 		$testMethods = [];
 		foreach ($classReflection->getNativeReflection()->getMethods() as $reflectionMethod) {
 			if (!$reflectionMethod->isPublic()) {

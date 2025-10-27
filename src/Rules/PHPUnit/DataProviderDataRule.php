@@ -8,7 +8,6 @@ use PHPStan\Node\Expr\TypeExpr;
 use PHPStan\Rules\Rule;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPUnit\Framework\TestCase;
 use function array_slice;
 use function count;
 use function max;
@@ -62,10 +61,7 @@ class DataProviderDataRule implements Rule
 
 		$method = $scope->getFunction();
 		$classReflection = $scope->getClassReflection();
-		if (
-			$classReflection === null
-			|| !$classReflection->is(TestCase::class)
-		) {
+		if ($classReflection === null) {
 			return [];
 		}
 

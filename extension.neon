@@ -67,6 +67,11 @@ services:
 		arguments:
 			parser: @defaultAnalysisParser
 
+	-
+		class: PHPStan\Type\PHPUnit\DataProviderReturnTypeIgnoreExtension
+		tags:
+			- phpstan.ignoreErrorExtension
+
 conditionalTags:
 	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:
 		phpstan.phpDoc.typeNodeResolverExtension: %phpunit.convertUnionToIntersectionType%

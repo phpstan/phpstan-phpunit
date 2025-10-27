@@ -27,20 +27,20 @@ final class DataProviderReturnTypeIgnoreExtension implements IgnoreErrorExtensio
 
 	public function shouldIgnore(Error $error, Node $node, Scope $scope): bool
 	{
-		if (!$scope->isInClass()) {
-			return false;
-		}
-
 		if ($error->getIdentifier() !== 'missingType.iterableValue') {
 			return false;
 		}
+
+		if (!$scope->isInClass()) {
+			return false;
+		}
+		$classReflection = $scope->getClassReflection();
 
 		$methodReflection = $scope->getFunction();
 		if ($methodReflection === null) {
 			return false;
 		}
 
-		$classReflection = $scope->getClassReflection();
 		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection, $scope);
 		foreach ($testMethods as $testMethod) {
 			foreach ($this->dataProviderHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [, $providerMethodName]) {

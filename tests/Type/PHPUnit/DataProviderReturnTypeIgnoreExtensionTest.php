@@ -14,6 +14,7 @@ class DataProviderReturnTypeIgnoreExtensionTest extends RuleTestCase {
 	{
 		/** @phpstan-ignore phpstanApi.classConstant */
 		$rule = self::getContainer()->getByType(MissingMethodReturnTypehintRule::class);
+		
 		return $rule;
 	}
 

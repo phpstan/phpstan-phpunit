@@ -28,4 +28,12 @@ class Foo extends TestCase {
 			[$i, 2],
 		];
 	}
+
+	public function notADataProvider(): iterable {
+		return [
+			[1, 2],
+			[3, 4],
+			[5, 6],
+		];
+	}
 }

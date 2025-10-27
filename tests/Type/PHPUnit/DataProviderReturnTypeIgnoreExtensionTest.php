@@ -20,6 +20,10 @@ class DataProviderReturnTypeIgnoreExtensionTest extends RuleTestCase {
 	public function testRule(): void
 	{
 		$this->analyse([__DIR__ . '/data/data-provider-iterable-value.php'], [
+			[
+				'Method DataProviderIterableValueTest\Foo::notADataProvider() return type has no value type specified in iterable type iterable.',
+				32
+			],
 		]);
 	}
 

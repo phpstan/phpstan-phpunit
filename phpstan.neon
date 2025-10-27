@@ -12,6 +12,10 @@ parameters:
 
 	resultCachePath: tmp/resultCache.php
 
+	paths:
+		- src
+		- tests
+
 	excludePaths:
 		- tests/*/data/*
 	ignoreErrors:

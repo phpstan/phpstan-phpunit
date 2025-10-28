@@ -100,7 +100,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function provideVersion(): iterable
+	static public function provideVersion(): iterable
 	{
 		yield [9];
 		yield [null];

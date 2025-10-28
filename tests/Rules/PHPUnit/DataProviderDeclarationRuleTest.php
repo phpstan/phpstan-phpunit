@@ -21,7 +21,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 				$reflection,
 				self::getContainer()->getByType(FileTypeMapper::class),
 				self::getContainer()->getService('defaultAnalysisParser'),
-				new PHPUnitVersion(11)
+				new PHPUnitVersion(10)
 			),
 			true,
 			true

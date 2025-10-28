@@ -24,13 +24,13 @@ class DataProviderDataRuleTest extends RuleTestCase
 			new DataProviderDataRule(
 				new TestMethodsHelper(
 					self::getContainer()->getByType(FileTypeMapper::class),
-					new PHPUnitVersion(11)
+					new PHPUnitVersion(10)
 				),
 				new DataProviderHelper(
 					$reflectionProvider,
 					self::getContainer()->getByType(FileTypeMapper::class),
 					self::getContainer()->getService('defaultAnalysisParser'),
-					new PHPUnitVersion(11)
+					new PHPUnitVersion(10)
 				),
 
 			),

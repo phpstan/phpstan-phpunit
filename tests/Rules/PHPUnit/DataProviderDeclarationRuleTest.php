@@ -11,7 +11,7 @@ use PHPStan\Type\FileTypeMapper;
  */
 class DataProviderDeclarationRuleTest extends RuleTestCase
 {
-	private int $phpunitVersion;
+	private ?int $phpunitVersion;
 
 	protected function getRule(): Rule
 	{
@@ -73,9 +73,12 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testRulePhpUnit9(): void
+	/**
+	 * @dataProvider provideVersion
+	 */
+	public function testRulePhpUnit9orUnknown(?int $version): void
 	{
-		$this->phpunitVersion = 9;
+		$this->phpunitVersion = $version;
 
 		$this->analyse([__DIR__ . '/data/data-provider-declaration.php'], [
 			[
@@ -95,6 +98,12 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 				70,
 			],
 		]);
+	}
+
+	public function provideVersion(): iterable
+	{
+		yield [9];
+		yield [null];
 	}
 
 	public function testFixDataProviderStatic(): void

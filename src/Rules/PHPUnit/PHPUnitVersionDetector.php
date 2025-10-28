@@ -13,8 +13,6 @@ use function json_decode;
 class PHPUnitVersionDetector
 {
 
-	private ?PHPUnitVersion $PHPUnitVersion = null;
-
 	private ReflectionProvider $reflectionProvider;
 
 	public function __construct(ReflectionProvider $reflectionProvider)
@@ -24,10 +22,6 @@ class PHPUnitVersionDetector
 
 	public function create(): PHPUnitVersion
 	{
-		if ($this->PHPUnitVersion !== null) {
-			return $this->PHPUnitVersion;
-		}
-
 		$majorVersion = null;
 		if ($this->reflectionProvider->hasClass(TestCase::class)) {
 			$testCase = $this->reflectionProvider->getClass(TestCase::class);
@@ -48,7 +42,7 @@ class PHPUnitVersionDetector
 			}
 		}
 
-		return $this->PHPUnitVersion = new PHPUnitVersion($majorVersion);
+		return new PHPUnitVersion($majorVersion);
 	}
 
 }

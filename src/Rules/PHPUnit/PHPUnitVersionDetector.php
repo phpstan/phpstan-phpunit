@@ -22,7 +22,7 @@ class PHPUnitVersionDetector
 		$this->reflectionProvider = $reflectionProvider;
 	}
 
-	public function getPHPUnitVersion(): PHPUnitVersion
+	public function create(): PHPUnitVersion
 	{
 		if ($this->PHPUnitVersion !== null) {
 			return $this->PHPUnitVersion;

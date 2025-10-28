@@ -11,6 +11,7 @@ use PHPStan\Type\FileTypeMapper;
  */
 class DataProviderDeclarationRuleTest extends RuleTestCase
 {
+	private int $phpunitVersion;
 
 	protected function getRule(): Rule
 	{
@@ -21,7 +22,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 				$reflection,
 				self::getContainer()->getByType(FileTypeMapper::class),
 				self::getContainer()->getService('defaultAnalysisParser'),
-				new PHPUnitVersion(10)
+				new PHPUnitVersion($this->phpunitVersion)
 			),
 			true,
 			true
@@ -30,6 +31,8 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
+		$this->phpunitVersion = 10;
+
 		$this->analyse([__DIR__ . '/data/data-provider-declaration.php'], [
 			[
 				'@dataProvider providebaz related method is used with incorrect case: provideBaz.',
@@ -70,8 +73,34 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testRulePhpUnit9(): void
+	{
+		$this->phpunitVersion = 9;
+
+		$this->analyse([__DIR__ . '/data/data-provider-declaration.php'], [
+			[
+				'@dataProvider providebaz related method is used with incorrect case: provideBaz.',
+				16,
+			],
+			[
+				'@dataProvider provideQuux related method must be public.',
+				16,
+			],
+			[
+				'@dataProvider provideNonExisting related method not found.',
+				70,
+			],
+			[
+				'@dataProvider NonExisting::provideNonExisting related class not found.',
+				70,
+			],
+		]);
+	}
+
 	public function testFixDataProviderStatic(): void
 	{
+		$this->phpunitVersion = 10;
+
 		$this->fix(__DIR__ . '/data/data-provider-static-fix.php', __DIR__ . '/data/data-provider-static-fix.php.fixed');
 	}
 

@@ -5,6 +5,8 @@ namespace PHPStan\Rules\PHPUnit;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 
 /**
  * @extends RuleTestCase<DataProviderDeclarationRule>
@@ -32,6 +34,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 	/**
 	 * @dataProvider provideVersions
 	 */
+	#[DataProvider('provideVersions')]
 	public function testRule(?int $version): void
 	{
 		$this->phpunitVersion = $version;

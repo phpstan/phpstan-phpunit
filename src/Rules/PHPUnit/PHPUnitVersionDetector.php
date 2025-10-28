@@ -20,7 +20,7 @@ class PHPUnitVersionDetector
 		$this->reflectionProvider = $reflectionProvider;
 	}
 
-	public function create(): PHPUnitVersion
+	public function createPHPUnitVersion(): PHPUnitVersion
 	{
 		$majorVersion = null;
 		if ($this->reflectionProvider->hasClass(TestCase::class)) {

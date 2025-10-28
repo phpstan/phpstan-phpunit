@@ -57,7 +57,7 @@ services:
 
 	-
 		class: PHPStan\Rules\PHPUnit\PHPUnitVersion
-		factory: @PHPStan\Rules\PHPUnit\PHPUnitVersionDetector::create()
+		factory: @PHPStan\Rules\PHPUnit\PHPUnitVersionDetector::createPHPUnitVersion()
 	-
 		class: PHPStan\Rules\PHPUnit\PHPUnitVersionDetector
 

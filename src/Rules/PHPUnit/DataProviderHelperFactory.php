@@ -15,24 +15,24 @@ class DataProviderHelperFactory
 
 	private Parser $parser;
 
-	private PHPUnitVersionDetector $PHPUnitVersionDetector;
+	private PHPUnitVersion $PHPUnitVersion;
 
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
 		FileTypeMapper $fileTypeMapper,
 		Parser $parser,
-		PHPUnitVersionDetector $PHPUnitVersionDetector
+		PHPUnitVersion $PHPUnitVersion
 	)
 	{
 		$this->reflectionProvider = $reflectionProvider;
 		$this->fileTypeMapper = $fileTypeMapper;
 		$this->parser = $parser;
-		$this->PHPUnitVersionDetector = $PHPUnitVersionDetector;
+		$this->PHPUnitVersion = $PHPUnitVersion;
 	}
 
 	public function create(): DataProviderHelper
 	{
-		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $this->PHPUnitVersionDetector->getPHPUnitVersion());
+		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $this->PHPUnitVersion);
 	}
 
 }

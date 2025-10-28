@@ -8,6 +8,7 @@ use PHPStan\Rules\Methods\CallMethodsRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<CompositeRule>
@@ -19,21 +20,22 @@ class DataProviderDataRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		$reflectionProvider = $this->createReflectionProvider();
+		$phpunitVersion = new PHPUnitVersion($this->phpunitVersion);
 
 		/** @var list<Rule<Node>> $rules */
 		$rules = [
 			new DataProviderDataRule(
 				new TestMethodsHelper(
 					self::getContainer()->getByType(FileTypeMapper::class),
-					new PHPUnitVersion($this->phpunitVersion)
+					$phpunitVersion
 				),
 				new DataProviderHelper(
 					$reflectionProvider,
 					self::getContainer()->getByType(FileTypeMapper::class),
 					self::getContainer()->getService('defaultAnalysisParser'),
-					new PHPUnitVersion($this->phpunitVersion)
+					$phpunitVersion
 				),
-
+				$phpunitVersion,
 			),
 			self::getContainer()->getByType(CallMethodsRule::class) /** @phpstan-ignore phpstanApi.classConstant */
 		];
@@ -176,30 +178,26 @@ class DataProviderDataRuleTest extends RuleTestCase
 	public function testRulePhp8(): void
 	{
 		if (PHP_VERSION_ID < 80000) {
-			self::markTestSkipped();
+			self::markTestSkipped('PHPUnit11 requires PHP 8.0.');
 		}
 
 		$this->phpunitVersion = 10;
 
 		$this->analyse([__DIR__ . '/data/data-provider-data-named.php'], [
 			[
-				'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
+				'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
 				44
 			],
 			[
-				'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
+				'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
 				44
 			],
 			[
-				'Unknown parameter $wrong in call to method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar().',
+				'Parameter #1 $si of method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar() expects int, string given.',
 				58
 			],
 			[
-				'Missing parameter $si (int) in call to method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar().',
-				58
-			],
-			[
-				'Parameter $si of method DataProviderDataTestPhp8\TestWrongTypeInArrayShapeIterable::testBar() expects int, string given.',
+				'Parameter #1 $si of method DataProviderDataTestPhp8\TestWrongTypeInArrayShapeIterable::testBar() expects int, string given.',
 				79
 			],
 		]);
@@ -274,7 +272,36 @@ class DataProviderDataRuleTest extends RuleTestCase
 		]);
 	}
 
-	/**
+	public function testNamedArgumentsInDataProviders(): void
+	{
+		$this->phpunitVersion = 10;
+
+		$this->analyse([__DIR__ . '/data/data-provider-named-args.php'], [
+			[
+				'Parameter #1 $int of method DataProviderNamedArgs\FooTest::testFoo() expects int, string given.',
+				26
+			],
+			[
+				'Parameter #2 $string of method DataProviderNamedArgs\FooTest::testFoo() expects string, int given.',
+				26
+			],
+		]);
+	}
+
+	public function testNamedArgumentsInDataProvidersPhpUnit11OrNewer(): void
+	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped('PHPUnit11 requires PHP 8.0.');
+		}
+
+		$this->phpunitVersion = 11;
+
+		$this->analyse([__DIR__ . '/data/data-provider-named-args.php'], [
+		]);
+	}
+
+
+		/**
 	 * @return string[]
 	 */
 	public static function getAdditionalConfigFiles(): array

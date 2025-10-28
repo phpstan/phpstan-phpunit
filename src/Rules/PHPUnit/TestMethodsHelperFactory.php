@@ -22,7 +22,7 @@ class TestMethodsHelperFactory
 
 	public function create(): TestMethodsHelper
 	{
-		return new TestMethodsHelper($this->fileTypeMapper, $this->PHPUnitVersionDetector->isPHPUnit10OrNewer());
+		return new TestMethodsHelper($this->fileTypeMapper, $this->PHPUnitVersionDetector->getPHPUnitVersion());
 	}
 
 }

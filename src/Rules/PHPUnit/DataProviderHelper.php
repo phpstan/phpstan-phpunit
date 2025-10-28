@@ -37,19 +37,19 @@ class DataProviderHelper
 
 	private Parser $parser;
 
-	private bool $phpunit10OrNewer;
+	private PHPUnitVersion $PHPUnitVersion;
 
 	public function __construct(
 		ReflectionProvider $reflectionProvider,
 		FileTypeMapper $fileTypeMapper,
 		Parser $parser,
-		bool $phpunit10OrNewer
+		PHPUnitVersion $PHPUnitVersion
 	)
 	{
 		$this->reflectionProvider = $reflectionProvider;
 		$this->fileTypeMapper = $fileTypeMapper;
 		$this->parser = $parser;
-		$this->phpunit10OrNewer = $phpunit10OrNewer;
+		$this->PHPUnitVersion = $PHPUnitVersion;
 	}
 
 	/**
@@ -65,7 +65,7 @@ class DataProviderHelper
 	{
 		yield from $this->yieldDataProviderAnnotations($testMethod, $scope, $classReflection);
 
-		if (!$this->phpunit10OrNewer) {
+		if (!$this->PHPUnitVersion->supportsDataProviderAttribute()) {
 			return;
 		}
 
@@ -156,7 +156,7 @@ class DataProviderHelper
 				->build();
 		}
 
-		if ($deprecationRulesInstalled && $this->phpunit10OrNewer && !$dataProviderMethodReflection->isStatic()) {
+		if ($deprecationRulesInstalled && $this->PHPUnitVersion->requiresStaticDataProviders() && !$dataProviderMethodReflection->isStatic()) {
 			$errorBuilder = RuleErrorBuilder::message(sprintf(
 				'@dataProvider %s related method must be static in PHPUnit 10 and newer.',
 				$dataProviderValue,

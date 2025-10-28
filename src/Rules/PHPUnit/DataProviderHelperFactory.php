@@ -32,7 +32,7 @@ class DataProviderHelperFactory
 
 	public function create(): DataProviderHelper
 	{
-		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $this->PHPUnitVersionDetector->isPHPUnit10OrNewer());
+		return new DataProviderHelper($this->reflectionProvider, $this->fileTypeMapper, $this->parser, $this->PHPUnitVersionDetector->getPHPUnitVersion());
 	}
 
 }

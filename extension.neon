@@ -53,13 +53,13 @@ services:
 		class: PHPStan\Rules\PHPUnit\AnnotationHelper
 
 	-
-		class: PHPStan\Rules\PHPUnit\PHPUnitVersionDetector
+		class: PHPStan\Rules\PHPUnit\TestMethodsHelper
 
 	-
-		class: PHPStan\Rules\PHPUnit\TestMethodsHelper
-		factory: @PHPStan\Rules\PHPUnit\TestMethodsHelperFactory::create()
+		class: PHPStan\Rules\PHPUnit\PHPUnitVersion
+		factory: @PHPStan\Rules\PHPUnit\PHPUnitVersionDetector::getPHPUnitVersion()
 	-
-		class: PHPStan\Rules\PHPUnit\TestMethodsHelperFactory
+		class: PHPStan\Rules\PHPUnit\PHPUnitVersionDetector
 
 	-
 		class: PHPStan\Rules\PHPUnit\DataProviderHelper

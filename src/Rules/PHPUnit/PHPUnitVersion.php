@@ -7,7 +7,6 @@ class PHPUnitVersion
 
 	private ?int $majorVersion;
 
-
 	public function __construct(?int $majorVersion)
 	{
 		$this->majorVersion = $majorVersion;

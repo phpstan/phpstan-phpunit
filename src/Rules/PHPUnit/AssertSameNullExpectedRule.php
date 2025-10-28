@@ -23,18 +23,20 @@ class AssertSameNullExpectedRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
+		if (!$node instanceof Node\Expr\MethodCall && ! $node instanceof Node\Expr\StaticCall) {
 			return [];
 		}
-
-		if ($node->isFirstClassCallable()) {
-			return [];
-		}
-
 		if (count($node->getArgs()) < 2) {
 			return [];
 		}
+		if ($node->isFirstClassCallable()) {
+			return [];
+		}
 		if (!$node->name instanceof Node\Identifier || $node->name->toLowerString() !== 'assertsame') {
+			return [];
+		}
+
+		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
 			return [];
 		}
 

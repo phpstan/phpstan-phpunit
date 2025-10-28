@@ -63,7 +63,7 @@ final class TestMethodsHelper
 				}
 			}
 
-			if (!$this->PHPUnitVersion->supportsTestAttribute()) {
+			if ($this->PHPUnitVersion->supportsTestAttribute()->no()) {
 				continue;
 			}
 

@@ -2,6 +2,8 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use PHPStan\TrinaryLogic;
+
 class PHPUnitVersion
 {
 
@@ -12,19 +14,28 @@ class PHPUnitVersion
 		$this->majorVersion = $majorVersion;
 	}
 
-	public function supportsDataProviderAttribute(): bool
+	public function supportsDataProviderAttribute(): TrinaryLogic
 	{
-		return $this->majorVersion !== null && $this->majorVersion >= 10;
+		if ($this->majorVersion === null) {
+			return TrinaryLogic::createMaybe();
+		}
+		return TrinaryLogic::createFromBoolean($this->majorVersion >= 10);
 	}
 
-	public function supportsTestAttribute(): bool
+	public function supportsTestAttribute(): TrinaryLogic
 	{
-		return $this->majorVersion !== null && $this->majorVersion >= 10;
+		if ($this->majorVersion === null) {
+			return TrinaryLogic::createMaybe();
+		}
+		return TrinaryLogic::createFromBoolean($this->majorVersion >= 10);
 	}
 
-	public function requiresStaticDataProviders(): bool
+	public function requiresStaticDataProviders(): TrinaryLogic
 	{
-		return $this->majorVersion !== null && $this->majorVersion >= 10;
+		if ($this->majorVersion === null) {
+			return TrinaryLogic::createMaybe();
+		}
+		return TrinaryLogic::createFromBoolean($this->majorVersion >= 10);
 	}
 
 }

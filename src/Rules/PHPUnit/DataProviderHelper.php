@@ -65,7 +65,7 @@ class DataProviderHelper
 	{
 		yield from $this->yieldDataProviderAnnotations($testMethod, $scope, $classReflection);
 
-		if (!$this->PHPUnitVersion->supportsDataProviderAttribute()) {
+		if (!$this->PHPUnitVersion->supportsDataProviderAttribute()->yes()) {
 			return;
 		}
 
@@ -156,7 +156,11 @@ class DataProviderHelper
 				->build();
 		}
 
-		if ($deprecationRulesInstalled && $this->PHPUnitVersion->requiresStaticDataProviders() && !$dataProviderMethodReflection->isStatic()) {
+		if (
+			$deprecationRulesInstalled
+			&& $this->PHPUnitVersion->requiresStaticDataProviders()->yes()
+			&& !$dataProviderMethodReflection->isStatic()
+		) {
 			$errorBuilder = RuleErrorBuilder::message(sprintf(
 				'@dataProvider %s related method must be static in PHPUnit 10 and newer.',
 				$dataProviderValue,

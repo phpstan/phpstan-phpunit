@@ -30,7 +30,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 	}
 
 	/**
-	 * @dataProvider provideVersion
+	 * @dataProvider provideVersions
 	 */
 	public function testRule(?int $version): void
 	{
@@ -99,11 +99,13 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/data-provider-declaration.php'], $errors);
 	}
 
-	static public function provideVersion(): iterable
+	static public function provideVersions(): iterable
 	{
-		yield [null];
-		yield [9];
-		yield [10];
+		return [
+			[null],
+			[9],
+			[10]
+		];
 	}
 
 	public function testFixDataProviderStatic(): void

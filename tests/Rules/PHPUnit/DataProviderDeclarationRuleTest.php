@@ -39,7 +39,7 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 	{
 		$this->phpunitVersion = $version;
 
-		if ($version === 10) {
+		if ($version >= 10) {
 			$errors = [
 				[
 					'@dataProvider providebaz related method is used with incorrect case: provideBaz.',

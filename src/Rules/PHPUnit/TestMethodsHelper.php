@@ -16,15 +16,15 @@ final class TestMethodsHelper
 
 	private FileTypeMapper $fileTypeMapper;
 
-	private bool $phpunit10OrNewer;
+	private PHPUnitVersion $PHPUnitVersion;
 
 	public function __construct(
 		FileTypeMapper $fileTypeMapper,
-		bool $phpunit10OrNewer
+		PHPUnitVersion $PHPUnitVersion
 	)
 	{
 		$this->fileTypeMapper = $fileTypeMapper;
-		$this->phpunit10OrNewer = $phpunit10OrNewer;
+		$this->PHPUnitVersion = $PHPUnitVersion;
 	}
 
 	/**
@@ -63,7 +63,7 @@ final class TestMethodsHelper
 				}
 			}
 
-			if (!$this->phpunit10OrNewer) {
+			if ($this->PHPUnitVersion->supportsTestAttribute()->no()) {
 				continue;
 			}
 

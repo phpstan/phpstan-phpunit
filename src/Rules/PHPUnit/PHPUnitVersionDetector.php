@@ -13,8 +13,6 @@ use function json_decode;
 class PHPUnitVersionDetector
 {
 
-	private ?bool $is10OrNewer = null;
-
 	private ReflectionProvider $reflectionProvider;
 
 	public function __construct(ReflectionProvider $reflectionProvider)
@@ -22,13 +20,9 @@ class PHPUnitVersionDetector
 		$this->reflectionProvider = $reflectionProvider;
 	}
 
-	public function isPHPUnit10OrNewer(): bool
+	public function createPHPUnitVersion(): PHPUnitVersion
 	{
-		if ($this->is10OrNewer !== null) {
-			return $this->is10OrNewer;
-		}
-
-		$this->is10OrNewer = false;
+		$majorVersion = null;
 		if ($this->reflectionProvider->hasClass(TestCase::class)) {
 			$testCase = $this->reflectionProvider->getClass(TestCase::class);
 			$file = $testCase->getFileName();
@@ -42,16 +36,13 @@ class PHPUnitVersionDetector
 						$version = $json['extra']['branch-alias']['dev-main'] ?? null;
 						if ($version !== null) {
 							$majorVersion = (int) explode('.', $version)[0];
-							if ($majorVersion >= 10) {
-								$this->is10OrNewer = true;
-							}
 						}
 					}
 				}
 			}
 		}
 
-		return $this->is10OrNewer;
+		return new PHPUnitVersion($majorVersion);
 	}
 
 }

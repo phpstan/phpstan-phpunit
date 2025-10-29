@@ -14,6 +14,7 @@ use PHPStan\Type\FileTypeMapper;
  */
 class DataProviderDataRuleTest extends RuleTestCase
 {
+	private int $phpunitVersion;
 
 	protected function getRule(): Rule
 	{
@@ -24,13 +25,13 @@ class DataProviderDataRuleTest extends RuleTestCase
 			new DataProviderDataRule(
 				new TestMethodsHelper(
 					self::getContainer()->getByType(FileTypeMapper::class),
-					true
+					new PHPUnitVersion($this->phpunitVersion)
 				),
 				new DataProviderHelper(
 					$reflectionProvider,
 					self::getContainer()->getByType(FileTypeMapper::class),
 					self::getContainer()->getService('defaultAnalysisParser'),
-					true
+					new PHPUnitVersion($this->phpunitVersion)
 				),
 
 			),
@@ -42,6 +43,8 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 	public function testRule(): void
 	{
+		$this->phpunitVersion = 10;
+
 		$this->analyse([__DIR__ . '/data/data-provider-data.php'], [
 			[
 				'Parameter #2 $input of method DataProviderDataTest\FooTest::testWithAttribute() expects string, int given.',
@@ -176,6 +179,8 @@ class DataProviderDataRuleTest extends RuleTestCase
 			self::markTestSkipped();
 		}
 
+		$this->phpunitVersion = 10;
+
 		$this->analyse([__DIR__ . '/data/data-provider-data-named.php'], [
 			[
 				'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
@@ -203,6 +208,8 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 	public function testVariadicMethod(): void
 	{
+		$this->phpunitVersion = 10;
+
 		$this->analyse([__DIR__ . '/data/data-provider-variadic-method.php'], [
 			[
 				'Method DataProviderVariadicMethod\FooTest::testProvide2() invoked with 1 parameter, at least 2 required.',
@@ -241,6 +248,8 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 	public function testTrimmingArgs(): void
 	{
+		$this->phpunitVersion = 10;
+
 		$this->analyse([__DIR__ . '/data/data-provider-trimming-args.php'], [
 			[
 				'Method DataProviderTrimmingArgs\FooTest::testProvide() invoked with 2 parameters, 1 required.',

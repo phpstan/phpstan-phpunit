@@ -308,11 +308,14 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 	static public function provideNamedArgumentPHPUnitVersions(): iterable
 	{
-		return [
-			[null],
-			[10],
-			[11],
-		];
+		yield [null]; // unknown phpunit version
+
+		if (PHP_VERSION_ID >= 80100) {
+			yield [10]; // PHPUnit 10.x requires PHP 8.1+
+		}
+		if (PHP_VERSION_ID >= 80200) {
+			yield [11]; // PHPUnit 11.x requires PHP 8.2+
+		}
 	}
 
 	/**
@@ -324,10 +327,6 @@ class DataProviderDataRuleTest extends RuleTestCase
 		$this->phpunitVersion = $phpunitVersion;
 
 		if ($phpunitVersion >= 11) {
-			if (PHP_VERSION_ID < 80000) {
-				self::markTestSkipped('PHPUnit11 requires PHP 8.0+');
-			}
-
 			$errors = [];
 		} else {
 			$errors = [

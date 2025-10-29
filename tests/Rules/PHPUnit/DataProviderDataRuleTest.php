@@ -9,6 +9,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 use const PHP_VERSION_ID;
 
 /**
@@ -176,32 +177,64 @@ class DataProviderDataRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testRulePhp8(): void
+
+	/**
+	 * @dataProvider provideNamedArgumentVersions
+	 */
+	#[DataProvider('provideNamedArgumentVersions')]
+	public function testRulePhp8(?int $phpunitVersion): void
 	{
 		if (PHP_VERSION_ID < 80000) {
 			self::markTestSkipped();
 		}
 
-		$this->phpunitVersion = 10;
+		$this->phpunitVersion = $phpunitVersion;
 
-		$this->analyse([__DIR__ . '/data/data-provider-data-named.php'], [
-			[
-				'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
-				44
-			],
-			[
-				'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
-				44
-			],
-			[
-				'Parameter #1 $si of method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar() expects int, string given.',
-				58
-			],
-			[
-				'Parameter #1 $si of method DataProviderDataTestPhp8\TestWrongTypeInArrayShapeIterable::testBar() expects int, string given.',
-				79
-			],
-		]);
+		if ($phpunitVersion >= 11) {
+			$errors = [
+				[
+					'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
+					44
+				],
+				[
+					'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
+					44
+				],
+				[
+					'Unknown parameter $wrong in call to method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar().',
+					58
+				],
+				[
+					'Missing parameter $si (int) in call to method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar().',
+					58
+				],
+				[
+					'Parameter $si of method DataProviderDataTestPhp8\TestWrongTypeInArrayShapeIterable::testBar() expects int, string given.',
+					79
+				],
+			];
+		} else {
+			$errors = [
+				[
+					'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
+					44
+				],
+				[
+					'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
+					44
+				],
+				[
+					'Parameter #1 $si of method DataProviderDataTestPhp8\TestWrongOffsetNameArrayShapeIterable::testBar() expects int, string given.',
+					58
+				],
+				[
+					'Parameter #1 $si of method DataProviderDataTestPhp8\TestWrongTypeInArrayShapeIterable::testBar() expects int, string given.',
+					79
+				],
+			];
+		}
+
+		$this->analyse([__DIR__ . '/data/data-provider-data-named.php'], $errors);
 	}
 
 

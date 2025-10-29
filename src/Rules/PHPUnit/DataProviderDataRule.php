@@ -23,13 +23,17 @@ class DataProviderDataRule implements Rule
 
 	private DataProviderHelper $dataProviderHelper;
 
+	private PHPUnitVersion $PHPUnitVersion;
+
 	public function __construct(
 		TestMethodsHelper $testMethodsHelper,
-		DataProviderHelper $dataProviderHelper
+		DataProviderHelper $dataProviderHelper,
+		PHPUnitVersion $PHPUnitVersion
 	)
 	{
 		$this->testMethodsHelper = $testMethodsHelper;
 		$this->dataProviderHelper = $dataProviderHelper;
+		$this->PHPUnitVersion = $PHPUnitVersion;
 	}
 
 	public function getNodeType(): string
@@ -153,11 +157,10 @@ class DataProviderDataRule implements Rule
 				return null;
 			}
 
-			if (count($key) === 0) {
+			if (count($key) === 0 || !$this->PHPUnitVersion->supportsNamedArgumentsInDataProvider()->yes()) {
 				$arg = new Node\Arg(new TypeExpr($valueType));
 				$args[] = $arg;
 				continue;
-
 			}
 
 			$arg = new Node\Arg(

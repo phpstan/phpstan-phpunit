@@ -324,9 +324,11 @@ class DataProviderDataRuleTest extends RuleTestCase
 		$this->phpunitVersion = $phpunitVersion;
 
 		if ($phpunitVersion >= 11) {
+			if (PHP_VERSION_ID < 80000) {
+				self::markTestSkipped('PHPUnit11 requires PHP 8.0+');
+			}
+
 			$errors = [];
-			$this->analyse([__DIR__ . '/data/data-provider-named-args.php'], [
-			]);
 		} else {
 			$errors = [
 				[

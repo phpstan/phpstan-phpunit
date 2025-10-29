@@ -179,9 +179,9 @@ class DataProviderDataRuleTest extends RuleTestCase
 
 
 	/**
-	 * @dataProvider provideNamedArgumentVersions
+	 * @dataProvider provideNamedArgumentPHPUnitVersions
 	 */
-	#[DataProvider('provideNamedArgumentVersions')]
+	#[DataProvider('provideNamedArgumentPHPUnitVersions')]
 	public function testRulePhp8(?int $phpunitVersion): void
 	{
 		if (PHP_VERSION_ID < 80000) {
@@ -306,7 +306,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 		]);
 	}
 
-	static public function provideNamedArgumentVersions(): iterable
+	static public function provideNamedArgumentPHPUnitVersions(): iterable
 	{
 		return [
 			[null],
@@ -316,9 +316,9 @@ class DataProviderDataRuleTest extends RuleTestCase
 	}
 
 	/**
-	 * @dataProvider provideNamedArgumentVersions
+	 * @dataProvider provideNamedArgumentPHPUnitVersions
 	 */
-	#[DataProvider('provideNamedArgumentVersions')]
+	#[DataProvider('provideNamedArgumentPHPUnitVersions')]
 	public function testNamedArgumentsInDataProviders(?int $phpunitVersion): void
 	{
 		$this->phpunitVersion = $phpunitVersion;

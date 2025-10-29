@@ -179,7 +179,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 	public function testRulePhp8(): void
 	{
 		if (PHP_VERSION_ID < 80000) {
-			self::markTestSkipped('PHPUnit11 requires PHP 8.0.');
+			self::markTestSkipped();
 		}
 
 		$this->phpunitVersion = 10;

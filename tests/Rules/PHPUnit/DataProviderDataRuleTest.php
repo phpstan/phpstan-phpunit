@@ -8,6 +8,7 @@ use PHPStan\Rules\Methods\CallMethodsRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use const PHP_VERSION_ID;
 
 /**
@@ -15,7 +16,7 @@ use const PHP_VERSION_ID;
  */
 class DataProviderDataRuleTest extends RuleTestCase
 {
-	private int $phpunitVersion;
+	private ?int $phpunitVersion;
 
 	protected function getRule(): Rule
 	{
@@ -272,36 +273,44 @@ class DataProviderDataRuleTest extends RuleTestCase
 		]);
 	}
 
-	public function testNamedArgumentsInDataProviders(): void
+	static public function provideNamedArgumentVersions(): iterable
 	{
-		$this->phpunitVersion = 10;
-
-		$this->analyse([__DIR__ . '/data/data-provider-named-args.php'], [
-			[
-				'Parameter #1 $int of method DataProviderNamedArgs\FooTest::testFoo() expects int, string given.',
-				26
-			],
-			[
-				'Parameter #2 $string of method DataProviderNamedArgs\FooTest::testFoo() expects string, int given.',
-				26
-			],
-		]);
+		return [
+			[null],
+			[10],
+			[11],
+		];
 	}
 
-	public function testNamedArgumentsInDataProvidersPhpUnit11OrNewer(): void
+	/**
+	 * @dataProvider provideNamedArgumentVersions
+	 */
+	#[DataProvider('provideNamedArgumentVersions')]
+	public function testNamedArgumentsInDataProviders(?int $phpunitVersion): void
 	{
-		if (PHP_VERSION_ID < 80000) {
-			self::markTestSkipped('PHPUnit11 requires PHP 8.0.');
+		$this->phpunitVersion = $phpunitVersion;
+
+		if ($phpunitVersion >= 11) {
+			$errors = [];
+			$this->analyse([__DIR__ . '/data/data-provider-named-args.php'], [
+			]);
+		} else {
+			$errors = [
+				[
+					'Parameter #1 $int of method DataProviderNamedArgs\FooTest::testFoo() expects int, string given.',
+					26
+				],
+				[
+					'Parameter #2 $string of method DataProviderNamedArgs\FooTest::testFoo() expects string, int given.',
+					26
+				],
+			];
 		}
 
-		$this->phpunitVersion = 11;
-
-		$this->analyse([__DIR__ . '/data/data-provider-named-args.php'], [
-		]);
+		$this->analyse([__DIR__ . '/data/data-provider-named-args.php'], $errors);
 	}
 
-
-		/**
+	/**
 	 * @return string[]
 	 */
 	public static function getAdditionalConfigFiles(): array

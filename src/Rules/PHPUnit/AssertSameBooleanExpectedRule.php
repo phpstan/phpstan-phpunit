@@ -47,13 +47,35 @@ class AssertSameBooleanExpectedRule implements Rule
 
 		if ($expectedArgumentValue->name->toLowerString() === 'true') {
 			return [
-				RuleErrorBuilder::message('You should use assertTrue() instead of assertSame() when expecting "true"')->identifier('phpunit.assertTrue')->build(),
+				RuleErrorBuilder::message('You should use assertTrue() instead of assertSame() when expecting "true"')
+					->identifier('phpunit.assertTrue')
+					->fixNode($node, static function (CallLike $node) {
+						$node->name = new Node\Identifier('assertTrue');
+
+						$args = $node->getArgs();
+						unset($args[0]);
+						$node->args = $args;
+
+						return $node;
+					})
+					->build(),
 			];
 		}
 
 		if ($expectedArgumentValue->name->toLowerString() === 'false') {
 			return [
-				RuleErrorBuilder::message('You should use assertFalse() instead of assertSame() when expecting "false"')->identifier('phpunit.assertFalse')->build(),
+				RuleErrorBuilder::message('You should use assertFalse() instead of assertSame() when expecting "false"')
+					->identifier('phpunit.assertFalse')
+					->fixNode($node, static function (CallLike $node) {
+						$node->name = new Node\Identifier('assertFalse');
+
+						$args = $node->getArgs();
+						unset($args[0]);
+						$node->args = $args;
+
+						return $node;
+					})
+					->build(),
 			];
 		}
 

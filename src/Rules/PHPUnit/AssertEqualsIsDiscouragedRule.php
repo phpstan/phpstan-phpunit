@@ -73,13 +73,7 @@ class AssertEqualsIsDiscouragedRule implements Rule
 					),
 				)->identifier('phpunit.assertEquals')
 					->fixNode($node, static function (CallLike $node) use ($correctName) {
-						if ($node instanceof Node\Expr\MethodCall) {
-							$node->name = new Node\Identifier($correctName);
-						}
-
-						if ($node instanceof Node\Expr\StaticCall) {
-							$node->name = new Node\Identifier($correctName);
-						}
+						$node->name = new Node\Identifier($correctName);
 
 						return $node;
 					})

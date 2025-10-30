@@ -1,0 +1,21 @@
+<?php declare(strict_types = 1);
+
+namespace AssertSameBooleanTestCaseFix;
+
+class AssertSameBooleanExpectedTestCase extends \PHPUnit\Framework\TestCase
+{
+	public function returnsBool(): bool
+	{
+		if (rand(0, 1)) {
+			return false;
+		}
+		return true;
+	}
+
+	public function doFoo(): void
+	{
+		$this->assertSame(true, $this->returnBool());
+		self::assertSame(false, $this->returnBool());
+	}
+
+}

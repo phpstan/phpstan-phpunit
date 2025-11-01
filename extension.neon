@@ -1,7 +1,7 @@
 parameters:
 	phpunit:
 		convertUnionToIntersectionType: true
-		ignoreMissingDataProviderReturnType: true
+		reportMissingDataProviderReturnType: false
 	additionalConstructors:
 		- PHPUnit\Framework\TestCase::setUp
 	earlyTerminatingMethodCalls:
@@ -25,7 +25,7 @@ parameters:
 parametersSchema:
 	phpunit: structure([
 		convertUnionToIntersectionType: bool(),
-		ignoreMissingDataProviderReturnType: bool(),
+		reportMissingDataProviderReturnType: bool(),
 	])
 
 services:
@@ -76,4 +76,4 @@ conditionalTags:
 	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:
 		phpstan.phpDoc.typeNodeResolverExtension: %phpunit.convertUnionToIntersectionType%
 	PHPStan\Type\PHPUnit\DataProviderReturnTypeIgnoreExtension:
-		phpstan.ignoreErrorExtension: [%featureToggles.bleedingEdge%, %phpunit.ignoreMissingDataProviderReturnType%]
+		phpstan.ignoreErrorExtension: [%featureToggles.bleedingEdge%, not(%phpunit.reportMissingDataProviderReturnType%)]

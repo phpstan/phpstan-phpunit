@@ -51,10 +51,7 @@ class AssertSameBooleanExpectedRule implements Rule
 					->identifier('phpunit.assertTrue')
 					->fixNode($node, static function (CallLike $node) {
 						$node->name = new Node\Identifier('assertTrue');
-
-						$args = $node->getArgs();
-						unset($args[0]);
-						$node->args = $args;
+						$node->args = self::rewriteArgs($node->args);
 
 						return $node;
 					})
@@ -68,10 +65,7 @@ class AssertSameBooleanExpectedRule implements Rule
 					->identifier('phpunit.assertFalse')
 					->fixNode($node, static function (CallLike $node) {
 						$node->name = new Node\Identifier('assertFalse');
-
-						$args = $node->getArgs();
-						unset($args[0]);
-						$node->args = $args;
+						$node->args = self::rewriteArgs($node->args);
 
 						return $node;
 					})
@@ -80,6 +74,19 @@ class AssertSameBooleanExpectedRule implements Rule
 		}
 
 		return [];
+	}
+
+	/**
+	 * @param array<Node\Arg|Node\VariadicPlaceholder> $args
+	 * @return list<Node\Arg|Node\VariadicPlaceholder>
+	 */
+	private static function rewriteArgs(array $args): array
+	{
+		$newArgs = [];
+		for ($i = 1; $i < count($args); $i++) {
+			$newArgs[] = $args[$i];
+		}
+		return $newArgs;
 	}
 
 }

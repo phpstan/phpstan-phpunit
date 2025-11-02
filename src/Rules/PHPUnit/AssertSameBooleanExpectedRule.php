@@ -40,19 +40,18 @@ class AssertSameBooleanExpectedRule implements Rule
 		if (!($expectedArgumentValue instanceof ConstFetch)) {
 			return [];
 		}
-		$expectedArgumentType = $scope->getType($expectedArgumentValue);
 
 		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
 			return [];
 		}
 
-		if ($expectedArgumentType->isTrue()->yes()) {
+		if ($expectedArgumentValue->name->toLowerString() === 'true') {
 			return [
 				RuleErrorBuilder::message('You should use assertTrue() instead of assertSame() when expecting "true"')->identifier('phpunit.assertTrue')->build(),
 			];
 		}
 
-		if ($expectedArgumentType->isFalse()->yes()) {
+		if ($expectedArgumentValue->name->toLowerString() === 'false') {
 			return [
 				RuleErrorBuilder::message('You should use assertFalse() instead of assertSame() when expecting "false"')->identifier('phpunit.assertFalse')->build(),
 			];

@@ -75,6 +75,14 @@ class AssertSameBooleanExpectedTestCase extends \PHPUnit\Framework\TestCase
 		\PHPUnit\Framework\Assert::assertSame(False, 'foo');
 	}
 
+	public function testMaybeTrueFalse(): void
+	{
+		$a = rand(0, 1) ? true : 'foo';
+		\PHPUnit\Framework\Assert::assertSame($a, 'foo');
+		$a = rand(0, 1) ? false : 'foo';
+		\PHPUnit\Framework\Assert::assertSame($a, 'foo');
+	}
+
 }
 
 const PHPSTAN_PHPUNIT_TRUE = true;

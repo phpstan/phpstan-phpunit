@@ -47,17 +47,46 @@ class AssertSameBooleanExpectedRule implements Rule
 
 		if ($expectedArgumentValue->name->toLowerString() === 'true') {
 			return [
-				RuleErrorBuilder::message('You should use assertTrue() instead of assertSame() when expecting "true"')->identifier('phpunit.assertTrue')->build(),
+				RuleErrorBuilder::message('You should use assertTrue() instead of assertSame() when expecting "true"')
+					->identifier('phpunit.assertTrue')
+					->fixNode($node, static function (CallLike $node) {
+						$node->name = new Node\Identifier('assertTrue');
+						$node->args = self::rewriteArgs($node->args);
+
+						return $node;
+					})
+					->build(),
 			];
 		}
 
 		if ($expectedArgumentValue->name->toLowerString() === 'false') {
 			return [
-				RuleErrorBuilder::message('You should use assertFalse() instead of assertSame() when expecting "false"')->identifier('phpunit.assertFalse')->build(),
+				RuleErrorBuilder::message('You should use assertFalse() instead of assertSame() when expecting "false"')
+					->identifier('phpunit.assertFalse')
+					->fixNode($node, static function (CallLike $node) {
+						$node->name = new Node\Identifier('assertFalse');
+						$node->args = self::rewriteArgs($node->args);
+
+						return $node;
+					})
+					->build(),
 			];
 		}
 
 		return [];
+	}
+
+	/**
+	 * @param array<Node\Arg|Node\VariadicPlaceholder> $args
+	 * @return list<Node\Arg|Node\VariadicPlaceholder>
+	 */
+	private static function rewriteArgs(array $args): array
+	{
+		$newArgs = [];
+		for ($i = 1; $i < count($args); $i++) {
+			$newArgs[] = $args[$i];
+		}
+		return $newArgs;
 	}
 
 }

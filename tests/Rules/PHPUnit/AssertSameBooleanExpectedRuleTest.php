@@ -42,6 +42,11 @@ class AssertSameBooleanExpectedRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testFix(): void
+	{
+		$this->fix(__DIR__ . '/data/assert-same-boolean-expected-fixable.php', __DIR__ . '/data/assert-same-boolean-expected-fixable.php.fixed');
+	}
+
 	/**
 	 * @return string[]
 	 */

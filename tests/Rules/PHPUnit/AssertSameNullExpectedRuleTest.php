@@ -34,6 +34,11 @@ class AssertSameNullExpectedRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testFix(): void
+	{
+		$this->fix(__DIR__ . '/data/assert-same-null-expected-fixable.php', __DIR__ . '/data/assert-same-null-expected-fixable.php.fixed');
+	}
+
 	/**
 	 * @return string[]
 	 */

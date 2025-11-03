@@ -47,11 +47,32 @@ class AssertSameNullExpectedRule implements Rule
 
 		if ($expectedArgumentValue->name->toLowerString() === 'null') {
 			return [
-				RuleErrorBuilder::message('You should use assertNull() instead of assertSame(null, $actual).')->identifier('phpunit.assertNull')->build(),
+				RuleErrorBuilder::message('You should use assertNull() instead of assertSame(null, $actual).')
+					->identifier('phpunit.assertNull')
+					->fixNode($node, static function (CallLike $node) {
+						$node->name = new Node\Identifier('assertNull');
+						$node->args = self::rewriteArgs($node->args);
+
+						return $node;
+					})
+					->build(),
 			];
 		}
 
 		return [];
+	}
+
+	/**
+	 * @param array<Node\Arg|Node\VariadicPlaceholder> $args
+	 * @return list<Node\Arg|Node\VariadicPlaceholder>
+	 */
+	private static function rewriteArgs(array $args): array
+	{
+		$newArgs = [];
+		for ($i = 1; $i < count($args); $i++) {
+			$newArgs[] = $args[$i];
+		}
+		return $newArgs;
 	}
 
 }

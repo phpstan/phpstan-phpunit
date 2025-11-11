@@ -30,6 +30,30 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame(5, $foo->bar->count());
 	}
 
+	public function testRecursiveCount($x)
+	{
+		$this->assertSame(5, count([1, 2, 3, $x], COUNT_RECURSIVE)); // OK
+	}
+
+	public function testNormalCount($x)
+	{
+		$this->assertSame(5, count([1, 2, 3, $x], COUNT_NORMAL));
+	}
+
+	public function testImplicitNormalCount($mode)
+	{
+		$this->assertSame(5, count([1, 2, 3], $mode));
+	}
+
+	public function testUnknownCountable($x, $mode)
+	{
+		$this->assertSame(5, count($x, $mode)); // OK
+	}
+
+	public function testUnknownCountMode($x, $mode)
+	{
+		$this->assertSame(5, count([1, 2, 3, $x], $mode)); // OK
+	}
 }
 
 class Bar implements \Countable {
@@ -37,4 +61,4 @@ class Bar implements \Countable {
 	{
 		return 1;
 	}
-};
+}

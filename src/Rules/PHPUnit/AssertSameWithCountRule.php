@@ -70,8 +70,13 @@ class AssertSameWithCountRule implements Rule
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).')
 					->identifier('phpunit.assertCount')
 					->fixNode($node, static function (CallLike $node) use ($scope) {
+						$newArgs = self::rewriteArgs($node->args, $scope);
+						if ($newArgs === null) {
+							return $node;
+						}
+
 						$node->name = new Node\Identifier('assertCount');
-						$node->args = self::rewriteArgs($node->args, $scope);
+						$node->args = $newArgs;
 
 						return $node;
 					})

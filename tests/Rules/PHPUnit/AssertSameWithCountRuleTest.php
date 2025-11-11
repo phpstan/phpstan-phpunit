@@ -31,6 +31,14 @@ class AssertSameWithCountRuleTest extends RuleTestCase
 				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).',
 				30,
 			],
+			[
+				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
+				40,
+			],
+			[
+				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
+				45,
+			],
 		]);
 	}
 

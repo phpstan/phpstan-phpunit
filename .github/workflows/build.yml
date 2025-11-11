@@ -246,7 +246,7 @@ jobs:
       - uses: ./build-infection/.github/actions/setup-php
         with:
           php-version: "${{ matrix.php-version }}"
-          extensions: mbstring
+          php-extensions: mbstring
 
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress"

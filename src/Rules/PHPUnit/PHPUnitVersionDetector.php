@@ -23,6 +23,7 @@ class PHPUnitVersionDetector
 	public function createPHPUnitVersion(): PHPUnitVersion
 	{
 		$majorVersion = null;
+		$minorVersion = null;
 		if ($this->reflectionProvider->hasClass(TestCase::class)) {
 			$testCase = $this->reflectionProvider->getClass(TestCase::class);
 			$file = $testCase->getFileName();
@@ -35,14 +36,16 @@ class PHPUnitVersionDetector
 						$json = json_decode($composerJson, true);
 						$version = $json['extra']['branch-alias']['dev-main'] ?? null;
 						if ($version !== null) {
-							$majorVersion = (int) explode('.', $version)[0];
+							$versionParts = explode('.', $version);
+							$majorVersion = (int) $versionParts[0];
+							$minorVersion = (int) $versionParts[1];
 						}
 					}
 				}
 			}
 		}
 
-		return new PHPUnitVersion($majorVersion);
+		return new PHPUnitVersion($majorVersion, $minorVersion);
 	}
 
 }

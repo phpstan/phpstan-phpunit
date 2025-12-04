@@ -26,6 +26,13 @@ services:
 			- phpstan.rules.rule
 
 	-
+		class: PHPStan\Rules\PHPUnit\AttributeRequiresPhpVersionRule
+		arguments:
+			deprecationRulesInstalled: %deprecationRulesInstalled%
+		tags:
+			- phpstan.rules.rule
+
+	-
 		class: PHPStan\Rules\PHPUnit\AssertEqualsIsDiscouragedRule
 
 	-

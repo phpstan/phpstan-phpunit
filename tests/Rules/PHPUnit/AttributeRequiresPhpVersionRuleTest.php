@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use PHPStan\Php\PhpVersion;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -11,6 +12,8 @@ use PHPStan\Type\FileTypeMapper;
  */
 final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 {
+
+	private int $phpVersion = 80500;
 
 	private ?int $phpunitMajorVersion;
 
@@ -78,6 +81,34 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testPhpVersionMismatch(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 4;
+		$this->deprecationRulesInstalled = false;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], [
+			[
+				'Version requirement will always evaluate to false.',
+				12,
+			],
+		]);
+	}
+
+	public function testInvalidPhpVersion(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 4;
+		$this->deprecationRulesInstalled = false;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version-invalid.php'], [
+			[
+				'Could not parse version constraint abc: Invalid version string "abc"',
+				12,
+			],
+		]);
+	}
+
 	protected function getRule(): Rule
 	{
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);
@@ -89,6 +120,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 				$phpunitVersion,
 			),
 			$this->deprecationRulesInstalled,
+			new PhpVersion($this->phpVersion),
 		);
 	}
 

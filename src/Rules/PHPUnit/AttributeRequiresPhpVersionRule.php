@@ -74,7 +74,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 				continue;
 			}
 
-			if ($this->PHPUnitVersion->notSupportsPhpversionAttributeWithoutOperator()->yes()) {
+			if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
 				$errors[] = RuleErrorBuilder::message(
 					sprintf('Version requirement is missing operator.'),
 				)

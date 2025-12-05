@@ -49,7 +49,7 @@ class PHPUnitVersion
 		return TrinaryLogic::createFromBoolean($this->majorVersion >= 11);
 	}
 
-	public function notSupportsPhpversionAttributeWithoutOperator(): TrinaryLogic
+	public function requiresPhpversionAttributeWithOperator(): TrinaryLogic
 	{
 		return TrinaryLogic::createFromBoolean($this->majorVersion >= 13);
 	}

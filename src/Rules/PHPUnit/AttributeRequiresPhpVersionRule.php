@@ -74,33 +74,27 @@ class AttributeRequiresPhpVersionRule implements Rule
 			}
 
 			if (
-				is_numeric($args[0])
+				!is_numeric($args[0])
 			) {
-				if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
+
+				try {
+					$testPhpVersionConstraint = $parser->parseConstraints($args[0]);
+				} catch (UnexpectedValueException $e) {
 					$errors[] = RuleErrorBuilder::message(
-						sprintf('Version requirement is missing operator.'),
+						sprintf($e->getMessage()),
 					)
 						->identifier('phpunit.attributeRequiresPhpVersion')
 						->build();
-				} elseif (
-					$this->deprecationRulesInstalled
-					&& $this->PHPUnitVersion->deprecatesPhpversionAttributeWithoutOperator()->yes()
-				) {
-					$errors[] = RuleErrorBuilder::message(
-						sprintf('Version requirement without operator is deprecated.'),
-					)
-						->identifier('phpunit.attributeRequiresPhpVersion')
-						->build();
+
+					continue;
 				}
 
-				continue;
-			}
+				if ($this->phpstanVersionConstraint->matches($testPhpVersionConstraint)) {
+					continue;
+				}
 
-			try {
-				$testPhpVersionConstraint = $parser->parseConstraints($args[0]);
-			} catch (UnexpectedValueException $e) {
 				$errors[] = RuleErrorBuilder::message(
-					sprintf($e->getMessage()),
+					sprintf('Version requirement will always evaluate to false.'),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
@@ -108,15 +102,22 @@ class AttributeRequiresPhpVersionRule implements Rule
 				continue;
 			}
 
-			if ($this->phpstanVersionConstraint->matches($testPhpVersionConstraint)) {
-				continue;
+			if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
+				$errors[] = RuleErrorBuilder::message(
+					sprintf('Version requirement is missing operator.'),
+				)
+					->identifier('phpunit.attributeRequiresPhpVersion')
+					->build();
+			} elseif (
+				$this->deprecationRulesInstalled
+				&& $this->PHPUnitVersion->deprecatesPhpversionAttributeWithoutOperator()->yes()
+			) {
+				$errors[] = RuleErrorBuilder::message(
+					sprintf('Version requirement without operator is deprecated.'),
+				)
+					->identifier('phpunit.attributeRequiresPhpVersion')
+					->build();
 			}
-
-			$errors[] = RuleErrorBuilder::message(
-				sprintf('Version requirement will always evaluate to false.'),
-			)
-				->identifier('phpunit.attributeRequiresPhpVersion')
-				->build();
 		}
 
 		return $errors;

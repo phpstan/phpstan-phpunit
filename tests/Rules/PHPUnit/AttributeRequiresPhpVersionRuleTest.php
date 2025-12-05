@@ -12,11 +12,19 @@ use PHPStan\Type\FileTypeMapper;
 final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 {
 
-	private int $phpunitMajorVersion;
+	private ?int $phpunitMajorVersion;
 
-	private int $phpunitMinorVersion;
+	private ?int $phpunitMinorVersion;
 
 	private bool $deprecationRulesInstalled = true;
+
+	public function testRuleOnPHPUnitUnknown(): void
+	{
+		$this->phpunitMajorVersion = null;
+		$this->phpunitMinorVersion = null;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], []);
+	}
 
 	public function testRuleOnPHPUnit115(): void
 	{

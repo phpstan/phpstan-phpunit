@@ -5,6 +5,7 @@ namespace PHPStan\Rules\PHPUnit;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
@@ -25,6 +26,17 @@ final class TestMethodsHelper
 	{
 		$this->fileTypeMapper = $fileTypeMapper;
 		$this->PHPUnitVersion = $PHPUnitVersion;
+	}
+
+	public function getTestMethodReflection(ClassReflection $classReflection, MethodReflection $methodReflection, Scope $scope): ?ReflectionMethod
+	{
+		foreach ($this->getTestMethods($classReflection, $scope) as $testMethod) {
+			if ($testMethod->getName() === $methodReflection->getName()) {
+				return $testMethod;
+			}
+		}
+
+		return null;
 	}
 
 	/**

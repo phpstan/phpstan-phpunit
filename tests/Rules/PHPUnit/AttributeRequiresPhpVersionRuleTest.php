@@ -1,0 +1,95 @@
+<?php declare(strict_types = 1);
+
+namespace PHPStan\Rules\PHPUnit;
+
+use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
+use PHPStan\Type\FileTypeMapper;
+
+/**
+ * @extends RuleTestCase<AttributeRequiresPhpVersionRule>
+ */
+final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
+{
+
+	private ?int $phpunitMajorVersion;
+
+	private ?int $phpunitMinorVersion;
+
+	private bool $deprecationRulesInstalled = true;
+
+	public function testRuleOnPHPUnitUnknown(): void
+	{
+		$this->phpunitMajorVersion = null;
+		$this->phpunitMinorVersion = null;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], []);
+	}
+
+	public function testRuleOnPHPUnit115(): void
+	{
+		$this->phpunitMajorVersion = 11;
+		$this->phpunitMinorVersion = 5;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], []);
+	}
+
+	public function testRuleOnPHPUnit123(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 3;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], []);
+	}
+
+	public function testRuleOnPHPUnit124DeprecationsOn(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 4;
+		$this->deprecationRulesInstalled = true;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], [
+			[
+				'Version requirement without operator is deprecated.',
+				12,
+			],
+		]);
+	}
+
+	public function testRuleOnPHPUnit124DeprecationsOff(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 4;
+		$this->deprecationRulesInstalled = false;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], []);
+	}
+
+	public function testRuleOnPHPUnit13(): void
+	{
+		$this->phpunitMajorVersion = 13;
+		$this->phpunitMinorVersion = 0;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], [
+			[
+				'Version requirement is missing operator.',
+				12,
+			],
+		]);
+	}
+
+	protected function getRule(): Rule
+	{
+		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);
+
+		return new AttributeRequiresPhpVersionRule(
+			$phpunitVersion,
+			new TestMethodsHelper(
+				self::getContainer()->getByType(FileTypeMapper::class),
+				$phpunitVersion,
+			),
+			$this->deprecationRulesInstalled,
+		);
+	}
+
+}

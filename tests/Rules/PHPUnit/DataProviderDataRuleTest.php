@@ -22,7 +22,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 	protected function getRule(): Rule
 	{
 		$reflectionProvider = $this->createReflectionProvider();
-		$phpunitVersion = new PHPUnitVersion($this->phpunitVersion);
+		$phpunitVersion = new PHPUnitVersion($this->phpunitVersion, 0);
 
 		/** @var list<Rule<Node>> $rules */
 		$rules = [

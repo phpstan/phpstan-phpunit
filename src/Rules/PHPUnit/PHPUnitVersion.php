@@ -51,6 +51,9 @@ class PHPUnitVersion
 
 	public function requiresPhpversionAttributeWithOperator(): TrinaryLogic
 	{
+		if ($this->majorVersion === null) {
+			return TrinaryLogic::createMaybe();
+		}
 		return TrinaryLogic::createFromBoolean($this->majorVersion >= 13);
 	}
 

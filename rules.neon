@@ -14,7 +14,7 @@ conditionalTags:
 		phpstan.rules.rule: [%strictRulesInstalled%, %featureToggles.bleedingEdge%]
 
 	PHPStan\Rules\PHPUnit\DataProviderDataRule:
-		phpstan.rules.rule: %phpunit.checkDataProviderData%
+		phpstan.rules.rule: %featureToggles.bleedingEdge%
 
 services:
 	-

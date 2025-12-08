@@ -2,11 +2,8 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use Composer\Semver\Constraint\ConstraintInterface;
-use Composer\Semver\VersionParser;
 use PharIo\Version\UnsupportedVersionConstraintException;
 use PharIo\Version\Version;
-use PharIo\Version\VersionConstraint;
 use PharIo\Version\VersionConstraintParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -15,20 +12,20 @@ use PHPStan\Php\PhpVersion;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 use function count;
 use function is_numeric;
 use function method_exists;
 use function preg_match;
 use function sprintf;
+use function version_compare;
 
 /**
  * @implements Rule<InClassMethodNode>
  */
 class AttributeRequiresPhpVersionRule implements Rule
 {
-	private const VERSION_COMPARISON = "/(?P<operator>!=|<|<=|<>|=|==|>|>=)?\s*(?P<version>[\d\.-]+(dev|(RC|alpha|beta)[\d\.])?)[ \t]*\r?$/m";
 
+	private const VERSION_COMPARISON = "/(?P<operator>!=|<|<=|<>|=|==|>|>=)?\s*(?P<version>[\d\.-]+(dev|(RC|alpha|beta)[\d\.])?)[ \t]*\r?$/m";
 
 	private Version $phpstanPhpVersion;
 
@@ -90,19 +87,19 @@ class AttributeRequiresPhpVersionRule implements Rule
 						continue;
 					}
 				} catch (UnsupportedVersionConstraintException $e) {
-					if (preg_match(self::VERSION_COMPARISON, $args[0], $matches) > 0) {
-						$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
-
-						if (version_compare($this->phpstanPhpVersion->getVersionString(), $matches['version'], $operator)) {
-							continue;
-						}
-					} else {
+					if (preg_match(self::VERSION_COMPARISON, $args[0], $matches) <= 0) {
 						$errors[] = RuleErrorBuilder::message(
 							sprintf($e->getMessage()),
 						)
 							->identifier('phpunit.attributeRequiresPhpVersion')
 							->build();
 
+						continue;
+					}
+
+					$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
+
+					if (version_compare($this->phpstanPhpVersion->getVersionString(), $matches['version'], $operator)) {
 						continue;
 					}
 				}

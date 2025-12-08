@@ -103,7 +103,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-php-version-invalid.php'], [
 			[
-				'Could not parse version constraint abc: Invalid version string "abc"',
+				'Version constraint abc is not supported.',
 				12,
 			],
 		]);

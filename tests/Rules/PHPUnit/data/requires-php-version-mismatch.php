@@ -15,9 +15,57 @@ class RequiresPhp5 extends TestCase
 	}
 }
 
+class RequiresPhp5Caret extends TestCase
+{
+	#[RequiresPhp('^5.0')]
+	public function testFoo(): void {
+
+	}
+}
+
+class RequiresPhp5Tilde extends TestCase
+{
+	#[RequiresPhp('~5.0')]
+	public function testFoo(): void {
+
+	}
+}
+
+class RequiresPhp5Star extends TestCase
+{
+	#[RequiresPhp('5.*')]
+	public function testFoo(): void {
+
+	}
+}
+
 class RequiresPhp8 extends TestCase
 {
 	#[RequiresPhp('>=8.0')]
+	public function testFoo(): void {
+
+	}
+}
+
+class RequiresPhp8Caret extends TestCase
+{
+	#[RequiresPhp('^8.0')]
+	public function testFoo(): void {
+
+	}
+}
+
+class RequiresPhp8Tilde extends TestCase
+{
+	#[RequiresPhp('~8.0')]
+	public function testFoo(): void {
+
+	}
+}
+
+class RequiresPhp8Star extends TestCase
+{
+	#[RequiresPhp('8.*')]
 	public function testFoo(): void {
 
 	}

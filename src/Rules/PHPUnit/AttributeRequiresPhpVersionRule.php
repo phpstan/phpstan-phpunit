@@ -81,12 +81,14 @@ class AttributeRequiresPhpVersionRule implements Rule
 				!is_numeric($args[0])
 			) {
 				try {
+					// check composer like version constraints, e.g. ^1  or ~2
 					$testPhpVersionConstraint = $parser->parse($args[0]);
 
 					if ($testPhpVersionConstraint->complies($this->phpstanPhpVersion)) {
 						continue;
 					}
 				} catch (UnsupportedVersionConstraintException $e) {
+					// test php-src builtin operators as in version_compare()
 					if (preg_match(self::VERSION_COMPARISON, $args[0], $matches) <= 0) {
 						$errors[] = RuleErrorBuilder::message(
 							sprintf($e->getMessage()),

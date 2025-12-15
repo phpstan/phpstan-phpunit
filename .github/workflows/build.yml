@@ -271,7 +271,7 @@ jobs:
           echo "name=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')" >> $GITHUB_OUTPUT
 
       - name: "Restore result cache"
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ./tmp
           key: "result-cache-v1-${{ matrix.php-version }}-${{ github.run_id }}"
@@ -292,7 +292,7 @@ jobs:
             --logger-text=php://stdout
 
       - name: "Save result cache"
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         if: ${{ !cancelled() }}
         with:
           path: ./tmp

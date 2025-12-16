@@ -41,6 +41,22 @@ class Foo extends \PHPUnit\Framework\TestCase
 		$mock->method('doFoo');
 	}
 
+	public function testMockForIntersection()
+	{
+		$mock = $this->createMockForIntersectionOfInterfaces([FooInterface::class, BarInterface::class]);
+		$mock->method('fooMethod');
+		$mock->method('barMethod');
+		$mock->method('bazMethod');
+	}
+
+	public function testStubForIntersection()
+	{
+		$stub = $this->createStubForIntersectionOfInterfaces([FooInterface::class, BarInterface::class]);
+		$stub->method('fooMethod');
+		$stub->method('barMethod');
+		$stub->method('bazMethod');
+	}
+
 }
 
 class Bar {
@@ -70,4 +86,12 @@ class FinalFooTest extends \PHPUnit\Framework\TestCase
 		$this->createMock(FinalFoo::class)->method('doFoo');
 	}
 
+}
+
+interface FooInterface {
+	public function fooMethod(): int;
+}
+
+interface BarInterface {
+	public function barMethod(): string;
 }

@@ -48,6 +48,10 @@ services:
 		tags:
 			- phpstan.broker.dynamicMethodReturnTypeExtension
 	-
+		class: PHPStan\Type\PHPUnit\MockForIntersectionDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
+	-
 		class: PHPStan\Rules\PHPUnit\CoversHelper
 	-
 		class: PHPStan\Rules\PHPUnit\AnnotationHelper

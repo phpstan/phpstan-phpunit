@@ -2,10 +2,13 @@
 
 namespace PHPStan\Type\PHPUnit;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
+use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -13,9 +16,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use function count;
-use function in_array;
+use function strtolower;
 
-class MockForIntersectionDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
+class MockForIntersectionDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension, DynamicStaticMethodReturnTypeExtension
 {
 
 	public function getClass(): string
@@ -25,19 +28,29 @@ class MockForIntersectionDynamicReturnTypeExtension implements DynamicMethodRetu
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return in_array(
-			$methodReflection->getName(),
-			[
-				'createMockForIntersectionOfInterfaces',
-				'createStubForIntersectionOfInterfaces',
-			],
-			true,
-		);
+		return strtolower($methodReflection->getName()) === 'createmockforintersectionofinterfaces';
+	}
+
+	public function isStaticMethodSupported(MethodReflection $methodReflection): bool
+	{
+		return strtolower($methodReflection->getName()) === 'createstubforintersectionofinterfaces';
+	}
+
+	public function getTypeFromStaticMethodCall(MethodReflection $methodReflection, StaticCall $methodCall, Scope $scope): ?Type
+	{
+		return $this->getTypeFromCall($methodReflection, $methodCall->getArgs(), $scope);
 	}
 
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
 	{
-		$args = $methodCall->getArgs();
+		return $this->getTypeFromCall($methodReflection, $methodCall->getArgs(), $scope);
+	}
+
+	/**
+	 * @param array<Arg> $args
+	 */
+	private function getTypeFromCall(MethodReflection $methodReflection, array $args, Scope $scope): ?Type
+	{
 		if (!isset($args[0])) {
 			return null;
 		}

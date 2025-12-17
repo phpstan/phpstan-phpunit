@@ -51,7 +51,7 @@ class Foo extends \PHPUnit\Framework\TestCase
 
 	public function testStubForIntersection()
 	{
-		$stub = $this->createStubForIntersectionOfInterfaces([FooInterface::class, BarInterface::class]);
+		$stub = static::createStubForIntersectionOfInterfaces([FooInterface::class, BarInterface::class]);
 		$stub->method('fooMethod');
 		$stub->method('barMethod');
 		$stub->method('bazMethod');

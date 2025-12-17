@@ -9,7 +9,7 @@ use function PHPStan\Testing\assertType;
 class Foo extends TestCase
 {
 
-	public function inheritedAssertMethodsNarrowType(?string $s): void
+	public function testFoo(bool $bool): void
 	{
 		assertType(
 			'MockForIntersection\BarInterface&MockForIntersection\FooInterface&PHPUnit\Framework\MockObject\MockObject',
@@ -18,6 +18,16 @@ class Foo extends TestCase
 		assertType(
 			'MockForIntersection\BarInterface&MockForIntersection\FooInterface&PHPUnit\Framework\MockObject\Stub',
 			self::createStubForIntersectionOfInterfaces([FooInterface::class, BarInterface::class]),
+		);
+
+
+		assertType(
+			'PHPUnit\Framework\MockObject\MockObject',
+			$this->createMockForIntersectionOfInterfaces($bool ? [FooInterface::class, BarInterface::class] : [FooInterface::class]),
+		);
+		assertType(
+			'PHPUnit\Framework\MockObject\MockObject',
+			$this->createMockForIntersectionOfInterfaces($bool ? [FooInterface::class] : [BarInterface::class]),
 		);
 	}
 

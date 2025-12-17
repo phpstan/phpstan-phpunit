@@ -36,7 +36,7 @@ class MockMethodCallRuleTest extends RuleTestCase
 			],
 		];
 
-		if (method_exists(TestCase::class, 'createMockForIntersectionOfInterfaces')) { // @phpstan-ignore-line
+		if (method_exists(TestCase::class, 'createMockForIntersectionOfInterfaces')) { // @phpstan-ignore-line function.alreadyNarrowedType
 			$expectedErrors[] = [
 				'Trying to mock an undefined method bazMethod() on class MockMethodCall\FooInterface&MockMethodCall\BarInterface.',
 				49,

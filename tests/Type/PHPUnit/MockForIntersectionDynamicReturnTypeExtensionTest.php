@@ -13,7 +13,7 @@ class MockForIntersectionDynamicReturnTypeExtensionTest extends TypeInferenceTes
 	/** @return mixed[] */
 	public static function dataFileAsserts(): iterable
 	{
-		if (method_exists(TestCase::class, 'createMockForIntersectionOfInterfaces')) { // @phpstan-ignore-line
+		if (method_exists(TestCase::class, 'createMockForIntersectionOfInterfaces')) { // @phpstan-ignore-line function.alreadyNarrowedType
 			yield from self::gatherAssertTypes(__DIR__ . '/data/mock-for-intersection.php');
 		}
 

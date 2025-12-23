@@ -1,0 +1,10 @@
+parameters:
+	featureToggles:
+		bleedingEdge: true
+
+includes:
+	- ../../../../extension.neon
+
+services:
+	-
+		class: PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsRule

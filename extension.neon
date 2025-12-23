@@ -72,8 +72,13 @@ services:
 	-
 		class: PHPStan\Type\PHPUnit\DataProviderReturnTypeIgnoreExtension
 
+	-
+		class: PHPStan\Type\PHPUnit\DynamicCallToAssertionIgnoreExtension
+
 conditionalTags:
 	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:
 		phpstan.phpDoc.typeNodeResolverExtension: %phpunit.convertUnionToIntersectionType%
 	PHPStan\Type\PHPUnit\DataProviderReturnTypeIgnoreExtension:
 		phpstan.ignoreErrorExtension: [%featureToggles.bleedingEdge%, not(%phpunit.reportMissingDataProviderReturnType%)]
+	PHPStan\Type\PHPUnit\DynamicCallToAssertionIgnoreExtension:
+		phpstan.ignoreErrorExtension: %featureToggles.bleedingEdge%

@@ -9,6 +9,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
+use function array_key_exists;
 use function str_starts_with;
 use function strtolower;
 
@@ -18,6 +19,9 @@ final class TestMethodsHelper
 	private FileTypeMapper $fileTypeMapper;
 
 	private PHPUnitVersion $PHPUnitVersion;
+
+	/** @var array<string, array<ReflectionMethod>> */
+	private array $methodCache = [];
 
 	public function __construct(
 		FileTypeMapper $fileTypeMapper,
@@ -44,8 +48,11 @@ final class TestMethodsHelper
 	 */
 	public function getTestMethods(ClassReflection $classReflection, Scope $scope): array
 	{
+		if (array_key_exists($classReflection->getName(), $this->methodCache)) {
+			return $this->methodCache[$classReflection->getName()];
+		}
 		if (!$classReflection->is(TestCase::class)) {
-			return [];
+			return $this->methodCache[$classReflection->getName()] = [];
 		}
 
 		$testMethods = [];
@@ -87,7 +94,7 @@ final class TestMethodsHelper
 			$testMethods[] = $reflectionMethod;
 		}
 
-		return $testMethods;
+		return $this->methodCache[$classReflection->getName()] = $testMethods;
 	}
 
 	private function hasTestAnnotation(?ResolvedPhpDocBlock $phpDoc): bool

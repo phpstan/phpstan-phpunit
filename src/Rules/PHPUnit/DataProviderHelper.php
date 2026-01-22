@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
+use PHPStan\BetterReflection\Reflection\ReflectionMethod;
 use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -20,11 +21,9 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
-use ReflectionMethod;
 use function array_merge;
 use function count;
 use function explode;
-use function method_exists;
 use function preg_match;
 use function sprintf;
 
@@ -282,21 +281,13 @@ class DataProviderHelper
 		if (
 			$node instanceof ReflectionMethod
 		) {
-			/** @phpstan-ignore function.alreadyNarrowedType */
-			if (!method_exists($node, 'getAttributes')) {
-				return;
-			}
-
-			foreach ($node->getAttributes('PHPUnit\Framework\Attributes\DataProvider') as $attr) {
+			foreach ($node->getAttributesByName('PHPUnit\Framework\Attributes\DataProvider') as $attr) {
 				$args = $attr->getArguments();
 				if (count($args) !== 1) {
 					continue;
 				}
 
 				$startLine = $node->getStartLine();
-				if ($startLine === false) {
-					$startLine = -1;
-				}
 
 				yield [$classReflection, $args[0], $startLine];
 			}
@@ -329,7 +320,7 @@ class DataProviderHelper
 	private function yieldDataProviderAnnotations($node, Scope $scope, ClassReflection $classReflection): iterable
 	{
 		$docComment = $node->getDocComment();
-		if ($docComment === null || $docComment === false) {
+		if ($docComment === null) {
 			return;
 		}
 
@@ -348,10 +339,6 @@ class DataProviderHelper
 			}
 
 			$startLine = $node->getStartLine();
-			if ($startLine === false) {
-				$startLine = -1;
-			}
-
 			$dataProviderMethod = $this->parseDataProviderAnnotationValue($scope, $dataProviderValue);
 			$dataProviderMethod[] = $startLine;
 

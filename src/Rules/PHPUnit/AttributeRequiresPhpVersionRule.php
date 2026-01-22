@@ -10,7 +10,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\TestCase;
 use function count;
 use function is_numeric;
-use function method_exists;
 use function sprintf;
 
 /**
@@ -56,13 +55,8 @@ class AttributeRequiresPhpVersionRule implements Rule
 			return [];
 		}
 
-		/** @phpstan-ignore function.alreadyNarrowedType */
-		if (!method_exists($reflectionMethod, 'getAttributes')) {
-			return [];
-		}
-
 		$errors = [];
-		foreach ($reflectionMethod->getAttributes('PHPUnit\Framework\Attributes\RequiresPhp') as $attr) {
+		foreach ($reflectionMethod->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhp') as $attr) {
 			$args = $attr->getArguments();
 			if (count($args) !== 1) {
 				continue;

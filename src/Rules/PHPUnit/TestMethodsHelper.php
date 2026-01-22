@@ -3,12 +3,12 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Analyser\Scope;
+use PHPStan\BetterReflection\Reflection\ReflectionMethod;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 use function str_starts_with;
 use function strtolower;
 
@@ -49,7 +49,7 @@ final class TestMethodsHelper
 		}
 
 		$testMethods = [];
-		foreach ($classReflection->getNativeReflection()->getMethods() as $reflectionMethod) {
+		foreach ($classReflection->getNativeReflection()->getBetterReflection()->getImmediateMethods() as $reflectionMethod) {
 			if (!$reflectionMethod->isPublic()) {
 				continue;
 			}
@@ -60,7 +60,7 @@ final class TestMethodsHelper
 			}
 
 			$docComment = $reflectionMethod->getDocComment();
-			if ($docComment !== false) {
+			if ($docComment !== null) {
 				$methodPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
 					$scope->getFile(),
 					$classReflection->getName(),
@@ -79,7 +79,7 @@ final class TestMethodsHelper
 				continue;
 			}
 
-			$testAttributes = $reflectionMethod->getAttributes('PHPUnit\Framework\Attributes\Test'); // @phpstan-ignore argument.type
+			$testAttributes = $reflectionMethod->getAttributesByName('PHPUnit\Framework\Attributes\Test'); // @phpstan-ignore argument.type
 			if ($testAttributes === []) {
 				continue;
 			}

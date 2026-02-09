@@ -16,7 +16,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use function count;
-use function strtolower;
 
 class MockForIntersectionDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension, DynamicStaticMethodReturnTypeExtension
 {
@@ -28,12 +27,12 @@ class MockForIntersectionDynamicReturnTypeExtension implements DynamicMethodRetu
 
 	public function isMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return strtolower($methodReflection->getName()) === 'createmockforintersectionofinterfaces';
+		return $methodReflection->getName() === 'createMockForIntersectionOfInterfaces';
 	}
 
 	public function isStaticMethodSupported(MethodReflection $methodReflection): bool
 	{
-		return strtolower($methodReflection->getName()) === 'createstubforintersectionofinterfaces';
+		return $methodReflection->getName() === 'createStubForIntersectionOfInterfaces';
 	}
 
 	public function getTypeFromStaticMethodCall(MethodReflection $methodReflection, StaticCall $methodCall, Scope $scope): ?Type

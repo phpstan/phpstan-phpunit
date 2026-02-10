@@ -4,6 +4,8 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use PHPUnit\Framework\TestCase;
+use function method_exists;
 use const PHP_VERSION_ID;
 
 /**
@@ -33,6 +35,17 @@ class MockMethodCallRuleTest extends RuleTestCase
 				36,
 			],
 		];
+
+		if (method_exists(TestCase::class, 'createMockForIntersectionOfInterfaces')) { // @phpstan-ignore function.alreadyNarrowedType
+			$expectedErrors[] = [
+				'Trying to mock an undefined method bazMethod() on class MockMethodCall\FooInterface&MockMethodCall\BarInterface.',
+				49,
+			];
+			$expectedErrors[] = [
+				'Trying to mock an undefined method bazMethod() on class MockMethodCall\FooInterface&MockMethodCall\BarInterface.',
+				57,
+			];
+		}
 
 		$this->analyse([__DIR__ . '/data/mock-method-call.php'], $expectedErrors);
 	}

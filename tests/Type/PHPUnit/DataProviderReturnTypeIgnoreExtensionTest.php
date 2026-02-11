@@ -5,6 +5,7 @@ namespace PHPStan\Type\PHPUnit;
 use PHPStan\Rules\Methods\MissingMethodReturnTypehintRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use function array_merge;
 
 /**
  * @extends RuleTestCase<MissingMethodReturnTypehintRule>
@@ -23,7 +24,7 @@ class DataProviderReturnTypeIgnoreExtensionTest extends RuleTestCase {
 		$this->analyse([__DIR__ . '/data/data-provider-iterable-value.php'], [
 			[
 				'Method DataProviderIterableValueTest\Foo::notADataProvider() return type has no value type specified in iterable type iterable.',
-				32,
+				41,
 				'See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type'
 			],
 		]);
@@ -31,8 +32,11 @@ class DataProviderReturnTypeIgnoreExtensionTest extends RuleTestCase {
 
 	static public function getAdditionalConfigFiles(): array
 	{
-		return [
-			__DIR__ . '/data/data-provider-iterable-value.neon'
-		];
+		return array_merge(
+			parent::getAdditionalConfigFiles(),
+			[
+				__DIR__ . '/data/data-provider-iterable-value.neon'
+			],
+		);
 	}
 }

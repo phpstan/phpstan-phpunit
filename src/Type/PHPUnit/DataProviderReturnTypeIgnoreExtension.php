@@ -8,6 +8,7 @@ use PHPStan\Analyser\IgnoreErrorExtension;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\PHPUnit\DataProviderHelper;
 use PHPStan\Rules\PHPUnit\TestMethodsHelper;
+use function in_array;
 
 final class DataProviderReturnTypeIgnoreExtension implements IgnoreErrorExtension
 {
@@ -27,7 +28,10 @@ final class DataProviderReturnTypeIgnoreExtension implements IgnoreErrorExtensio
 
 	public function shouldIgnore(Error $error, Node $node, Scope $scope): bool
 	{
-		if ($error->getIdentifier() !== 'missingType.iterableValue') {
+		if (!in_array($error->getIdentifier(), [
+			'missingType.iterableValue',
+			'missingType.generics',
+		], true)) {
 			return false;
 		}
 

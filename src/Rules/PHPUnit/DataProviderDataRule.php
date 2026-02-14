@@ -58,18 +58,13 @@ class DataProviderDataRule implements Rule
 			return [];
 		}
 
-		$arraysTypes = $this->buildArrayTypesFromNode($node, $scope);
-		if ($arraysTypes === []) {
-			return [];
-		}
-
-		$method = $scope->getFunction();
 		$classReflection = $scope->getClassReflection();
 		if ($classReflection === null) {
 			return [];
 		}
 
 		$testsWithProvider = [];
+		$method = $scope->getFunction();
 		$testMethods = $this->testMethodsHelper->getTestMethods($classReflection, $scope);
 		foreach ($testMethods as $testMethod) {
 			foreach ($this->dataProviderHelper->getDataProviderMethods($scope, $testMethod, $classReflection) as [, $providerMethodName]) {
@@ -81,6 +76,11 @@ class DataProviderDataRule implements Rule
 		}
 
 		if (count($testsWithProvider) === 0) {
+			return [];
+		}
+
+		$arraysTypes = $this->buildArrayTypesFromNode($node, $scope);
+		if ($arraysTypes === []) {
 			return [];
 		}
 

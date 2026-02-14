@@ -48,11 +48,12 @@ final class TestMethodsHelper
 	 */
 	public function getTestMethods(ClassReflection $classReflection, Scope $scope): array
 	{
-		if (array_key_exists($classReflection->getName(), $this->methodCache)) {
-			return $this->methodCache[$classReflection->getName()];
+		$className = $classReflection->getName();
+		if (array_key_exists($className, $this->methodCache)) {
+			return $this->methodCache[$className];
 		}
 		if (!$classReflection->is(TestCase::class)) {
-			return $this->methodCache[$classReflection->getName()] = [];
+			return $this->methodCache[$className] = [];
 		}
 
 		$testMethods = [];
@@ -70,7 +71,7 @@ final class TestMethodsHelper
 			if ($docComment !== null) {
 				$methodPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
 					$scope->getFile(),
-					$classReflection->getName(),
+					$className,
 					$scope->isInTrait() ? $scope->getTraitReflection()->getName() : null,
 					$reflectionMethod->getName(),
 					$docComment,
@@ -94,7 +95,7 @@ final class TestMethodsHelper
 			$testMethods[] = $reflectionMethod;
 		}
 
-		return $this->methodCache[$classReflection->getName()] = $testMethods;
+		return $this->methodCache[$className] = $testMethods;
 	}
 
 	private function hasTestAnnotation(?ResolvedPhpDocBlock $phpDoc): bool

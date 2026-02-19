@@ -11,6 +11,7 @@ This extension provides following features:
 
 * `createMock()`, `getMockForAbstractClass()` and `getMockFromWsdl()` methods return an intersection type (see the [detailed explanation of intersection types](https://phpstan.org/blog/union-types-vs-intersection-types)) of the mock object and the mocked class so that both methods from the mock object (like `expects`) and from the mocked class are available on the object.
 * `getMock()` called on `MockBuilder` is also supported.
+* `createMockForIntersectionOfInterfaces()` and `createStubForIntersectionOfInterfaces()` return correct intersection types.
 * Interprets `Foo|MockObject` in phpDoc so that it results in an intersection type instead of a union type.
 * Defines early terminating method calls for the `PHPUnit\Framework\TestCase` class to prevent undefined variable errors.
 * Specifies types of expressions passed to various `assert` methods like `assertInstanceOf`, `assertTrue`, `assertInternalType` etc.
@@ -24,6 +25,13 @@ It also contains this strict framework-specific rules (can be enabled separately
 * Check that you are not using `assertSame()` with `count($variable)` as second parameter. `assertCount($variable)` should be used instead.
 * Check that you are not using `assertEquals()` with same types (`assertSame()` should be used)
 * Check that you are not using `assertNotEquals()` with same types (`assertNotSame()` should be used)
+* Validate `@covers` and `@coversDefaultClass` annotations reference existing classes, methods, and functions.
+* Check that methods called on mock objects via `->method('...')` exist on the mocked class.
+* Check that `setUp()` and `tearDown()` call their parent methods.
+* Validate data provider declarations (method existence, naming, static requirement in PHPUnit 10+).
+* Validate data provider return data matches test method parameters (bleeding edge).
+* Validate `#[RequiresPhp]` attribute format.
+* Check for proper spacing in PHPUnit annotations.
 
 ## How to document mock objects in phpDocs?
 

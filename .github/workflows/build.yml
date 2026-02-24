@@ -290,11 +290,6 @@ jobs:
           > infection.json5
           jq . infection.json5
 
-      - name: "Determine default branch"
-        id: default-branch
-        run: |
-          echo "name=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')" >> "$GITHUB_OUTPUT"
-
       - name: "Restore result cache"
         uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
@@ -305,9 +300,9 @@ jobs:
 
       - name: "Run infection"
         run: |
-          git fetch --depth=1 origin ${{ steps.default-branch.outputs.name }}
+          git fetch --depth=1 origin "$GITHUB_BASE_REF"
           infection \
-            --git-diff-base=origin/${{ steps.default-branch.outputs.name }} \
+            --git-diff-base=origin/"$GITHUB_BASE_REF" \
             --git-diff-lines \
             --ignore-msi-with-no-mutations \
             --min-msi=100 \

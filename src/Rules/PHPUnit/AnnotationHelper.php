@@ -5,7 +5,6 @@ namespace PHPStan\Rules\PHPUnit;
 use PhpParser\Comment\Doc;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use function array_key_exists;
 use function in_array;
 use function preg_match;
 use function preg_split;

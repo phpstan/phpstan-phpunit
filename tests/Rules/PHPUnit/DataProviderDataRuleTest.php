@@ -99,7 +99,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 				182,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\UnionTypeReturnTest::testFoo() expects string, int given.',
+				'Parameter #2 $input of method DataProviderDataTest\UnionTypeReturnTest::testFoo() expects string, int|string given.',
 				216,
 			],
 			[
@@ -159,7 +159,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 				411,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionTypeReturnTest::testFoo() expects string, int given.',
+				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayUnionTypeReturnTest::testFoo() expects string, int|string given.',
 				446,
 			],
 			[
@@ -167,7 +167,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 				484,
 			],
 			[
-				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() expects string, int given.',
+				'Parameter #2 $input of method DataProviderDataTest\ConstantArrayDifferentLengthUnionTypeReturnTest::testFoo() expects string, int|string given.',
 				484,
 			],
 			[
@@ -193,11 +193,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 		if ($phpunitVersion >= 11) {
 			$errors = [
 				[
-					'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
-					44
-				],
-				[
-					'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
+					'Parameter $input of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int|string|false given.',
 					44
 				],
 				[
@@ -216,11 +212,7 @@ class DataProviderDataRuleTest extends RuleTestCase
 		} else {
 			$errors = [
 				[
-					'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int given.',
-					44
-				],
-				[
-					'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, false given.',
+					'Parameter #1 $expectedResult of method DataProviderDataTestPhp8\NamedArgsInProvider::testFoo() expects string, int|string|false given.',
 					44
 				],
 				[

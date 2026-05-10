@@ -1,6 +1,6 @@
 <?php
 
-namespace AssertFunction;
+namespace AssertFunction96;
 
 use function PHPStan\Testing\assertType;
 use function PHPUnit\Framework\assertObjectHasProperty;

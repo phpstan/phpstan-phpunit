@@ -76,6 +76,9 @@ class AttributeRequiresPhpVersionRule implements Rule
 				continue;
 			}
 
+			// the following block is mimicing PHPUnit version parsing
+			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
+
 			$versionRequirement = $args[0];
 			if (
 				!is_numeric($versionRequirement)

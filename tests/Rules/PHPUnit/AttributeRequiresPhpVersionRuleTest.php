@@ -104,6 +104,22 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 				'Version requirement will always evaluate to false.',
 				36,
 			],
+			[
+				'Version requirement will always evaluate to false.',
+				44,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				52,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				60,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				68,
+			],
 		]);
 	}
 

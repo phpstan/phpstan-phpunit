@@ -14,7 +14,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\TestCase;
 use function count;
 use function is_numeric;
-use function method_exists;
 use function preg_match;
 use function sprintf;
 use function version_compare;

@@ -100,7 +100,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 				$errors[] = RuleErrorBuilder::message(
 					sprintf('Version requirement is incomplete.'),
 				)
-					->identifier('phpunit.incompletePhpVersion')
+					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
 			}
 

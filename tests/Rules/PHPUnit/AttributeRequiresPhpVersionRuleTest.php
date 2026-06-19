@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use PHPStan\Php\PhpVersion;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -11,6 +12,8 @@ use PHPStan\Type\FileTypeMapper;
  */
 final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 {
+
+	private int $phpVersion = 80500;
 
 	private ?int $phpunitMajorVersion;
 
@@ -78,6 +81,64 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testPhpVersionMismatch(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 4;
+		$this->deprecationRulesInstalled = false;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], [
+			[
+				// errors because https://github.com/sebastianbergmann/phpunit/issues/6451
+				// the test assumes PHP_VERSION_ID 80500 and the constraint only has 2 digits
+				'Version requirement will always evaluate to false.',
+				12,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				20,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				28,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				36,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				44,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				52,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				60,
+			],
+			[
+				'Version requirement will always evaluate to false.',
+				68,
+			],
+		]);
+	}
+
+	public function testInvalidPhpVersion(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 4;
+		$this->deprecationRulesInstalled = false;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version-invalid.php'], [
+			[
+				'Version constraint abc is not supported.',
+				12,
+			],
+		]);
+	}
+
 	protected function getRule(): Rule
 	{
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);
@@ -89,7 +150,15 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 				$phpunitVersion,
 			),
 			$this->deprecationRulesInstalled,
+			new PhpVersion($this->phpVersion),
 		);
+	}
+
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [
+			__DIR__ . '/AttributeRequiresPhpVersionRule.neon',
+		];
 	}
 
 }

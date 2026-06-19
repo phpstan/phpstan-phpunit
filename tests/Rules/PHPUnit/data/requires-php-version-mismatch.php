@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\RequiresPhp;
 
 class RequiresPhpLowerEqual85a extends TestCase
 {
-	#[RequiresPhp('<= 8.5')]
+	#[RequiresPhp('<= 8.5')] // note, version without patch component
 	public function testFoo(): void {
 
 	}
@@ -106,6 +106,14 @@ class RequiresPhp8Tilde extends TestCase
 class RequiresPhp8Star extends TestCase
 {
 	#[RequiresPhp('8.*')]
+	public function testFoo(): void {
+
+	}
+}
+
+class RequiresPhpLowerEqual853Digits extends TestCase
+{
+	#[RequiresPhp('<= 8.5.0')]
 	public function testFoo(): void {
 
 	}

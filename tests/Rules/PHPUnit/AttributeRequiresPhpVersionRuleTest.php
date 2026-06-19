@@ -155,7 +155,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 	public static function getAdditionalConfigFiles(): array
 	{
 		return [
-			__DIR__.'/AttributeRequiresPhpVersionRule.neon'
+			__DIR__ . '/AttributeRequiresPhpVersionRule.neon',
 		];
 	}
 

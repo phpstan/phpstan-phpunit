@@ -111,9 +111,17 @@ class RequiresPhp8Star extends TestCase
 	}
 }
 
-class RequiresPhpLowerEqual853Digits extends TestCase
+class RequiresPhpLowerEqual85With3Digits extends TestCase
 {
 	#[RequiresPhp('<= 8.5.0')]
+	public function testFoo(): void {
+
+	}
+}
+
+class RequiresPhpLowerEqual86With2Digits extends TestCase
+{
+	#[RequiresPhp('<= 8.6')]
 	public function testFoo(): void {
 
 	}

@@ -90,6 +90,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], [
 			[
 				// errors because https://github.com/sebastianbergmann/phpunit/issues/6451
+				// the test assumes PHP_VERSION_ID 80500 and the constraint only has 2 digits
 				'Version requirement will always evaluate to false.',
 				12,
 			],

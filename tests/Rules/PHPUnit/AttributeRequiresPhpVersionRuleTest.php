@@ -182,7 +182,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 			),
 			$this->deprecationRulesInstalled,
 			new PhpVersion($this->phpVersion),
-			$this->warnAboutIncompleteVersion
+			$this->warnAboutIncompleteVersion,
 		);
 	}
 

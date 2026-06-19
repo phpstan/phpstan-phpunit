@@ -19,6 +19,7 @@ use function count;
 use function is_numeric;
 use function preg_match;
 use function sprintf;
+use function substr_count;
 use function version_compare;
 
 /**
@@ -197,7 +198,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 	}
 
 	// see https://github.com/sebastianbergmann/phpunit/issues/6451
-	function warnAboutIncompleteVersion(string $versionRequirement): bool
+	private function warnAboutIncompleteVersion(string $versionRequirement): bool
 	{
 		if (!$this->warnAboutIncompleteVersion) {
 			return false;

@@ -8,6 +8,7 @@ use PharIo\Version\VersionConstraintParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
+use PHPStan\Php\PhpMinorVersionIterator;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -69,15 +70,9 @@ class AttributeRequiresPhpVersionRule implements Rule
 			return [];
 		}
 
-		$scopePhpVersion = $scope->getPhpVersion()->getType();
-		if ($scopePhpVersion instanceof ConstantIntegerType) {
-			$v = new PhpVersion($scopePhpVersion->getValue());
-			$phpstanPharIoVersion = new Version($v->getVersionString());
-		} elseif ($scopePhpVersion instanceof IntegerRangeType && $scopePhpVersion->getMin() !== null) {
-			$v = new PhpVersion($scopePhpVersion->getMin());
-			$phpstanPharIoVersion = new Version($v->getVersionString());
-		} else {
-			$phpstanPharIoVersion = new Version($this->fallbackPhpVersion->getVersionString());
+		$phpstanPharIoVersions = $this->getAnalyzedPhpVersions($scope);
+		if ($phpstanPharIoVersions === []) {
+			return [];
 		}
 
 		$errors = [];
@@ -99,8 +94,11 @@ class AttributeRequiresPhpVersionRule implements Rule
 					// check composer like version constraints, e.g. ^1  or ~2
 					$testPhpVersionConstraint = $parser->parse($versionRequirement);
 
-					if ($testPhpVersionConstraint->complies($phpstanPharIoVersion)) {
-						continue;
+					foreach ($phpstanPharIoVersions as $pharIoVersion) {
+						if ($testPhpVersionConstraint->complies($pharIoVersion)) {
+							// one of the versions within range matched, check next attribute
+							continue 2;
+						}
 					}
 				} catch (UnsupportedVersionConstraintException $e) {
 					// test php-src builtin operators as in version_compare()
@@ -116,8 +114,10 @@ class AttributeRequiresPhpVersionRule implements Rule
 
 					$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
 
-					if (version_compare($phpstanPharIoVersion->getVersionString(), $matches['version'], $operator)) {
-						continue;
+					foreach ($phpstanPharIoVersions as $pharIoVersion) {
+						if (version_compare($pharIoVersion->getVersionString(), $matches['version'], $operator)) {
+							continue 2;
+						}
 					}
 				}
 
@@ -149,6 +149,34 @@ class AttributeRequiresPhpVersionRule implements Rule
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * @return Version[]
+	 */
+	private function getAnalyzedPhpVersions(Scope $scope): array
+	{
+		$scopePhpVersion = $scope->getPhpVersion()->getType();
+		if ($scopePhpVersion instanceof ConstantIntegerType) {
+			$v = new PhpVersion($scopePhpVersion->getValue());
+			return [new Version($v->getVersionString())];
+		} elseif ($scopePhpVersion instanceof IntegerRangeType) {
+			if ($scopePhpVersion->getMin() === null || $scopePhpVersion->getMax() === null) {
+				return [];
+			}
+
+			$versions = [];
+			$minorVersionIterator = new PhpMinorVersionIterator(
+				new PhpVersion($scopePhpVersion->getMin()),
+				new PhpVersion($scopePhpVersion->getMax()),
+			);
+			foreach ($minorVersionIterator as $phpstanVersion) {
+				$versions[] = new Version($phpstanVersion->getVersionString());
+			}
+			return $versions;
+		}
+
+		return [new Version($this->fallbackPhpVersion->getVersionString())];
 	}
 
 }

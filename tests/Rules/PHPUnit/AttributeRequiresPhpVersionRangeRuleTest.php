@@ -53,6 +53,7 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 			),
 			false,
 			new PhpVersion($this->phpVersion),
+			true,
 		);
 	}
 

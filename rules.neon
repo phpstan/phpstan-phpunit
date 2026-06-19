@@ -29,6 +29,7 @@ services:
 		class: PHPStan\Rules\PHPUnit\AttributeRequiresPhpVersionRule
 		arguments:
 			deprecationRulesInstalled: %deprecationRulesInstalled%
+			bleedingEdge: %featureToggles.bleedingEdge%
 		tags:
 			- phpstan.rules.rule
 

@@ -46,11 +46,14 @@ class AttributeRequiresPhpVersionRule implements Rule
 	 */
 	private bool $warnAboutIncompleteVersion;
 
+	private bool $bleedingEdge;
+
 	public function __construct(
 		PHPUnitVersion $PHPUnitVersion,
 		TestMethodsHelper $testMethodsHelper,
 		bool $deprecationRulesInstalled,
 		PhpVersion $phpVersion,
+		bool $bleedingEdge,
 		bool $warnAboutIncompleteVersion = true
 	)
 	{
@@ -59,6 +62,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 		$this->deprecationRulesInstalled = $deprecationRulesInstalled;
 		$this->fallbackPhpVersion = $phpVersion;
 		$this->warnAboutIncompleteVersion = $warnAboutIncompleteVersion;
+		$this->bleedingEdge = $bleedingEdge;
 	}
 
 	public function getNodeType(): string
@@ -107,6 +111,10 @@ class AttributeRequiresPhpVersionRule implements Rule
 			if (
 				!is_numeric($versionRequirement)
 			) {
+				if (!$this->bleedingEdge) {
+					continue;
+				}
+
 				try {
 					// check composer like version constraints, e.g. ^1  or ~2
 					$testPhpVersionConstraint = $parser->parse($versionRequirement);
@@ -200,6 +208,10 @@ class AttributeRequiresPhpVersionRule implements Rule
 	// see https://github.com/sebastianbergmann/phpunit/issues/6451
 	private function warnAboutIncompleteVersion(string $versionRequirement): bool
 	{
+		if (!$this->bleedingEdge) {
+			return false;
+		}
+
 		if (!$this->warnAboutIncompleteVersion) {
 			return false;
 		}

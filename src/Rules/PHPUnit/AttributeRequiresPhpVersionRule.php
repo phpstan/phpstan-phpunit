@@ -69,12 +69,12 @@ class AttributeRequiresPhpVersionRule implements Rule
 			return [];
 		}
 
-		$phpversionType = $scope->getPhpVersion()->getType();
-		if ($phpversionType instanceof ConstantIntegerType) {
-			$v = new PhpVersion($phpversionType->getValue());
+		$scopePhpVersion = $scope->getPhpVersion()->getType();
+		if ($scopePhpVersion instanceof ConstantIntegerType) {
+			$v = new PhpVersion($scopePhpVersion->getValue());
 			$phpstanPharIoVersion = new Version($v->getVersionString());
-		} elseif ($phpversionType instanceof IntegerRangeType && $phpversionType->getMin() !== null) {
-			$v = new PhpVersion($phpversionType->getMin());
+		} elseif ($scopePhpVersion instanceof IntegerRangeType && $scopePhpVersion->getMin() !== null) {
+			$v = new PhpVersion($scopePhpVersion->getMin());
 			$phpstanPharIoVersion = new Version($v->getVersionString());
 		} else {
 			$phpstanPharIoVersion = new Version($this->fallbackPhpVersion->getVersionString());

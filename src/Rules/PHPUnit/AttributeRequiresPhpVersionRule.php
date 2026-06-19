@@ -116,6 +116,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 
 					foreach ($phpstanPharIoVersions as $pharIoVersion) {
 						if (version_compare($pharIoVersion->getVersionString(), $matches['version'], $operator)) {
+							// one of the versions within range matched, check next attribute
 							continue 2;
 						}
 					}

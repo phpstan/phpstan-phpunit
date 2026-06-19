@@ -7,18 +7,26 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\RequiresPhp;
 
-class DeprecatedVersionFormat extends TestCase
+class TwoDigitVersionA extends TestCase
 {
 	#[RequiresPhp('8.0')]
-	public function testDeprecatedFormat(): void {
+	public function testFoo(): void {
 
 	}
 }
 
-class AllGoodTest extends TestCase
+class TwoDigitVersionB extends TestCase
 {
 	#[RequiresPhp('>=8.0')]
-	public function testHappyPath(): void {
+	public function testBar(): void {
+
+	}
+}
+
+class CorrectRequirement extends TestCase
+{
+	#[RequiresPhp('>=8.0.0')]
+	public function testBar(): void {
 
 	}
 }

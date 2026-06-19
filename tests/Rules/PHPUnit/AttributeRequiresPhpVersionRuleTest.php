@@ -21,6 +21,8 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 	private bool $deprecationRulesInstalled = true;
 
+	private bool $warnAboutIncompleteVersion = false;
+
 	public function testRuleOnPHPUnitUnknown(): void
 	{
 		$this->phpunitMajorVersion = null;
@@ -139,6 +141,35 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testNoWarnAboutIncompleteVersionInOldPhpunit(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 0;
+		$this->deprecationRulesInstalled = false;
+		$this->warnAboutIncompleteVersion = true;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], []);
+	}
+
+	public function testWarnAboutIncompleteVersion(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 5;
+		$this->deprecationRulesInstalled = false;
+		$this->warnAboutIncompleteVersion = true;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version.php'], [
+			[
+				'Version requirement is incomplete.',
+				12,
+			],
+			[
+				'Version requirement is incomplete.',
+				20,
+			],
+		]);
+	}
+
 	protected function getRule(): Rule
 	{
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);
@@ -151,6 +182,8 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 			),
 			$this->deprecationRulesInstalled,
 			new PhpVersion($this->phpVersion),
+			true,
+			$this->warnAboutIncompleteVersion,
 		);
 	}
 

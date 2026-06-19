@@ -19,6 +19,7 @@ use function count;
 use function is_numeric;
 use function preg_match;
 use function sprintf;
+use function substr_count;
 use function version_compare;
 
 /**
@@ -36,21 +37,32 @@ class AttributeRequiresPhpVersionRule implements Rule
 	private PhpVersion $fallbackPhpVersion;
 
 	/**
-	 * When phpstan-deprecation-rules is installed, it reports deprecated usages.
+	 * When phpstan-deprecation-rules is installed, rule reports deprecated usages.
 	 */
 	private bool $deprecationRulesInstalled;
+
+	/**
+	 * Whether warnings about incomplete versions are allowed to be emitted
+	 */
+	private bool $warnAboutIncompleteVersion;
+
+	private bool $bleedingEdge;
 
 	public function __construct(
 		PHPUnitVersion $PHPUnitVersion,
 		TestMethodsHelper $testMethodsHelper,
 		bool $deprecationRulesInstalled,
-		PhpVersion $phpVersion
+		PhpVersion $phpVersion,
+		bool $bleedingEdge,
+		bool $warnAboutIncompleteVersion = true
 	)
 	{
 		$this->PHPUnitVersion = $PHPUnitVersion;
 		$this->testMethodsHelper = $testMethodsHelper;
 		$this->deprecationRulesInstalled = $deprecationRulesInstalled;
 		$this->fallbackPhpVersion = $phpVersion;
+		$this->warnAboutIncompleteVersion = $warnAboutIncompleteVersion;
+		$this->bleedingEdge = $bleedingEdge;
 	}
 
 	public function getNodeType(): string
@@ -87,9 +99,22 @@ class AttributeRequiresPhpVersionRule implements Rule
 			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
 
 			$versionRequirement = $args[0];
+
+			if ($this->warnAboutIncompleteVersion($versionRequirement)) {
+				$errors[] = RuleErrorBuilder::message(
+					sprintf('Version requirement is incomplete.'),
+				)
+					->identifier('phpunit.attributeRequiresPhpVersion')
+					->build();
+			}
+
 			if (
 				!is_numeric($versionRequirement)
 			) {
+				if (!$this->bleedingEdge) {
+					continue;
+				}
+
 				try {
 					// check composer like version constraints, e.g. ^1  or ~2
 					$testPhpVersionConstraint = $parser->parse($versionRequirement);
@@ -178,6 +203,24 @@ class AttributeRequiresPhpVersionRule implements Rule
 		}
 
 		return [new Version($this->fallbackPhpVersion->getVersionString())];
+	}
+
+	// see https://github.com/sebastianbergmann/phpunit/issues/6451
+	private function warnAboutIncompleteVersion(string $versionRequirement): bool
+	{
+		if (!$this->bleedingEdge) {
+			return false;
+		}
+
+		if (!$this->warnAboutIncompleteVersion) {
+			return false;
+		}
+
+		if (!$this->PHPUnitVersion->warnsAboutIncompleteVersion()->yes()) {
+			return false;
+		}
+
+		return substr_count($versionRequirement, '.') !== 2;
 	}
 
 }

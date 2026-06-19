@@ -8,9 +8,12 @@ use PharIo\Version\VersionConstraintParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
+use PHPStan\Php\ComposerPhpVersionParser;
 use PHPStan\Php\PhpVersion;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\IntegerRangeType;
 use PHPUnit\Framework\TestCase;
 use function count;
 use function is_numeric;
@@ -26,11 +29,11 @@ class AttributeRequiresPhpVersionRule implements Rule
 
 	private const VERSION_COMPARISON = "/(?P<operator>!=|<|<=|<>|=|==|>|>=)?\s*(?P<version>[\d\.-]+(dev|(RC|alpha|beta)[\d\.])?)[ \t]*\r?$/m";
 
-	private Version $phpstanPhpVersion;
-
 	private PHPUnitVersion $PHPUnitVersion;
 
 	private TestMethodsHelper $testMethodsHelper;
+
+	private PhpVersion $fallbackPhpVersion;
 
 	/**
 	 * When phpstan-deprecation-rules is installed, it reports deprecated usages.
@@ -47,8 +50,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 		$this->PHPUnitVersion = $PHPUnitVersion;
 		$this->testMethodsHelper = $testMethodsHelper;
 		$this->deprecationRulesInstalled = $deprecationRulesInstalled;
-
-		$this->phpstanPhpVersion = new Version($phpVersion->getVersionString());
+		$this->fallbackPhpVersion = $phpVersion;
 	}
 
 	public function getNodeType(): string
@@ -66,6 +68,17 @@ class AttributeRequiresPhpVersionRule implements Rule
 		$reflectionMethod = $this->testMethodsHelper->getTestMethodReflection($classReflection, $node->getMethodReflection(), $scope);
 		if ($reflectionMethod === null) {
 			return [];
+		}
+
+		$phpversionType = $scope->getPhpVersion()->getType();
+		if ($phpversionType instanceof ConstantIntegerType) {
+			$v = new PhpVersion($phpversionType->getValue());
+			$phpstanPharIoVersion = new Version($v->getVersionString());
+		} elseif ($phpversionType instanceof IntegerRangeType && $phpversionType->getMin() !== null) {
+			$v = new PhpVersion($phpversionType->getMin());
+			$phpstanPharIoVersion = new Version($v->getVersionString());
+		} else {
+			$phpstanPharIoVersion = new Version($this->fallbackPhpVersion->getVersionString());
 		}
 
 		$errors = [];
@@ -87,7 +100,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 					// check composer like version constraints, e.g. ^1  or ~2
 					$testPhpVersionConstraint = $parser->parse($versionRequirement);
 
-					if ($testPhpVersionConstraint->complies($this->phpstanPhpVersion)) {
+					if ($testPhpVersionConstraint->complies($phpstanPharIoVersion)) {
 						continue;
 					}
 				} catch (UnsupportedVersionConstraintException $e) {
@@ -104,7 +117,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 
 					$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
 
-					if (version_compare($this->phpstanPhpVersion->getVersionString(), $matches['version'], $operator)) {
+					if (version_compare($phpstanPharIoVersion->getVersionString(), $matches['version'], $operator)) {
 						continue;
 					}
 				}

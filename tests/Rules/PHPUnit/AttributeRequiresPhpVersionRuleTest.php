@@ -175,15 +175,17 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);
 
 		return new AttributeRequiresPhpVersionRule(
-			$phpunitVersion,
 			new TestMethodsHelper(
 				self::getContainer()->getByType(FileTypeMapper::class),
 				$phpunitVersion,
 			),
-			$this->deprecationRulesInstalled,
-			new PhpVersion($this->phpVersion),
-			true,
-			$this->warnAboutIncompleteVersion,
+			new AttributeVersionRequirementHelper(
+				$phpunitVersion,
+				$this->deprecationRulesInstalled,
+				new PhpVersion($this->phpVersion),
+				true,
+				$this->warnAboutIncompleteVersion,
+			),
 		);
 	}
 

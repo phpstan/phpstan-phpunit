@@ -46,14 +46,16 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 		$phpunitVersion = new PHPUnitVersion(null, null);
 
 		return new AttributeRequiresPhpVersionRule(
-			$phpunitVersion,
 			new TestMethodsHelper(
 				self::getContainer()->getByType(FileTypeMapper::class),
 				$phpunitVersion,
 			),
-			false,
-			new PhpVersion($this->phpVersion),
-			true,
+			new AttributeVersionRequirementHelper(
+				$phpunitVersion,
+				false,
+				new PhpVersion($this->phpVersion),
+				true,
+			),
 		);
 	}
 

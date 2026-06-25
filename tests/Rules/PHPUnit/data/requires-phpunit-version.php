@@ -1,6 +1,6 @@
 <?php
 
-namespace RequiresPhpVersion;
+namespace RequiresPhpunitVersion;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;

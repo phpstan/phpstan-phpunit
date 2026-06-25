@@ -170,6 +170,21 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testWarnAboutIncompletePhpunitVersion(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 5;
+		$this->deprecationRulesInstalled = false;
+		$this->warnAboutIncompleteVersion = true;
+
+		$this->analyse([__DIR__ . '/data/requires-phpunit-version.php'], [
+			[
+				'Version requirement is incomplete.',
+				12,
+			],
+		]);
+	}
+
 	protected function getRule(): Rule
 	{
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);

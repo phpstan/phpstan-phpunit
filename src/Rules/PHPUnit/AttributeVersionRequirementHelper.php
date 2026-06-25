@@ -61,7 +61,7 @@ final class AttributeVersionRequirementHelper
 	 *
 	 * @return list<IdentifierRuleError>
 	 */
-	public function checkRequiresPhpVersion(array $attributes, Scope $scope): array
+	public function checkVersionRequirement(array $attributes, Scope $scope): array
 	{
 		$phpstanPharIoVersions = $this->getAnalyzedPhpVersions($scope);
 		if ($phpstanPharIoVersions === []) {

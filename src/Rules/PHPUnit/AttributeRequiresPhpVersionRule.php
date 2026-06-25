@@ -45,7 +45,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 			return [];
 		}
 
-		return $this->attributeVersionRequirementHelper->checkRequiresPhpVersion(
+		return $this->attributeVersionRequirementHelper->checkVersionRequirement(
 			array_merge(
 				$reflectionMethod->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhp'),
 				$reflectionMethod->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhpunit'),

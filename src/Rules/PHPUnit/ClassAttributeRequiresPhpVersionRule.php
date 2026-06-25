@@ -7,6 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPUnit\Framework\TestCase;
+use function array_merge;
 
 /**
  * @implements Rule<InClassNode>
@@ -36,7 +37,10 @@ class ClassAttributeRequiresPhpVersionRule implements Rule
 		}
 
 		return $this->attributeVersionRequirementHelper->checkRequiresPhpVersion(
-			$classReflection->getNativeReflection()->getBetterReflection()->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhp'),
+			array_merge(
+				$classReflection->getNativeReflection()->getBetterReflection()->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhp'),
+				$classReflection->getNativeReflection()->getBetterReflection()->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhpunit'),
+			),
 			$scope,
 		);
 	}

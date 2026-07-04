@@ -196,8 +196,8 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 			),
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				$this->deprecationRulesInstalled,
 				new PhpVersion($this->phpVersion),
+				$this->deprecationRulesInstalled,
 				true,
 				$this->warnAboutIncompleteVersion,
 			),

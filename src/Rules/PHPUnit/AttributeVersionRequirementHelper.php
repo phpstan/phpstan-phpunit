@@ -43,9 +43,9 @@ final class AttributeVersionRequirementHelper
 
 	public function __construct(
 		PHPUnitVersion $PHPUnitVersion,
-		bool $deprecationRulesInstalled,
 		PhpVersion $phpVersion,
-		bool $bleedingEdge,
+		bool $deprecationRulesInstalled = false,
+		bool $bleedingEdge = false,
 		bool $warnAboutIncompleteVersion = true
 	)
 	{

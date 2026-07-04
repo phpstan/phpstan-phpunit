@@ -52,8 +52,8 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 			),
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				false,
 				new PhpVersion($this->phpVersion),
+				false,
 				true,
 			),
 		);

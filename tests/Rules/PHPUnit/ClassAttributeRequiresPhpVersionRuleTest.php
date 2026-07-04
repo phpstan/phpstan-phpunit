@@ -59,8 +59,8 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		return new ClassAttributeRequiresPhpVersionRule(
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				false,
 				new PhpVersion($this->phpVersion),
+				false,
 				true,
 				$this->warnAboutIncompleteVersion,
 			),

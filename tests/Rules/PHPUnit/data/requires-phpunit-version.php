@@ -9,13 +9,13 @@ use PHPUnit\Framework\Attributes\RequiresPhpunit;
 
 class TwoDigitVersionA extends TestCase
 {
-	#[RequiresPhpunit('8.0')]
+	#[RequiresPhpunit('11.0')]
 	public function testFoo(): void {
 
 	}
 }
 
-#[RequiresPhpunit('>=8.0')]
+#[RequiresPhpunit('>=11.0')]
 class TwoDigitVersionB extends TestCase
 {
 	public function testBar(): void {
@@ -25,13 +25,18 @@ class TwoDigitVersionB extends TestCase
 
 class CorrectRequirement extends TestCase
 {
-	#[RequiresPhpunit('>=8.0.0')]
+	#[RequiresPhpunit('>=11.0.0')]
 	public function testBar(): void {
+
+	}
+
+	#[RequiresPhpunit('^12.0.0')]
+	public function testBaz(): void {
 
 	}
 }
 
-#[RequiresPhpunit('>=8.0.0')]
+#[RequiresPhpunit('>=11.0.0')]
 class CorrectClassRequirement extends TestCase
 {
 	public function testBar(): void {

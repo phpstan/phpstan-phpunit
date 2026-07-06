@@ -61,11 +61,6 @@ final class AttributeVersionRequirementHelper
 	 */
 	public function checkVersionRequirement(array $attributes, Scope $scope): array
 	{
-		$phpstanPharIoVersions = $this->getAnalyzedPhpVersions();
-		if ($phpstanPharIoVersions === []) {
-			return [];
-		}
-
 		$errors = [];
 		$parser = new VersionConstraintParser();
 		foreach ($attributes as $attr) {
@@ -94,11 +89,18 @@ final class AttributeVersionRequirementHelper
 					continue;
 				}
 
+				$pharIoVersions = strpos($attr->getName(), 'RequiresPhpunit') !== false
+					? $this->PHPUnitVersion->getPharIoVersions()
+					: $this->getAnalyzedPhpVersions();
+				if ($pharIoVersions === []) {
+					continue;
+				}
+
 				try {
 					// check composer like version constraints, e.g. ^1  or ~2
 					$testPhpVersionConstraint = $parser->parse($versionRequirement);
 
-					foreach ($phpstanPharIoVersions as $pharIoVersion) {
+					foreach ($pharIoVersions as $pharIoVersion) {
 						if ($testPhpVersionConstraint->complies($pharIoVersion)) {
 							// one of the versions within range matched, check next attribute
 							continue 2;
@@ -118,7 +120,7 @@ final class AttributeVersionRequirementHelper
 
 					$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
 
-					foreach ($phpstanPharIoVersions as $pharIoVersion) {
+					foreach ($pharIoVersions as $pharIoVersion) {
 						if (version_compare($pharIoVersion->getVersionString(), $matches['version'], $operator)) {
 							// one of the versions within range matched, check next attribute
 							continue 2;

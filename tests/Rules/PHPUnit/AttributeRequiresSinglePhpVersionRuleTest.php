@@ -10,33 +10,12 @@ use PHPStan\Type\FileTypeMapper;
 /**
  * @extends RuleTestCase<AttributeRequiresPhpVersionRule>
  */
-final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
+final class AttributeRequiresSinglePhpVersionRuleTest extends RuleTestCase
 {
 
 	public function testPhpVersionMismatch(): void
 	{
-		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], [
-			[
-				'Version requirement will always evaluate to false.',
-				20,
-			],
-			[
-				'Version requirement will always evaluate to false.',
-				28,
-			],
-			[
-				'Version requirement will always evaluate to false.',
-				36,
-			],
-			[
-				'Version requirement will always evaluate to false.',
-				44,
-			],
-			[
-				'Version requirement will always evaluate to false.',
-				76,
-			],
-		]);
+		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], []);
 	}
 
 	protected function getRule(): Rule
@@ -60,7 +39,7 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 	public static function getAdditionalConfigFiles(): array
 	{
 		return [
-			__DIR__ . '/AttributeRequiresPhpVersionRangeRule.neon',
+			__DIR__ . '/AttributeRequiresSinglePhpVersionRule.neon',
 		];
 	}
 

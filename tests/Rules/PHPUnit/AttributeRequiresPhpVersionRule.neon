@@ -1,2 +1,4 @@
 parameters:
-	phpVersion: 80500
+	phpVersion:
+		min: 80500
+		max: 80599

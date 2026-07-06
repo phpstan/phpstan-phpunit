@@ -2,7 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PHPStan\Php\PhpVersion;
+use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -12,8 +12,6 @@ use PHPStan\Type\FileTypeMapper;
  */
 final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 {
-
-	private int $phpVersion = 80500;
 
 	private ?int $phpunitMajorVersion;
 
@@ -196,7 +194,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 			),
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				new PhpVersion($this->phpVersion),
+				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class), // @phpstan-ignore phpstanApi.classConstant
 				$this->deprecationRulesInstalled,
 				true,
 				$this->warnAboutIncompleteVersion,

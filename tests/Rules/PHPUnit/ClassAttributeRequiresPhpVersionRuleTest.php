@@ -2,7 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PHPStan\Php\PhpVersion;
+use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 
@@ -11,8 +11,6 @@ use PHPStan\Testing\RuleTestCase;
  */
 final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 {
-
-	private int $phpVersion = 80500;
 
 	private int $phpunitMajorVersion;
 
@@ -59,7 +57,7 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		return new ClassAttributeRequiresPhpVersionRule(
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				new PhpVersion($this->phpVersion),
+				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class), // @phpstan-ignore phpstanApi.classConstant
 				false,
 				true,
 				$this->warnAboutIncompleteVersion,

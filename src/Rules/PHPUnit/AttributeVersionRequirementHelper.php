@@ -12,8 +12,6 @@ use PHPStan\Php\PhpMinorVersionIterator;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\IntegerRangeType;
-use PHPStan\Type\VerbosityLevel;
 use function count;
 use function is_numeric;
 use function preg_match;
@@ -141,7 +139,7 @@ final class AttributeVersionRequirementHelper
 						'Version requirement %s does not match %s...%s.',
 						$versionRequirement,
 						$pharIoVersions[0]->getVersionString(),
-						$pharIoVersions[count($pharIoVersions) - 1]->getVersionString()
+						$pharIoVersions[count($pharIoVersions) - 1]->getVersionString(),
 					),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')

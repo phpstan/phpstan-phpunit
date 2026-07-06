@@ -2,7 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PHPStan\Php\PhpVersion;
+use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -12,8 +12,6 @@ use PHPStan\Type\FileTypeMapper;
  */
 final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 {
-
-	private int $phpVersion = 80500;
 
 	public function testPhpVersionMismatch(): void
 	{
@@ -52,7 +50,7 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 			),
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				new PhpVersion($this->phpVersion),
+				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class),
 				false,
 				true,
 			),

@@ -1,12 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace Rules\PHPUnit;
+namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
-use PHPStan\Rules\PHPUnit\AttributeRequiresPhpVersionRule;
-use PHPStan\Rules\PHPUnit\AttributeVersionRequirementHelper;
-use PHPStan\Rules\PHPUnit\PHPUnitVersion;
-use PHPStan\Rules\PHPUnit\TestMethodsHelper;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;

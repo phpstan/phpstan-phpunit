@@ -1,0 +1,56 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+name: "E2E Tests"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "2.0.x"
+
+concurrency:
+  group: e2e-${{ github.head_ref || github.run_id }} # will be canceled on subsequent pushes in pull requests but not branches
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  e2e-tests:
+    name: "E2E tests"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - script: |
+              cd e2e/composer-version
+              composer install
+              vendor/bin/phpstan
+
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - name: "Checkout"
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # v2.37.1
+        with:
+          coverage: "none"
+          php-version: "8.3"
+
+      - uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
+
+      - name: "Install bashunit"
+        uses: "TypedDevs/bashunit@ffa9c79e71ecbb9990e777348bc9ba12314b62d0" # 0.39.1
+        with:
+          directory: "e2e"
+
+      - name: "Test"
+        run: ${{ matrix.script }}

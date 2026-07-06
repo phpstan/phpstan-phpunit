@@ -28,7 +28,7 @@ jobs:
           - script: |
               cd e2e/composer-version
               composer install
-              OUTPUT=$(../bashunit -a exit_code "1" "vendor/bin/phpstan --error-format=raw")
+              OUTPUT=$(../bashunit -a exit_code "1" "vendor/bin/phpstan analyze test.php --error-format=raw")
               echo "$OUTPUT"
               ../bashunit -a contains 'test.php:12:Version requirement will always evaluate to false.' "$OUTPUT"
               ../bashunit -a contains 'test.php:32:Version requirement will always evaluate to false.' "$OUTPUT"

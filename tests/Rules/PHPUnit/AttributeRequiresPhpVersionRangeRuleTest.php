@@ -17,23 +17,23 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 	{
 		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], [
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement < 7.0 does not match 8.2.0...8.4.0.',
 				20,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement ^5.0 does not match 8.2.0...8.4.0.',
 				28,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement ~5.0 does not match 8.2.0...8.4.0.',
 				36,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement 5.* does not match 8.2.0...8.4.0.',
 				44,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement 8.5.* does not match 8.2.0...8.4.0.',
 				76,
 			],
 		]);

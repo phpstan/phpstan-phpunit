@@ -53,7 +53,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-php-version.php'], [
 			[
-				'Version requirement without operator is deprecated.',
+				'Version requirement 8.0 without operator is deprecated.',
 				12,
 			],
 		]);
@@ -75,7 +75,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-php-version.php'], [
 			[
-				'Version requirement is missing operator.',
+				'Version requirement 8.0 is missing operator.',
 				12,
 			],
 		]);
@@ -91,35 +91,35 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 			[
 				// errors because https://github.com/sebastianbergmann/phpunit/issues/6451
 				// the test assumes PHP_VERSION_ID 80500 and the constraint only has 2 digits
-				'Version requirement will always evaluate to false.',
+				'Version requirement <= 8.5 does not match 8.5.0...8.5.99.',
 				12,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement < 7.0 does not match 8.5.0...8.5.99.',
 				20,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement ^5.0 does not match 8.5.0...8.5.99.',
 				28,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement ~5.0 does not match 8.5.0...8.5.99.',
 				36,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement 5.* does not match 8.5.0...8.5.99.',
 				44,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement <= 8.4 does not match 8.5.0...8.5.99.',
 				52,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement <= 8.5 does not match 8.5.0...8.5.99.',
 				60,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement 8.3.* does not match 8.5.0...8.5.99.',
 				68,
 			],
 		]);
@@ -158,11 +158,11 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-php-version.php'], [
 			[
-				'Version requirement is incomplete.',
+				'Version requirement 8.0 is incomplete.',
 				12,
 			],
 			[
-				'Version requirement is incomplete.',
+				'Version requirement >=8.0 is incomplete.',
 				20,
 			],
 		]);
@@ -177,7 +177,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-phpunit-version.php'], [
 			[
-				'Version requirement is incomplete.',
+				'Version requirement 11.0 is incomplete.',
 				12,
 			],
 		]);

@@ -15,6 +15,7 @@ use function count;
 use function is_numeric;
 use function preg_match;
 use function sprintf;
+use function strpos;
 use function substr_count;
 use function version_compare;
 
@@ -162,6 +163,7 @@ final class AttributeVersionRequirementHelper
 	 */
 	private function getAnalyzedPhpVersions(): array
 	{
+		// @phpstan-ignore phpstanApi.method
 		[$minVersion, $maxVersion] = $this->phpVersionRangeHelper->getVersionRange();
 		if ($minVersion !== null && $maxVersion !== null) {
 			$versions = [];

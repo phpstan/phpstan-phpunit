@@ -57,7 +57,7 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		return new ClassAttributeRequiresPhpVersionRule(
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class),
+				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class), // @phpstan-ignore phpstanApi.classConstant
 				false,
 				true,
 				$this->warnAboutIncompleteVersion,

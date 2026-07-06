@@ -50,7 +50,7 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 			),
 			new AttributeVersionRequirementHelper(
 				$phpunitVersion,
-				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class),
+				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class), // @phpstan-ignore phpstanApi.classConstant
 				false,
 				true,
 			),

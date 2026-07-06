@@ -28,7 +28,10 @@ jobs:
           - script: |
               cd e2e/composer-version
               composer install
-              vendor/bin/phpstan
+              OUTPUT=$(../bashunit -a exit_code "1" "vendor/bin/phpstan --error-format=raw)
+              echo "$OUTPUT"
+              ../bashunit -a contains 'test.php:12:Version requirement will always evaluate to false.' "$OUTPUT"
+              ../bashunit -a contains 'test.php:32:Version requirement will always evaluate to false.' "$OUTPUT"
 
     steps:
       - name: Harden the runner (Audit all outbound calls)

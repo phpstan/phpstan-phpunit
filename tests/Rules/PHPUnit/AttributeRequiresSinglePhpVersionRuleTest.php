@@ -1,0 +1,50 @@
+<?php declare(strict_types = 1);
+
+namespace Rules\PHPUnit;
+
+use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
+use PHPStan\Rules\PHPUnit\AttributeRequiresPhpVersionRule;
+use PHPStan\Rules\PHPUnit\AttributeVersionRequirementHelper;
+use PHPStan\Rules\PHPUnit\PHPUnitVersion;
+use PHPStan\Rules\PHPUnit\TestMethodsHelper;
+use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
+use PHPStan\Type\FileTypeMapper;
+
+/**
+ * @extends RuleTestCase<AttributeRequiresPhpVersionRule>
+ */
+final class AttributeRequiresSinglePhpVersionRuleTest extends RuleTestCase
+{
+
+	public function testPhpVersionMismatch(): void
+	{
+		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], []);
+	}
+
+	protected function getRule(): Rule
+	{
+		$phpunitVersion = new PHPUnitVersion(null, null);
+
+		return new AttributeRequiresPhpVersionRule(
+			new TestMethodsHelper(
+				self::getContainer()->getByType(FileTypeMapper::class),
+				$phpunitVersion,
+			),
+			new AttributeVersionRequirementHelper(
+				$phpunitVersion,
+				self::getContainer()->getByType(ConfiguredPhpVersionRangeHelper::class), // @phpstan-ignore phpstanApi.classConstant
+				false,
+				true,
+			),
+		);
+	}
+
+	public static function getAdditionalConfigFiles(): array
+	{
+		return [
+			__DIR__ . '/AttributeRequiresSinglePhpVersionRule.neon',
+		];
+	}
+
+}

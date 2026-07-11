@@ -135,7 +135,7 @@ final class AttributeVersionRequirementHelper
 				}
 
 				if (strpos($attr->getName(), 'RequiresPhpunit') !== false) {
-					$tip = 'PHPUnit version inferred from composer.json. requirements';
+					$tip = 'PHPUnit version inferred from composer.json requirements.';
 				} else {
 					$tip = 'PHP version for analysis inferred from NEON config phpVersion or composer.json requirements. Invoke PHPStan with -vvv to get more details.';
 				}

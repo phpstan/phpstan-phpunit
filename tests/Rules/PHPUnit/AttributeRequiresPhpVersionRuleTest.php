@@ -133,7 +133,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-php-version-invalid.php'], [
 			[
-				'Version constraint abc is not supported.',
+				'"abc" is not a valid version requirement: expected a version constraint (such as "^8.1", "~8.1.0", or "8.1.*") or a version comparison (such as ">= 8.1.0")',
 				12,
 			],
 		]);

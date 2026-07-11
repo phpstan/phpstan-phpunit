@@ -2,7 +2,6 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PharIo\Version\Version;
 use PHPStan\TrinaryLogic;
 use function sprintf;
 
@@ -20,17 +19,17 @@ class PHPUnitVersion
 	}
 
 	/**
-	 * @return array{}|array{Version, Version}
+	 * @return array{}|array{string, string}
 	 */
-	public function getPharIoVersions(): array
+	public function getMinMaxVersion(): array
 	{
 		if ($this->majorVersion === null || $this->minorVersion === null) {
 			return [];
 		}
 
 		return [
-			new Version(sprintf('%d.%d.0', $this->majorVersion, $this->minorVersion)),
-			new Version(sprintf('%d.%d.99', $this->majorVersion, $this->minorVersion)),
+			sprintf('%d.%d.0', $this->majorVersion, $this->minorVersion),
+			sprintf('%d.%d.99', $this->majorVersion, $this->minorVersion),
 		];
 	}
 

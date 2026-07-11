@@ -2,22 +2,18 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PharIo\Version\UnsupportedVersionConstraintException;
-use PharIo\Version\Version;
-use PharIo\Version\VersionConstraintParser;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\ReflectionAttribute;
 use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
 use PHPStan\Php\PhpMinorVersionIterator;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
+use SebastianBergmann\VersionRequirement\InvalidVersionOperatorException;
+use SebastianBergmann\VersionRequirement\InvalidVersionRequirementException;
+use SebastianBergmann\VersionRequirement\Requirement;
 use function count;
-use function is_numeric;
-use function preg_match;
 use function sprintf;
 use function strpos;
-use function substr_count;
-use function version_compare;
 
 final class AttributeVersionRequirementHelper
 {
@@ -63,74 +59,38 @@ final class AttributeVersionRequirementHelper
 	public function checkVersionRequirement(array $attributes, Scope $scope): array
 	{
 		$errors = [];
-		$parser = new VersionConstraintParser();
 		foreach ($attributes as $attr) {
 			$args = $attr->getArguments();
 			if (count($args) !== 1) {
 				continue;
 			}
 
-			// the following block is mimicing PHPUnit version parsing
-			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
-
 			$versionRequirement = $args[0];
 
-			if ($this->warnAboutIncompleteVersion($versionRequirement)) {
+			try {
+				$requirement = Requirement::from($versionRequirement);
+			} catch (InvalidVersionOperatorException $e) {
+				if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
+					$errors[] = RuleErrorBuilder::message(
+						sprintf('Version requirement is missing operator.'),
+					)
+						->identifier('phpunit.attributeRequiresPhpVersion')
+						->build();
+				} elseif (
+					$this->deprecationRulesInstalled
+					&& $this->PHPUnitVersion->deprecatesPhpversionAttributeWithoutOperator()->yes()
+				) {
+					$errors[] = RuleErrorBuilder::message(
+						sprintf('Version requirement without operator is deprecated.'),
+					)
+						->identifier('phpunit.attributeRequiresPhpVersion')
+						->build();
+				}
+
+				continue;
+			} catch (InvalidVersionRequirementException $e) {
 				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement is incomplete.'),
-				)
-					->identifier('phpunit.attributeRequiresPhpVersion')
-					->build();
-			}
-
-			if (
-				!is_numeric($versionRequirement)
-			) {
-				if (!$this->bleedingEdge) {
-					continue;
-				}
-
-				$pharIoVersions = strpos($attr->getName(), 'RequiresPhpunit') !== false
-					? $this->PHPUnitVersion->getPharIoVersions()
-					: $this->getAnalyzedPhpVersions();
-				if ($pharIoVersions === []) {
-					continue;
-				}
-
-				try {
-					// check composer like version constraints, e.g. ^1  or ~2
-					$testPhpVersionConstraint = $parser->parse($versionRequirement);
-
-					foreach ($pharIoVersions as $pharIoVersion) {
-						if ($testPhpVersionConstraint->complies($pharIoVersion)) {
-							// one of the versions within range matched, check next attribute
-							continue 2;
-						}
-					}
-				} catch (UnsupportedVersionConstraintException $e) {
-					// test php-src builtin operators as in version_compare()
-					if (preg_match(self::VERSION_COMPARISON, $versionRequirement, $matches) <= 0) {
-						$errors[] = RuleErrorBuilder::message(
-							sprintf($e->getMessage()),
-						)
-							->identifier('phpunit.attributeRequiresPhpVersion')
-							->build();
-
-						continue;
-					}
-
-					$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
-
-					foreach ($pharIoVersions as $pharIoVersion) {
-						if (version_compare($pharIoVersion->getVersionString(), $matches['version'], $operator)) {
-							// one of the versions within range matched, check next attribute
-							continue 2;
-						}
-					}
-				}
-
-				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement will always evaluate to false.'),
+					sprintf($e->getMessage()),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
@@ -138,28 +98,49 @@ final class AttributeVersionRequirementHelper
 				continue;
 			}
 
-			if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
+			if (!$requirement->isComplete()) {
+				if (!$this->warnAboutIncompleteVersion) {
+					continue;
+				}
+
+				if (!$this->PHPUnitVersion->warnsAboutIncompleteVersion()->yes()) {
+					continue;
+				}
+
 				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement is missing operator.'),
+					sprintf('Version requirement is incomplete.'),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
-			} elseif (
-				$this->deprecationRulesInstalled
-				&& $this->PHPUnitVersion->deprecatesPhpversionAttributeWithoutOperator()->yes()
-			) {
-				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement without operator is deprecated.'),
-				)
-					->identifier('phpunit.attributeRequiresPhpVersion')
-					->build();
+
+				continue;
 			}
+
+			$versionStrings = strpos($attr->getName(), 'RequiresPhpunit') !== false
+				? $this->PHPUnitVersion->getMinMaxVersion()
+				: $this->getAnalyzedPhpVersions();
+			if ($versionStrings === []) {
+				continue;
+			}
+			foreach ($versionStrings as $versionString) {
+				if ($requirement->isSatisfiedBy($versionString)) {
+					// one of the versions within range matched, check next attribute
+					continue 2;
+				}
+			}
+
+			$errors[] = RuleErrorBuilder::message(
+				sprintf('Version requirement will always evaluate to false.'),
+			)
+				->identifier('phpunit.attributeRequiresPhpVersion')
+				->build();
 		}
+
 		return $errors;
 	}
 
 	/**
-	 * @return Version[]
+	 * @return list<string>
 	 */
 	private function getAnalyzedPhpVersions(): array
 	{
@@ -172,30 +153,12 @@ final class AttributeVersionRequirementHelper
 				$maxVersion,
 			);
 			foreach ($minorVersionIterator as $phpstanVersion) {
-				$versions[] = new Version($phpstanVersion->getVersionString());
+				$versions[] = $phpstanVersion->getVersionString();
 			}
 			return $versions;
 		}
 
 		return [];
-	}
-
-	// see https://github.com/sebastianbergmann/phpunit/issues/6451
-	private function warnAboutIncompleteVersion(string $versionRequirement): bool
-	{
-		if (!$this->bleedingEdge) {
-			return false;
-		}
-
-		if (!$this->warnAboutIncompleteVersion) {
-			return false;
-		}
-
-		if (!$this->PHPUnitVersion->warnsAboutIncompleteVersion()->yes()) {
-			return false;
-		}
-
-		return substr_count($versionRequirement, '.') !== 2;
 	}
 
 }

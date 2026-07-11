@@ -2,22 +2,19 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
-use PharIo\Version\UnsupportedVersionConstraintException;
-use PharIo\Version\Version;
-use PharIo\Version\VersionConstraintParser;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\ReflectionAttribute;
 use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
 use PHPStan\Php\PhpMinorVersionIterator;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
+use SebastianBergmann\VersionRequirement\InvalidVersionRequirementException;
+use SebastianBergmann\VersionRequirement\Requirement;
 use function count;
 use function is_numeric;
-use function preg_match;
 use function sprintf;
 use function strpos;
 use function substr_count;
-use function version_compare;
 
 final class AttributeVersionRequirementHelper
 {
@@ -63,7 +60,6 @@ final class AttributeVersionRequirementHelper
 	public function checkVersionRequirement(array $attributes, Scope $scope): array
 	{
 		$errors = [];
-		$parser = new VersionConstraintParser();
 		foreach ($attributes as $attr) {
 			$args = $attr->getArguments();
 			if (count($args) !== 1) {
@@ -90,43 +86,31 @@ final class AttributeVersionRequirementHelper
 					continue;
 				}
 
-				$pharIoVersions = strpos($attr->getName(), 'RequiresPhpunit') !== false
-					? $this->PHPUnitVersion->getPharIoVersions()
+				$versionStrings = strpos($attr->getName(), 'RequiresPhpunit') !== false
+					? $this->PHPUnitVersion->getMinMaxVersion()
 					: $this->getAnalyzedPhpVersions();
-				if ($pharIoVersions === []) {
+				if ($versionStrings === []) {
 					continue;
 				}
 
 				try {
 					// check composer like version constraints, e.g. ^1  or ~2
-					$testPhpVersionConstraint = $parser->parse($versionRequirement);
+					$requirement = Requirement::from($versionRequirement);
 
-					foreach ($pharIoVersions as $pharIoVersion) {
-						if ($testPhpVersionConstraint->complies($pharIoVersion)) {
+					foreach ($versionStrings as $versionString) {
+						if ($requirement->isSatisfiedBy($versionString)) {
 							// one of the versions within range matched, check next attribute
 							continue 2;
 						}
 					}
-				} catch (UnsupportedVersionConstraintException $e) {
-					// test php-src builtin operators as in version_compare()
-					if (preg_match(self::VERSION_COMPARISON, $versionRequirement, $matches) <= 0) {
-						$errors[] = RuleErrorBuilder::message(
-							sprintf($e->getMessage()),
-						)
-							->identifier('phpunit.attributeRequiresPhpVersion')
-							->build();
+				} catch (InvalidVersionRequirementException $e) {
+					$errors[] = RuleErrorBuilder::message(
+						sprintf($e->getMessage()),
+					)
+						->identifier('phpunit.attributeRequiresPhpVersion')
+						->build();
 
-						continue;
-					}
-
-					$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
-
-					foreach ($pharIoVersions as $pharIoVersion) {
-						if (version_compare($pharIoVersion->getVersionString(), $matches['version'], $operator)) {
-							// one of the versions within range matched, check next attribute
-							continue 2;
-						}
-					}
+					continue;
 				}
 
 				$errors[] = RuleErrorBuilder::message(
@@ -159,7 +143,7 @@ final class AttributeVersionRequirementHelper
 	}
 
 	/**
-	 * @return Version[]
+	 * @return list<string>
 	 */
 	private function getAnalyzedPhpVersions(): array
 	{
@@ -172,7 +156,7 @@ final class AttributeVersionRequirementHelper
 				$maxVersion,
 			);
 			foreach ($minorVersionIterator as $phpstanVersion) {
-				$versions[] = new Version($phpstanVersion->getVersionString());
+				$versions[] = $phpstanVersion->getVersionString();
 			}
 			return $versions;
 		}

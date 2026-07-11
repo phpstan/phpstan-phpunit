@@ -9,7 +9,8 @@
 	"require": {
 		"php": "^7.4 || ^8.0",
 		"phar-io/version": "^3.2",
-		"phpstan/phpstan": "^2.2.6"
+		"phpstan/phpstan": "^2.2.6",
+		"sebastian/version-requirement": "dev-main"
 	},
 	"conflict": {
 		"phpunit/phpunit": "<7.0"
@@ -19,7 +20,7 @@
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"phpstan/phpstan-deprecation-rules": "^2.0",
 		"phpstan/phpstan-strict-rules": "^2.0",
-		"phpunit/phpunit": "^9.6",
+		"phpunit/phpunit": "^12",
 		"shipmonk/name-collision-detector": "^2.1"
 	},
 	"config": {

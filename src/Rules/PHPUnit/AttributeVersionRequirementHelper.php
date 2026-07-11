@@ -78,7 +78,7 @@ final class AttributeVersionRequirementHelper
 
 			if ($this->warnAboutIncompleteVersion($versionRequirement)) {
 				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement %s is incomplete.', $versionRequirement),
+					sprintf('Version requirement %s is incomplete. Expect a version composed of major, minor and patch.', $versionRequirement),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();

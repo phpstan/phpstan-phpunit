@@ -158,11 +158,11 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-php-version.php'], [
 			[
-				'Version requirement 8.0 is incomplete.',
+				'Version requirement 8.0 is incomplete. Expect a version composed of major, minor and patch.',
 				12,
 			],
 			[
-				'Version requirement >=8.0 is incomplete.',
+				'Version requirement >=8.0 is incomplete. Expect a version composed of major, minor and patch.',
 				20,
 			],
 		]);
@@ -177,7 +177,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-phpunit-version.php'], [
 			[
-				'Version requirement 11.0 is incomplete.',
+				'Version requirement 11.0 is incomplete. Expect a version composed of major, minor and patch.',
 				12,
 			],
 		]);

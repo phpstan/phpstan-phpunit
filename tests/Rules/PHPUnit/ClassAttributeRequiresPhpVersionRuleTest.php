@@ -30,7 +30,7 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 				10,
 			],
 			[
-				'Version requirement < 7.0 is incomplete.',
+				'Version requirement < 7.0 is incomplete. Expect a version composed of major, minor and patch.',
 				10,
 			],
 		]);
@@ -44,7 +44,7 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-phpunit-version.php'], [
 			[
-				'Version requirement >=11.0 is incomplete.',
+				'Version requirement >=11.0 is incomplete. Expect a version composed of major, minor and patch.',
 				18,
 			],
 		]);

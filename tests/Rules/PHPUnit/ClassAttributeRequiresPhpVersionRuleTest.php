@@ -24,13 +24,16 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		$this->phpunitMinorVersion = 5;
 		$this->warnAboutIncompleteVersion = true;
 
+		$tip = 'PHP version for analysis inferred from NEON config phpVersion or composer.json requirements. Invoke PHPStan with -vvv to get more details.';
+
 		$this->analyse([__DIR__ . '/data/requires-php-version-on-class.php'], [
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement < 7.0 does not match 8.5.0...8.5.99.',
 				10,
+				$tip,
 			],
 			[
-				'Version requirement is incomplete.',
+				'Version requirement < 7.0 is incomplete. Expect a version composed of major, minor and patch.',
 				10,
 			],
 		]);
@@ -44,7 +47,7 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 
 		$this->analyse([__DIR__ . '/data/requires-phpunit-version.php'], [
 			[
-				'Version requirement is incomplete.',
+				'Version requirement >=11.0 is incomplete. Expect a version composed of major, minor and patch.',
 				18,
 			],
 		]);

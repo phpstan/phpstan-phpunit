@@ -15,26 +15,33 @@ final class AttributeRequiresPhpVersionRangeRuleTest extends RuleTestCase
 
 	public function testPhpVersionMismatch(): void
 	{
+		$tip = 'PHP version for analysis inferred from NEON config phpVersion or composer.json requirements. Invoke PHPStan with -vvv to get more details.';
+
 		$this->analyse([__DIR__ . '/data/requires-php-version-mismatch.php'], [
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement < 7.0 does not match 8.2.0...8.4.0.',
 				20,
+				$tip,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement ^5.0 does not match 8.2.0...8.4.0.',
 				28,
+				$tip,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement ~5.0 does not match 8.2.0...8.4.0.',
 				36,
+				$tip,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement 5.* does not match 8.2.0...8.4.0.',
 				44,
+				$tip,
 			],
 			[
-				'Version requirement will always evaluate to false.',
+				'Version requirement 8.5.* does not match 8.2.0...8.4.0.',
 				76,
+				$tip,
 			],
 		]);
 	}

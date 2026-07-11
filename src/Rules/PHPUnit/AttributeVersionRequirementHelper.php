@@ -11,6 +11,7 @@ use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
 use PHPStan\Php\PhpMinorVersionIterator;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 use function count;
 use function is_numeric;
 use function preg_match;
@@ -77,7 +78,7 @@ final class AttributeVersionRequirementHelper
 
 			if ($this->warnAboutIncompleteVersion($versionRequirement)) {
 				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement is incomplete.'),
+					sprintf('Version requirement %s is incomplete. Expect a version composed of major, minor and patch.', $versionRequirement),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
@@ -129,9 +130,25 @@ final class AttributeVersionRequirementHelper
 					}
 				}
 
+				if (count($pharIoVersions) < 2) {
+					throw new ShouldNotHappenException();
+				}
+
+				if (strpos($attr->getName(), 'RequiresPhpunit') !== false) {
+					$tip = 'PHPUnit version inferred from composer.json requirements.';
+				} else {
+					$tip = 'PHP version for analysis inferred from NEON config phpVersion or composer.json requirements. Invoke PHPStan with -vvv to get more details.';
+				}
+
 				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement will always evaluate to false.'),
+					sprintf(
+						'Version requirement %s does not match %s...%s.',
+						$versionRequirement,
+						$pharIoVersions[0]->getVersionString(),
+						$pharIoVersions[count($pharIoVersions) - 1]->getVersionString(),
+					),
 				)
+					->tip($tip)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
 
@@ -140,7 +157,7 @@ final class AttributeVersionRequirementHelper
 
 			if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
 				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement is missing operator.'),
+					sprintf('Version requirement %s is missing operator.', $versionRequirement),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
@@ -149,7 +166,7 @@ final class AttributeVersionRequirementHelper
 				&& $this->PHPUnitVersion->deprecatesPhpversionAttributeWithoutOperator()->yes()
 			) {
 				$errors[] = RuleErrorBuilder::message(
-					sprintf('Version requirement without operator is deprecated.'),
+					sprintf('Version requirement %s without operator is deprecated.', $versionRequirement),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion')
 					->build();
@@ -159,7 +176,7 @@ final class AttributeVersionRequirementHelper
 	}
 
 	/**
-	 * @return Version[]
+	 * @return list<Version>
 	 */
 	private function getAnalyzedPhpVersions(): array
 	{

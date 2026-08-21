@@ -24,6 +24,7 @@ It also contains this strict framework-specific rules (can be enabled separately
 * Check that you are not using `assertSame()` with `count($variable)` as second parameter. `assertCount($variable)` should be used instead.
 * Check that you are not using `assertEquals()` with same types (`assertSame()` should be used)
 * Check that you are not using `assertNotEquals()` with same types (`assertNotSame()` should be used)
+* When PHPStan Strict Rules' `disallowedEmpty` rule is enabled, disallow PHPUnit's `assertEmpty()` and `assertNotEmpty()` assertions as well.
 
 ## How to document mock objects in phpDocs?
 

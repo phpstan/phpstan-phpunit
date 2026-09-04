@@ -10,6 +10,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
 use function array_key_exists;
+use function strpos;
 use function strtolower;
 
 final class TestMethodsHelper

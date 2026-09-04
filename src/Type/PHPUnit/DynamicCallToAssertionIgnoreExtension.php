@@ -8,6 +8,7 @@ use PHPStan\Analyser\IgnoreErrorExtension;
 use PHPStan\Analyser\Scope;
 use PHPUnit\Framework\TestCase;
 use function is_string;
+use function strpos;
 
 final class DynamicCallToAssertionIgnoreExtension implements IgnoreErrorExtension
 {

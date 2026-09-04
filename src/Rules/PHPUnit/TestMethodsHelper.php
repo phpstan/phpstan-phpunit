@@ -10,7 +10,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\FileTypeMapper;
 use PHPUnit\Framework\TestCase;
 use function array_key_exists;
-use function str_starts_with;
 use function strtolower;
 
 final class TestMethodsHelper
@@ -62,7 +61,7 @@ final class TestMethodsHelper
 				continue;
 			}
 
-			if (str_starts_with(strtolower($reflectionMethod->getName()), 'test')) {
+			if (strpos(strtolower($reflectionMethod->getName()), 'test') === 0) {
 				$testMethods[] = $reflectionMethod;
 				continue;
 			}

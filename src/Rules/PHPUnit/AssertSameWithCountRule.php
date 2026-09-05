@@ -50,6 +50,17 @@ class AssertSameWithCountRule implements Rule
 			return [
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).')
 					->identifier('phpunit.assertCount')
+					->fixNode($node, static function (CallLike $node) use ($scope) {
+						$newArgs = self::rewriteArgs($node->args, $scope);
+						if ($newArgs === null) {
+							return $node;
+						}
+
+						$node->name = new Node\Identifier('assertCount');
+						$node->args = $newArgs;
+
+						return $node;
+					})
 					->build(),
 			];
 		}
@@ -58,6 +69,17 @@ class AssertSameWithCountRule implements Rule
 			return [
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).')
 					->identifier('phpunit.assertCount')
+					->fixNode($node, static function (CallLike $node) use ($scope) {
+						$newArgs = self::rewriteArgs($node->args, $scope);
+						if ($newArgs === null) {
+							return $node;
+						}
+
+						$node->name = new Node\Identifier('assertCount');
+						$node->args = $newArgs;
+
+						return $node;
+					})
 					->build(),
 			];
 		}
@@ -107,6 +129,38 @@ class AssertSameWithCountRule implements Rule
 			$isNormalCount = (new ConstantIntegerType(COUNT_NORMAL))->isSuperTypeOf($mode)->result->or($countedType->getIterableValueType()->isArray()->negate());
 		}
 		return $isNormalCount;
+	}
+
+	/**
+	 * @param array<Node\Arg|Node\VariadicPlaceholder> $args
+	 * @return list<Node\Arg|Node\VariadicPlaceholder>
+	 */
+	private static function rewriteArgs(array $args, Scope $scope): ?array
+	{
+		$newArgs = [];
+		for ($i = 0; $i < count($args); $i++) {
+
+			if (
+				$args[$i] instanceof Node\Arg
+				&& $args[$i]->value instanceof CallLike
+			) {
+				$value = $args[$i]->value;
+				if (self::isCountFunctionCall($value, $scope)) {
+					if (count($value->getArgs()) !== 1) {
+						return null;
+					}
+
+					$newArgs[] = new Node\Arg($value->getArgs()[0]->value);
+					continue;
+				} elseif (self::isCountableMethodCall($value, $scope)) {
+					$newArgs[] = new Node\Arg($value->var);
+					continue;
+				}
+			}
+
+			$newArgs[] = $args[$i];
+		}
+		return $newArgs;
 	}
 
 }

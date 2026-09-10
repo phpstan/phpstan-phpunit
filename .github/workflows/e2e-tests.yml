@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           egress-policy: audit
 
@@ -51,7 +51,7 @@ jobs:
       - uses: "ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda" # v4.0.0
 
       - name: "Install bashunit"
-        uses: "TypedDevs/bashunit@81fb3e1d146eef12d0e728cb3b542fe00dee906e" # 0.49.0
+        uses: "TypedDevs/bashunit@28ea63c467f1f461a6368c93e5c264051b141c6f" # 0.50.1
         with:
           directory: "e2e"
 

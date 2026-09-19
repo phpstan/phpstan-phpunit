@@ -63,8 +63,8 @@ class AssertSameNullExpectedRule implements Rule
 	}
 
 	/**
-	 * @param array<Node\Arg|Node\VariadicPlaceholder> $args
-	 * @return list<Node\Arg|Node\VariadicPlaceholder>
+	 * @param array<Node\Arg|Node\VariadicPlaceholder|Node\ArgPlaceholder> $args
+	 * @return list<Node\Arg|Node\VariadicPlaceholder|Node\ArgPlaceholder>
 	 */
 	private static function rewriteArgs(array $args): array
 	{

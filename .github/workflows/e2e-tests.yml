@@ -28,10 +28,10 @@ jobs:
           - script: |
               cd e2e/composer-version
               composer install
-              OUTPUT=$(../bashunit -a exit_code "1" "vendor/bin/phpstan analyze test.php --error-format=raw")
+              OUTPUT=$(../bashunit assert exit_code "1" "vendor/bin/phpstan analyze test.php --error-format=raw")
               echo "$OUTPUT"
-              ../bashunit -a contains 'test.php:12:Version requirement <=8.0.0 does not match 8.1.0...8.5.99.' "$OUTPUT"
-              ../bashunit -a contains 'test.php:32:Version requirement ^11.0.0 does not match 12.5.0...12.5.99.' "$OUTPUT"
+              ../bashunit assert contains 'test.php:12:Version requirement <=8.0.0 does not match 8.1.0...8.6.99.' "$OUTPUT"
+              ../bashunit assert contains 'test.php:32:Version requirement ^11.0.0 does not match 12.5.0...12.5.99.' "$OUTPUT"
 
     steps:
       - name: Harden the runner (Audit all outbound calls)

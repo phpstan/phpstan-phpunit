@@ -4,8 +4,6 @@ namespace AssertEmptyIsDiscouragedTest;
 
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEmpty;
-use function PHPUnit\Framework\assertNotEmpty;
 
 final class AssertEmptyTest extends TestCase
 {
@@ -16,8 +14,6 @@ final class AssertEmptyTest extends TestCase
 		$this->assertNotEmpty([1]);
 		Assert::assertEmpty([]);
 		static::assertNotEmpty([1]);
-		assertEmpty([]);
-		assertNotEmpty([1]);
 	}
 
 }

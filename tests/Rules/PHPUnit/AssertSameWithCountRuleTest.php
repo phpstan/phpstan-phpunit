@@ -42,6 +42,11 @@ class AssertSameWithCountRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testFix(): void
+	{
+		$this->fix(__DIR__ . '/data/assert-same-count-fixable.php', __DIR__ . '/data/assert-same-count-fixable.php.fixed');
+	}
+
 	/**
 	 * @return string[]
 	 */

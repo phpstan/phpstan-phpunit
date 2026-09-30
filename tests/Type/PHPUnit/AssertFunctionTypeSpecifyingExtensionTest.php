@@ -20,6 +20,8 @@ class AssertFunctionTypeSpecifyingExtensionTest extends TypeInferenceTestCase
 			yield from self::gatherAssertTypes(__DIR__ . '/data/assert-function-9.6.11.php');
 		}
 
+		yield from self::gatherAssertTypes(__DIR__ . '/data/bug-14279.php');
+
 		return [];
 	}
 

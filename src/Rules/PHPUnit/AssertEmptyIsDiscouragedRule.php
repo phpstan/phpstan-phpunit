@@ -27,11 +27,11 @@ class AssertEmptyIsDiscouragedRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if ($node->isFirstClassCallable() || count($node->getArgs()) < 1) {
+		if (!($node instanceof MethodCall) && !($node instanceof StaticCall)) {
 			return [];
 		}
 
-		if (!($node instanceof MethodCall) && !($node instanceof StaticCall)) {
+		if ($node->isFirstClassCallable() || count($node->getArgs()) < 1) {
 			return [];
 		}
 

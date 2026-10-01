@@ -45,7 +45,7 @@ class AssertEmptyIsDiscouragedRule implements Rule
 
 		return [
 			RuleErrorBuilder::message(sprintf('%s() is not allowed. Use more strict assertion.', $node->name->toString()))
-				->identifier('empty.notAllowed')
+				->identifier('phpunit.notEmpty')
 				->build(),
 		];
 	}

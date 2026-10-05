@@ -21,6 +21,11 @@ final class AssertEmptyIsDiscouragedRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testFix(): void
+	{
+		$this->fix(__DIR__ . '/data/assert-empty-is-discouraged-fixable.php', __DIR__ . '/data/assert-empty-is-discouraged-fixable.php.fixed');
+	}
+
 	protected function getRule(): Rule
 	{
 		return new AssertEmptyIsDiscouragedRule();

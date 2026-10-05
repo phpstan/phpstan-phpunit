@@ -1,0 +1,49 @@
+<?php declare(strict_types = 1);
+
+namespace AssertEmptyIsDiscouragedFixTest;
+
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
+
+final class AssertEmptyTest extends TestCase
+{
+
+	/**
+	 * @param non-falsy-string $nonFalsyString
+	 * @param non-falsy-string $otherNonFalsyString
+	 * @param string|int $union
+	 */
+	public function test(
+		bool $boolean,
+		array $array,
+		int $integer,
+		float $float,
+		string $string,
+		$union,
+		string $nonFalsyString,
+		string $otherNonFalsyString,
+		?\stdClass $nullableObject,
+		?object $otherNullableObject
+	): void
+	{
+		$this->assertFalse($boolean);
+		$this->assertTrue($boolean);
+		$this->assertCount(0, $array, 'message');
+		$this->assertNotCount(0, $array);
+		$this->assertSame(0, $integer);
+		$this->assertNotSame(0, $integer);
+		Assert::assertEmpty($float);
+		Assert::assertNotEmpty($float);
+		static::assertNull(null);
+		static::assertNotNull(null);
+		$this->assertSame('', $nonFalsyString);
+		$this->assertNotSame('', $otherNonFalsyString);
+		$this->assertEmpty($string);
+		$this->assertNotEmpty($string);
+		$this->assertEmpty($union);
+		$this->assertNotEmpty($union);
+		$this->assertNull($nullableObject);
+		$this->assertNotNull($otherNullableObject);
+	}
+
+}

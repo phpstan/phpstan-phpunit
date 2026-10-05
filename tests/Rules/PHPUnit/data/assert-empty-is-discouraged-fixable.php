@@ -5,6 +5,11 @@ namespace AssertEmptyIsDiscouragedFixTest;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
+final class UserDefinedObject
+{
+
+}
+
 final class AssertEmptyTest extends TestCase
 {
 
@@ -26,6 +31,8 @@ final class AssertEmptyTest extends TestCase
 		?\stdClass $nullableObject,
 		?object $otherNullableObject,
 		?\SimpleXMLElement $nullableSimpleXml,
+		?UserDefinedObject $nullableUserDefinedObject,
+		?UserDefinedObject $otherNullableUserDefinedObject,
 		$phpDocInteger,
 		$mixed
 	): void
@@ -47,6 +54,8 @@ final class AssertEmptyTest extends TestCase
 		$this->assertEmpty($nullableObject);
 		$this->assertNotEmpty($otherNullableObject);
 		$this->assertEmpty($nullableSimpleXml);
+		$this->assertEmpty($nullableUserDefinedObject);
+		$this->assertNotEmpty($otherNullableUserDefinedObject);
 		$this->assertNotEmpty($phpDocInteger);
 		$this->assertEmpty($mixed);
 	}

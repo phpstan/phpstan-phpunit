@@ -12,7 +12,6 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
@@ -84,11 +83,18 @@ class AssertEmptyIsDiscouragedRule implements Rule
 	{
 		if ($type instanceof UnionType) {
 			$typeWithoutNull = TypeCombinator::removeNull($type);
-			if (
-				TypeCombinator::containsNull($type)
-				&& $typeWithoutNull->isObject()->yes()
-				&& (new ObjectType('SimpleXMLElement'))->isSuperTypeOf($typeWithoutNull)->no()
-			) {
+			if (TypeCombinator::containsNull($type) && $typeWithoutNull->isObject()->yes()) {
+				$classReflections = $typeWithoutNull->getObjectClassReflections();
+				if (count($classReflections) === 0) {
+					return null;
+				}
+				foreach ($classReflections as $classReflection) {
+					// some builtin classes like SimpleXmlElement have different empty() semantics
+					if ($classReflection->isBuiltin()) {
+						return null;
+					}
+				}
+
 				return [$negated ? 'assertNotNull' : 'assertNull', null];
 			}
 

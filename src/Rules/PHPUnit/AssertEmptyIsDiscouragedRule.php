@@ -92,9 +92,6 @@ class AssertEmptyIsDiscouragedRule implements Rule
 		if ($type->isInteger()->yes()) {
 			return [$negated ? 'assertNotSame' : 'assertSame', new Int_(0)];
 		}
-		if ($type->isNull()->yes()) {
-			return [$negated ? 'assertNotNull' : 'assertNull', null];
-		}
 		if ($type->isNonFalsyString()->yes()) {
 			return [$negated ? 'assertNotSame' : 'assertSame', new String_('')];
 		}

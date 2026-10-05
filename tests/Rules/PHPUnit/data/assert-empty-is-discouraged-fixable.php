@@ -34,8 +34,6 @@ final class AssertEmptyTest extends TestCase
 		$this->assertNotEmpty($integer);
 		Assert::assertEmpty($float);
 		Assert::assertNotEmpty($float);
-		static::assertEmpty(null);
-		static::assertNotEmpty(null);
 		$this->assertEmpty($nonFalsyString);
 		$this->assertNotEmpty($otherNonFalsyString);
 		$this->assertEmpty($string);

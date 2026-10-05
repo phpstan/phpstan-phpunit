@@ -82,8 +82,9 @@ class AssertEmptyIsDiscouragedRule implements Rule
 	private function getReplacement(Type $type, bool $negated): ?array
 	{
 		if ($type instanceof UnionType) {
-			$typeWithoutNull = TypeCombinator::removeNull($type);
 			if (TypeCombinator::containsNull($type)) {
+				$typeWithoutNull = TypeCombinator::removeNull($type);
+
 				$classReflections = $typeWithoutNull->getObjectClassReflections();
 				if (count($classReflections) === 0) {
 					return null;

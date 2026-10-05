@@ -30,7 +30,7 @@ final class AssertEmptyIsDiscouragedRuleTest extends RuleTestCase
 	public function testNativeUnionTypeIsNotFixed(): void
 	{
 		if (PHP_VERSION_ID < 80000) {
-			$this->markTestSkipped('Native union types require PHP 8.0.');
+			self::markTestSkipped('Native union types require PHP 8.0.');
 		}
 
 		$this->fix(__DIR__ . '/data/assert-empty-is-discouraged-native-union.php', __DIR__ . '/data/assert-empty-is-discouraged-native-union.php.fixed');

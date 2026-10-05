@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php // lint >= 8.0
 
 namespace AssertEmptyIsDiscouragedNativeUnionTest;
 

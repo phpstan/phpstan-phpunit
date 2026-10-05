@@ -83,7 +83,7 @@ class AssertEmptyIsDiscouragedRule implements Rule
 	{
 		if ($type instanceof UnionType) {
 			$typeWithoutNull = TypeCombinator::removeNull($type);
-			if (TypeCombinator::containsNull($type) && $typeWithoutNull->isObject()->yes()) {
+			if (TypeCombinator::containsNull($type)) {
 				$classReflections = $typeWithoutNull->getObjectClassReflections();
 				if (count($classReflections) === 0) {
 					return null;

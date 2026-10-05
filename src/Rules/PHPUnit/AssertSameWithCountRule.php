@@ -5,6 +5,7 @@ namespace PHPStan\Rules\PHPUnit;
 use Countable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\CallLike;
+use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -39,6 +40,11 @@ class AssertSameWithCountRule implements Rule
 		}
 		if (!$node->name instanceof Node\Identifier	|| $node->name->toLowerString() !== 'assertsame') {
 			return [];
+		}
+		foreach ($node->getArgs() as $arg) {
+			if ($arg->name !== null) {
+				return [];
+			}
 		}
 
 		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
@@ -132,8 +138,9 @@ class AssertSameWithCountRule implements Rule
 	}
 
 	/**
-	 * @param array<Node\Arg|Node\VariadicPlaceholder> $args
-	 * @return list<Node\Arg|Node\VariadicPlaceholder>
+	 * @template T of NodeAbstract
+	 * @param array<T> $args
+	 * @return list<T|Node\Arg>
 	 */
 	private static function rewriteArgs(array $args, Scope $scope): ?array
 	{

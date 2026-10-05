@@ -4,6 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<AssertSameWithCountRule>
@@ -45,6 +46,15 @@ class AssertSameWithCountRuleTest extends RuleTestCase
 	public function testFix(): void
 	{
 		$this->fix(__DIR__ . '/data/assert-same-count-fixable.php', __DIR__ . '/data/assert-same-count-fixable.php.fixed');
+	}
+
+	public function testNamedArguments(): void
+	{
+		if (PHP_VERSION_ID < 80000) {
+			self::markTestSkipped('Named arguments require PHP 8.0.');
+		}
+
+		$this->analyse([__DIR__ . '/data/assert-same-count-named-arguments.php'], []);
 	}
 
 	/**

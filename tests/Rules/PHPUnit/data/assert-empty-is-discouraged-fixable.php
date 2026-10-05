@@ -11,6 +11,7 @@ final class AssertEmptyTest extends TestCase
 	/**
 	 * @param non-falsy-string $nonFalsyString
 	 * @param non-falsy-string $otherNonFalsyString
+	 * @param int $phpDocInteger
 	 * @param string|int $union
 	 */
 	public function test(
@@ -23,7 +24,10 @@ final class AssertEmptyTest extends TestCase
 		string $nonFalsyString,
 		string $otherNonFalsyString,
 		?\stdClass $nullableObject,
-		?object $otherNullableObject
+		?object $otherNullableObject,
+		?\SimpleXMLElement $nullableSimpleXml,
+		$phpDocInteger,
+		$mixed
 	): void
 	{
 		$this->assertEmpty($boolean);
@@ -42,6 +46,18 @@ final class AssertEmptyTest extends TestCase
 		$this->assertNotEmpty($union);
 		$this->assertEmpty($nullableObject);
 		$this->assertNotEmpty($otherNullableObject);
+		$this->assertEmpty($nullableSimpleXml);
+		$this->assertNotEmpty($phpDocInteger);
+		$this->assertEmpty($mixed);
+	}
+
+	public function testNativeNonFalsyString(string $value): void
+	{
+		if ($value === '' || $value === '0') {
+			return;
+		}
+
+		$this->assertNotEmpty($value);
 	}
 
 }

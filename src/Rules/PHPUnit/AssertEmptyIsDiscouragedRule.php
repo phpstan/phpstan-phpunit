@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
@@ -52,7 +53,13 @@ class AssertEmptyIsDiscouragedRule implements Rule
 		$errorBuilder = RuleErrorBuilder::message(sprintf('%s() is not allowed. Use more strict assertion.', $node->name->toString()))
 			->identifier('phpunit.assertEmpty');
 
-		$replacement = $this->getReplacement($scope->getType($node->getArgs()[0]->value), $node->name->toLowerString() === 'assertnotempty');
+		foreach ($node->getArgs() as $arg) {
+			if ($arg->name !== null) {
+				return [$errorBuilder->build()];
+			}
+		}
+
+		$replacement = $this->getReplacement($scope->getNativeType($node->getArgs()[0]->value), $node->name->toLowerString() === 'assertnotempty');
 		if ($replacement !== null) {
 			[$correctName, $expectedValue] = $replacement;
 			$errorBuilder->fixNode($node, static function (CallLike $node) use ($correctName, $expectedValue) {
@@ -76,7 +83,12 @@ class AssertEmptyIsDiscouragedRule implements Rule
 	private function getReplacement(Type $type, bool $negated): ?array
 	{
 		if ($type instanceof UnionType) {
-			if (TypeCombinator::containsNull($type) && TypeCombinator::removeNull($type)->isObject()->yes()) {
+			$typeWithoutNull = TypeCombinator::removeNull($type);
+			if (
+				TypeCombinator::containsNull($type)
+				&& $typeWithoutNull->isObject()->yes()
+				&& (new ObjectType('SimpleXMLElement'))->isSuperTypeOf($typeWithoutNull)->no()
+			) {
 				return [$negated ? 'assertNotNull' : 'assertNull', null];
 			}
 

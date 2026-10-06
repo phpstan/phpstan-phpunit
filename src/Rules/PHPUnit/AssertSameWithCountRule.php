@@ -52,6 +52,10 @@ class AssertSameWithCountRule implements Rule
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).')
 					->identifier('phpunit.assertCount')
 					->fixNode($node, static function (CallLike $node) use ($scope) {
+						if (AssertRuleHelper::hasNamedOrUnpackedArguments($node)) {
+							return $node;
+						}
+
 						$newArgs = self::rewriteArgs($node->args, $scope);
 						if ($newArgs === null) {
 							return $node;
@@ -71,6 +75,10 @@ class AssertSameWithCountRule implements Rule
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).')
 					->identifier('phpunit.assertCount')
 					->fixNode($node, static function (CallLike $node) use ($scope) {
+						if (AssertRuleHelper::hasNamedOrUnpackedArguments($node)) {
+							return $node;
+						}
+
 						$newArgs = self::rewriteArgs($node->args, $scope);
 						if ($newArgs === null) {
 							return $node;
@@ -144,11 +152,6 @@ class AssertSameWithCountRule implements Rule
 			if (!$arg instanceof Node\Arg) {
 				$newArgs[] = $arg;
 				continue;
-			}
-
-			// PHPUnit does not support named arguments for assert*.
-			if ($arg->name !== null || $arg->unpack) {
-				return null;
 			}
 
 			if ($i !== 1 || !$arg->value instanceof CallLike) {

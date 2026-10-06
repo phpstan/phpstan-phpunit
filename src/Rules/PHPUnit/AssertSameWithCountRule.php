@@ -147,7 +147,7 @@ class AssertSameWithCountRule implements Rule
 			}
 
 			// PHPUnit does not support named arguments for assert*.
-			if ($arg->name !== null) {
+			if ($arg->name !== null || $arg->unpack) {
 				return null;
 			}
 
@@ -158,9 +158,9 @@ class AssertSameWithCountRule implements Rule
 
 			$callLike = $arg->value;
 
-			// The count call itself must not use named arguments.
+			// The count call itself must not use named arguments or unpacking.
 			foreach ($callLike->getArgs() as $callArg) {
-				if ($callArg->name !== null) {
+				if ($callArg->name !== null || $callArg->unpack) {
 					return null;
 				}
 			}

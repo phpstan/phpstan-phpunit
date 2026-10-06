@@ -20,6 +20,7 @@ final class AssertEmptyTest extends TestCase
 	 * @param string|int $union
 	 */
 	public function test(
+		array $arguments,
 		bool $boolean,
 		array $array,
 		int $integer,
@@ -37,6 +38,7 @@ final class AssertEmptyTest extends TestCase
 		$mixed
 	): void
 	{
+		$this->assertEmpty(...$arguments);
 		$this->assertEmpty($boolean);
 		$this->assertNotEmpty($boolean);
 		$this->assertEmpty($array, 'message');

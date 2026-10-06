@@ -53,7 +53,7 @@ class AssertEmptyIsDiscouragedRule implements Rule
 			->identifier('phpunit.assertEmpty');
 
 		foreach ($node->getArgs() as $arg) {
-			if ($arg->name !== null) {
+			if ($arg->name !== null || $arg->unpack) {
 				return [$errorBuilder->build()];
 			}
 		}

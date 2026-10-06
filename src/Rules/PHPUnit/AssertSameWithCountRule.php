@@ -93,20 +93,11 @@ class AssertSameWithCountRule implements Rule
 	 */
 	private static function isCountFunctionCall(Node\Expr $expr, Scope $scope): bool
 	{
-		if (!$expr instanceof Node\Expr\FuncCall
-			|| !$expr->name instanceof Node\Name
-			|| $expr->name->toLowerString() !== 'count'
-		) {
-			return false;
-		}
-
-		$args = $expr->getArgs();
-		if (self::hasNamedArgs($args)) {
-			return false;
-		}
-
-		return count($args) >= 1
-			&& self::isNormalCount($expr, $scope->getType($args[0]->value), $scope)->yes();
+		return $expr instanceof Node\Expr\FuncCall
+			&& $expr->name instanceof Node\Name
+			&& $expr->name->toLowerString() === 'count'
+			&& count($expr->getArgs()) >= 1
+			&& self::isNormalCount($expr, $scope->getType($expr->getArgs()[0]->value), $scope)->yes();
 	}
 
 	/**

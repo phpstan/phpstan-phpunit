@@ -52,10 +52,8 @@ class AssertEmptyIsDiscouragedRule implements Rule
 		$errorBuilder = RuleErrorBuilder::message(sprintf('%s() is not allowed. Use more strict assertion.', $node->name->toString()))
 			->identifier('phpunit.assertEmpty');
 
-		foreach ($node->getArgs() as $arg) {
-			if ($arg->name !== null || $arg->unpack) {
-				return [$errorBuilder->build()];
-			}
+		if (AssertRuleHelper::hasNamedOrUnpackedArguments($node)) {
+			return [$errorBuilder->build()];
 		}
 
 		$replacement = $this->getReplacement($scope->getNativeType($node->getArgs()[0]->value), $node->name->toLowerString() === 'assertnotempty');

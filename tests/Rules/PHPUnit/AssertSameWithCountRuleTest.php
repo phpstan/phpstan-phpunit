@@ -46,6 +46,8 @@ class AssertSameWithCountRuleTest extends RuleTestCase
 	public function testFix(): void
 	{
 		$this->fix(__DIR__ . '/data/assert-same-count-fixable.php', __DIR__ . '/data/assert-same-count-fixable.php.fixed');
+		// we don't expect any fixes for named arguments
+		$this->fix(__DIR__ . '/data/assert-same-count-named-arguments.php', __DIR__ . '/data/assert-same-count-named-arguments.php');
 	}
 
 	public function testNamedArguments(): void

@@ -133,62 +133,53 @@ class AssertSameWithCountRule implements Rule
 	}
 
 	/**
-	 * @param array<Node\Arg> $args
-	 */
-	private static function hasNamedArg(array $args): bool
-	{
-		foreach ($args as $arg) {
-			if ($arg->name !== null) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * @template T of NodeAbstract
 	 * @param array<T> $args
-	 * @return list<T|Node\Arg>
+	 * @return list<T|Node\Arg>|null
 	 */
 	private static function rewriteArgs(array $args, Scope $scope): ?array
 	{
 		$newArgs = [];
-		for ($i = 0; $i < count($args); $i++) {
-			if (
-				$args[$i] instanceof Node\Arg
-			) {
-				// skip named args for auto-fixing. PHPUnit does not support named arguments for assert*.
-				if ($args[$i]->name !== null) {
-					return null;
-				}
+		foreach ($args as $i => $arg) {
+			if (!$arg instanceof Node\Arg) {
+				$newArgs[] = $arg;
+				continue;
+			}
 
-				if ($args[$i]->value instanceof CallLike) {
-					$callLike = $args[$i]->value;
+			// PHPUnit does not support named arguments for assert*.
+			if ($arg->name !== null) {
+				return null;
+			}
 
-					// skip named args for auto-fixing. PHPUnit does not support named arguments for assert*.
-					if (self::hasNamedArg($callLike->getArgs())) {
-						return null;
-					}
+			if ($i !== 1 || !$arg->value instanceof CallLike) {
+				$newArgs[] = $arg;
+				continue;
+			}
 
-					if (self::isCountFunctionCall($callLike, $scope)) {
-						if (count($callLike->getArgs()) !== 1) {
-							return null;
-						}
+			$callLike = $arg->value;
 
-						$newArgs[] = new Node\Arg($callLike->getArgs()[0]->value);
-						continue;
-					} elseif (self::isCountableMethodCall($callLike, $scope)) {
-						$newArgs[] = new Node\Arg($callLike->var);
-						continue;
-					}
-
+			// The count call itself must not use named arguments.
+			foreach ($callLike->getArgs() as $callArg) {
+				if ($callArg->name !== null) {
 					return null;
 				}
 			}
 
-			$newArgs[] = $args[$i];
+			if (self::isCountFunctionCall($callLike, $scope)) {
+				if (count($callLike->getArgs()) !== 1) {
+					return null;
+				}
+
+				$newArgs[] = new Node\Arg($callLike->getArgs()[0]->value);
+				continue;
+			} elseif (self::isCountableMethodCall($callLike, $scope)) {
+				$newArgs[] = new Node\Arg($callLike->var);
+				continue;
+			}
+
+			return null;
 		}
+
 		return $newArgs;
 	}
 

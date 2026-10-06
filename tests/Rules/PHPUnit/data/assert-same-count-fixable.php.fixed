@@ -12,6 +12,13 @@ class AssertSameWithCountTestCase extends \PHPUnit\Framework\TestCase
 		$this->assertCount(5, [1, 2, 3]);
 	}
 
+	public function testAssertSameWithCountCallsInOtherArguments($expected, $actual, \Countable $countable)
+	{
+		$this->assertCount(count($expected), $actual);
+		$this->assertCount(count($expected), $actual, getMessage());
+		$this->assertCount(count($expected), $countable, getMessage());
+	}
+
 	public function testAssertSameWithCountRecursive($x)
 	{
 		$this->assertSame(5, count([1, 2, 3, $x], COUNT_RECURSIVE));

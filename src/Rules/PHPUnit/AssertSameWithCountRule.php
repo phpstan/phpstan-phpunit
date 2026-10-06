@@ -135,7 +135,7 @@ class AssertSameWithCountRule implements Rule
 	/**
 	 * @param array<Node\Arg> $args
 	 */
-	private static function hasNamedArgs(array $args): bool
+	private static function hasNamedArg(array $args): bool
 	{
 		foreach ($args as $arg) {
 			if ($arg->name !== null) {
@@ -167,7 +167,7 @@ class AssertSameWithCountRule implements Rule
 					$callLike = $args[$i]->value;
 
 					// skip named args for auto-fixing. PHPUnit does not support named arguments for assert*.
-					if (self::hasNamedArgs($callLike->getArgs())) {
+					if (self::hasNamedArg($callLike->getArgs())) {
 						return null;
 					}
 

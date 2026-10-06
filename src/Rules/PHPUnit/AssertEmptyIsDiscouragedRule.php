@@ -2,6 +2,7 @@
 
 namespace PHPStan\Rules\PHPUnit;
 
+use Countable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
@@ -88,9 +89,21 @@ class AssertEmptyIsDiscouragedRule implements Rule
 					return null;
 				}
 				foreach ($classReflections as $classReflection) {
-					// some builtin classes like SimpleXmlElement have different empty() semantics
-					if ($classReflection->isBuiltin()) {
+					if (
+						$classReflection->isBuiltin()
+						|| !$classReflection->isFinal()
+						|| $classReflection->implementsInterface(Countable::class)
+					) {
 						return null;
+					}
+
+					$parentClass = $classReflection->getParentClass();
+					while ($parentClass !== null) {
+						// Builtin parents can define different empty() semantics.
+						if ($parentClass->isBuiltin()) {
+							return null;
+						}
+						$parentClass = $parentClass->getParentClass();
 					}
 				}
 

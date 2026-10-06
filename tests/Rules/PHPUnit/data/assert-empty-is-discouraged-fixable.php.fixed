@@ -10,6 +10,51 @@ final class UserDefinedObject
 
 }
 
+class UserDefinedCountable implements \Countable
+{
+
+	public function count(): int
+	{
+		return 0;
+	}
+
+}
+
+class OpenParent
+{
+
+}
+
+interface Thing
+{
+
+}
+
+class ThingImplementation implements Thing, \Countable
+{
+
+	public function count(): int
+	{
+		return 0;
+	}
+
+}
+
+final class FinalEmptyIterator extends \EmptyIterator
+{
+
+}
+
+final class FinalCountable implements \Countable
+{
+
+	public function count(): int
+	{
+		return 0;
+	}
+
+}
+
 final class AssertEmptyTest extends TestCase
 {
 
@@ -34,6 +79,11 @@ final class AssertEmptyTest extends TestCase
 		?\SimpleXMLElement $nullableSimpleXml,
 		?UserDefinedObject $nullableUserDefinedObject,
 		?UserDefinedObject $otherNullableUserDefinedObject,
+		?UserDefinedCountable $nullableCountable,
+		?OpenParent $nullableOpenParent,
+		?Thing $nullableThing,
+		?FinalEmptyIterator $nullableEmptyIterator,
+		?FinalCountable $nullableFinalCountable,
 		$phpDocInteger,
 		$mixed
 	): void
@@ -58,6 +108,16 @@ final class AssertEmptyTest extends TestCase
 		$this->assertEmpty($nullableSimpleXml);
 		$this->assertNull($nullableUserDefinedObject);
 		$this->assertNotNull($otherNullableUserDefinedObject);
+		$this->assertEmpty($nullableCountable);
+		$this->assertNotEmpty($nullableCountable);
+		$this->assertEmpty($nullableOpenParent);
+		$this->assertNotEmpty($nullableOpenParent);
+		$this->assertEmpty($nullableThing);
+		$this->assertNotEmpty($nullableThing);
+		$this->assertEmpty($nullableEmptyIterator);
+		$this->assertNotEmpty($nullableEmptyIterator);
+		$this->assertEmpty($nullableFinalCountable);
+		$this->assertNotEmpty($nullableFinalCountable);
 		$this->assertNotEmpty($phpDocInteger);
 		$this->assertEmpty($mixed);
 	}

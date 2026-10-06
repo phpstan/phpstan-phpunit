@@ -50,6 +50,7 @@ class AssertRuleHelper
 	public static function hasNamedOrUnpackedArguments(CallLike $call): bool
 	{
 		foreach ($call->getArgs() as $arg) {
+			// PHPUnit does not support named arguments for most of its APIs, e.g. assert*.
 			if ($arg->name !== null || $arg->unpack) {
 				return true;
 			}

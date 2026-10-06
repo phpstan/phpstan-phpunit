@@ -167,7 +167,7 @@ class AssertSameWithCountRule implements Rule
 			if (
 				$args[$i] instanceof Node\Arg
 			) {
-				// skip named args for auto-fixing for now
+				// skip named args for auto-fixing. PHPUnit does not support named arguments for assert*.
 				if ($args[$i]->name !== null) {
 					return null;
 				}
@@ -175,7 +175,7 @@ class AssertSameWithCountRule implements Rule
 				if ($args[$i]->value instanceof CallLike) {
 					$callLike = $args[$i]->value;
 
-					// skip named args for auto-fixing for now
+					// skip named args for auto-fixing. PHPUnit does not support named arguments for assert*.
 					if (self::hasNamedArgs($callLike->getArgs())) {
 						return null;
 					}

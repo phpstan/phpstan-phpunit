@@ -10,6 +10,12 @@ final class UserDefinedObject
 
 }
 
+/** @final */
+class PhpDocFinalObject
+{
+
+}
+
 class UserDefinedCountable implements \Countable
 {
 
@@ -79,6 +85,7 @@ final class AssertEmptyTest extends TestCase
 		?\SimpleXMLElement $nullableSimpleXml,
 		?UserDefinedObject $nullableUserDefinedObject,
 		?UserDefinedObject $otherNullableUserDefinedObject,
+		?PhpDocFinalObject $nullablePhpDocFinalObject,
 		?UserDefinedCountable $nullableCountable,
 		?OpenParent $nullableOpenParent,
 		?Thing $nullableThing,
@@ -108,6 +115,8 @@ final class AssertEmptyTest extends TestCase
 		$this->assertEmpty($nullableSimpleXml);
 		$this->assertEmpty($nullableUserDefinedObject);
 		$this->assertNotEmpty($otherNullableUserDefinedObject);
+		$this->assertEmpty($nullablePhpDocFinalObject);
+		$this->assertNotEmpty($nullablePhpDocFinalObject);
 		$this->assertEmpty($nullableCountable);
 		$this->assertNotEmpty($nullableCountable);
 		$this->assertEmpty($nullableOpenParent);

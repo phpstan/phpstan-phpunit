@@ -91,7 +91,7 @@ class AssertEmptyIsDiscouragedRule implements Rule
 				foreach ($classReflections as $classReflection) {
 					if (
 						$classReflection->isBuiltin()
-						|| !$classReflection->isFinal()
+						|| !$classReflection->isFinalByKeyword()
 						|| $classReflection->implementsInterface(Countable::class)
 					) {
 						return null;

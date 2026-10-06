@@ -161,11 +161,9 @@ class AssertSameWithCountRule implements Rule
 
 			$callLike = $arg->value;
 
-			// The count call itself must not use named arguments or unpacking.
-			foreach ($callLike->getArgs() as $callArg) {
-				if ($callArg->name !== null || $callArg->unpack) {
-					return null;
-				}
+			// for now skip more complex cases
+			if (AssertRuleHelper::hasNamedOrUnpackedArguments($callLike)) {
+				return null;
 			}
 
 			if (self::isCountFunctionCall($callLike, $scope)) {

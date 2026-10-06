@@ -15,6 +15,8 @@ class AssertSameNullExpectedTestCase extends \PHPUnit\Framework\TestCase
 	public function doFoo(): void
 	{
 		$this->assertSame(null, 'a');
+		$this->assertSame(expected: null, actual: 'named');
+		$this->assertSame(null, ...func_get_args());
 
 		\PHPUnit\Framework\Assert::assertSame($this->returnNull(), 'foo');
 	}

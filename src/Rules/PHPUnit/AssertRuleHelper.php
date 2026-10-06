@@ -3,6 +3,7 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\CallLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use function in_array;
@@ -44,6 +45,17 @@ class AssertRuleHelper
 		$testCaseType = new ObjectType('PHPUnit\Framework\Assert');
 
 		return $testCaseType->isSuperTypeOf($calledOnType)->yes();
+	}
+
+	public static function hasNamedOrUnpackedArguments(CallLike $call): bool
+	{
+		foreach ($call->getArgs() as $arg) {
+			if ($arg->name !== null || $arg->unpack) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

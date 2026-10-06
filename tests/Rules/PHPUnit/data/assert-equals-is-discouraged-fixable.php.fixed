@@ -13,6 +13,8 @@ class Foo extends TestCase
 	{
 		$this->assertSame('', $s);
 		$this->assertNotSame('', $t);
+		$this->assertEquals(expected: '', actual: $s);
+		$this->assertEquals('', $s, ...func_get_args());
 	}
 
 	public function doFoo2(string $s, string $t): void

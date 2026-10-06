@@ -41,16 +41,13 @@ class AssertSameWithCountRule implements Rule
 		if (!$node->name instanceof Node\Identifier	|| $node->name->toLowerString() !== 'assertsame') {
 			return [];
 		}
-		if (self::hasNamedArgs($node->getArgs())) {
-			return [];
-		}
 
 		if (!AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
 			return [];
 		}
 
 		$right = $node->getArgs()[1]->value;
-		if (self::isFixableCountFunctionCall($right, $scope)) {
+		if (self::isCountFunctionCall($right, $scope)) {
 			return [
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).')
 					->identifier('phpunit.assertCount')
@@ -69,7 +66,7 @@ class AssertSameWithCountRule implements Rule
 			];
 		}
 
-		if (self::isFixableCountableMethodCall($right, $scope)) {
+		if (self::isCountableMethodCall($right, $scope)) {
 			return [
 				RuleErrorBuilder::message('You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, $variable->count()).')
 					->identifier('phpunit.assertCount')
@@ -94,7 +91,7 @@ class AssertSameWithCountRule implements Rule
 	/**
 	 * @phpstan-assert-if-true Node\Expr\FuncCall $expr
 	 */
-	private static function isFixableCountFunctionCall(Node\Expr $expr, Scope $scope): bool
+	private static function isCountFunctionCall(Node\Expr $expr, Scope $scope): bool
 	{
 		if (!$expr instanceof Node\Expr\FuncCall
 			|| !$expr->name instanceof Node\Name
@@ -115,7 +112,7 @@ class AssertSameWithCountRule implements Rule
 	/**
 	 * @phpstan-assert-if-true Node\Expr\MethodCall $expr
 	 */
-	private static function isFixableCountableMethodCall(Node\Expr $expr, Scope $scope): bool
+	private static function isCountableMethodCall(Node\Expr $expr, Scope $scope): bool
 	{
 		if (
 			$expr instanceof Node\Expr\MethodCall
@@ -167,25 +164,36 @@ class AssertSameWithCountRule implements Rule
 	{
 		$newArgs = [];
 		for ($i = 0; $i < count($args); $i++) {
-
 			if (
 				$args[$i] instanceof Node\Arg
-				&& $args[$i]->value instanceof CallLike
 			) {
-				$value = $args[$i]->value;
-				if (self::isFixableCountFunctionCall($value, $scope)) {
-					if (count($value->getArgs()) !== 1) {
+				// skip named args for auto-fixing for now
+				if ($args[$i]->name !== null) {
+					return null;
+				}
+
+				if ($args[$i]->value instanceof CallLike) {
+					$callLike = $args[$i]->value;
+
+					// skip named args for auto-fixing for now
+					if (self::hasNamedArgs($callLike->getArgs())) {
 						return null;
 					}
 
-					$newArgs[] = new Node\Arg($value->getArgs()[0]->value);
-					continue;
-				} elseif (self::isFixableCountableMethodCall($value, $scope)) {
-					$newArgs[] = new Node\Arg($value->var);
-					continue;
-				}
+					if (self::isCountFunctionCall($callLike, $scope)) {
+						if (count($callLike->getArgs()) !== 1) {
+							return null;
+						}
 
-				return null;
+						$newArgs[] = new Node\Arg($callLike->getArgs()[0]->value);
+						continue;
+					} elseif (self::isCountableMethodCall($callLike, $scope)) {
+						$newArgs[] = new Node\Arg($callLike->var);
+						continue;
+					}
+
+					return null;
+				}
 			}
 
 			$newArgs[] = $args[$i];

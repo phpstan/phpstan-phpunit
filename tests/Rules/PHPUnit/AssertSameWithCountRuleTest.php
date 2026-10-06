@@ -54,7 +54,16 @@ class AssertSameWithCountRuleTest extends RuleTestCase
 			self::markTestSkipped('Named arguments require PHP 8.0.');
 		}
 
-		$this->analyse([__DIR__ . '/data/assert-same-count-named-arguments.php'], []);
+		$this->analyse([__DIR__ . '/data/assert-same-count-named-arguments.php'], [
+			[
+				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
+				12,
+			],
+			[
+				'You should use assertCount($expectedCount, $variable) instead of assertSame($expectedCount, count($variable)).',
+				15,
+			],
+		]);
 	}
 
 	/**

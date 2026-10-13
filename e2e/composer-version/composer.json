@@ -3,7 +3,7 @@
 		"php": "^8.1",
 		"phpstan/phpstan": "@dev",
 		"phpstan/phpstan-phpunit": "@dev",
-		"phpunit/phpunit": "^12.5",
+		"phpunit/phpunit": "^13.0",
 		"phpstan/extension-installer": "^1.4"
 	},
 	"repositories": [

@@ -123,7 +123,7 @@ The GitHub Actions workflow (`.github/workflows/build.yml`) runs on the `2.0.x` 
 2. **Coding Standard** — PHPCS checks using build-cs.
 3. **Tests** — PHPUnit across PHP 7.4–8.5 × lowest/highest dependencies × PHPUnit 9.5/10.5/11.5/12.0 (with version-appropriate exclusions).
 4. **Static Analysis** — PHPStan self-analysis with the same matrix.
-5. **Mutation Testing** — Infection framework on PHP 8.2–8.5, requires 100% MSI on changed lines.
+5. **Mutation Testing** — Infection framework on PHP 8.3–8.5, pull requests only, requires 100% MSI on changed lines.
 
 ## Development Branch
 

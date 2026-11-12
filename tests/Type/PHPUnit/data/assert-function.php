@@ -11,6 +11,8 @@ use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertNotCount;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertGreaterThan;
+use function PHPUnit\Framework\assertLessThan;
 
 class Foo
 {
@@ -108,6 +110,20 @@ class Foo
 		// still might be empty
 		assertNotCount(1, $b);
 		assertType('array', $b);
+	}
+
+	/** @param string[] $arr */
+	public function greaterThanFunction(array $arr): void
+	{
+		assertGreaterThan(2, count($arr));
+		assertType('non-empty-array<string>', $arr);
+	}
+
+	/** @param string[] $arr */
+	public function lessThanFunction(array $arr): void
+	{
+		assertLessThan(1, count($arr));
+		assertType('array{}', $arr);
 	}
 
 }

@@ -300,3 +300,25 @@ class MaybeIterableTest extends TestCase
 	}
 
 }
+
+class IteratorWithEmptyReturn extends \PHPUnit\Framework\TestCase
+{
+
+	/**
+	 * @return iterable<mixed>
+	 */
+	public function dataFileAsserts(): iterable
+	{
+		if (PHP_VERSION_ID >= 80000) {
+			return [];
+		}
+
+		yield 1;
+		yield 2;
+	}
+
+	/**
+	 * @dataProvider dataFileAsserts
+	 */
+	public function testFileAsserts() {}
+}

@@ -41,6 +41,12 @@ class EmptyDataProviderRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
+		// A generator yields its data sets one at a time, so whether it provides
+		// any depends on control flow this rule cannot decide.
+		if ($node->isGenerator()) {
+			return [];
+		}
+
 		$returnStatements = $node->getReturnStatements();
 		if ($returnStatements === []) {
 			return [];

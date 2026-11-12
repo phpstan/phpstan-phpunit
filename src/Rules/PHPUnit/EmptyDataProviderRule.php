@@ -41,14 +41,6 @@ class EmptyDataProviderRule implements Rule
 
 	public function processNode(Node $node, Scope $scope): array
 	{
-		if ($this->PHPUnitVersion->rejectsEmptyDataProviders()->no()) {
-			return [];
-		}
-
-		if (!$node->getClassReflection()->is(TestCase::class)) {
-			return [];
-		}
-
 		// A generator yields its data sets one at a time, so whether it provides
 		// any depends on control flow this rule cannot decide.
 		if ($node->isGenerator()) {
@@ -57,6 +49,14 @@ class EmptyDataProviderRule implements Rule
 
 		$returnStatements = $node->getReturnStatements();
 		if ($returnStatements === []) {
+			return [];
+		}
+
+		if ($this->PHPUnitVersion->rejectsEmptyDataProviders()->no()) {
+			return [];
+		}
+
+		if (!$node->getClassReflection()->is(TestCase::class)) {
 			return [];
 		}
 

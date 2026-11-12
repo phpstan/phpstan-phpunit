@@ -63,6 +63,10 @@ class EmptyDataProviderRuleTest extends RuleTestCase
 				'Data provider method provideData() provides no data sets, which is an error in PHPUnit 10 and newer.',
 				158,
 			];
+			$errors[] = [
+				'Data provider method provideData() provides no data sets, which is an error in PHPUnit 10 and newer.',
+				190,
+			];
 		}
 
 		// DataProviderHelper only reads the attribute when the detected major version supports it.

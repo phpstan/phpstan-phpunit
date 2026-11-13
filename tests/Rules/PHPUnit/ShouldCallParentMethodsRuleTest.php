@@ -4,6 +4,7 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use const PHP_VERSION_ID;
 
 /**
  * @extends RuleTestCase<ShouldCallParentMethodsRule>
@@ -42,6 +43,24 @@ class ShouldCallParentMethodsRuleTest extends RuleTestCase
 			[
 				'Missing call to parent::setUp() method.',
 				155,
+			],
+		]);
+	}
+
+	public function testFirstClassCallable(): void
+	{
+		if (PHP_VERSION_ID < 80100) {
+			self::markTestSkipped('First-class callable syntax requires PHP 8.1.');
+		}
+
+		$this->analyse([__DIR__ . '/data/missing-parent-method-calls-first-class-callable.php'], [
+			[
+				'Missing call to parent::setUp() method.',
+				20,
+			],
+			[
+				'Missing call to parent::tearDown() method.',
+				25,
 			],
 		]);
 	}

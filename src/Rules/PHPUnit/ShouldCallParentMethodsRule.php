@@ -95,6 +95,7 @@ class ShouldCallParentMethodsRule implements Rule
 
 				if (
 					$node instanceof Node\Expr\StaticCall
+					&& !$node->isFirstClassCallable()
 					&& $node->class instanceof Node\Name
 					&& $node->class->toLowerString() === 'parent'
 					&& $node->name instanceof Node\Identifier

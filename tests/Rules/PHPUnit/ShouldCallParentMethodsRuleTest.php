@@ -31,6 +31,18 @@ class ShouldCallParentMethodsRuleTest extends RuleTestCase
 				'Missing call to parent::tearDown() method.',
 				63,
 			],
+			[
+				'Missing call to parent::setUp() method.',
+				140,
+			],
+			[
+				'Missing call to parent::tearDown() method.',
+				147,
+			],
+			[
+				'Missing call to parent::setUp() method.',
+				155,
+			],
 		]);
 	}
 

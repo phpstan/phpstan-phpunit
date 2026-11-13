@@ -1,0 +1,208 @@
+<?php
+
+namespace MissingParentMethodCallsFixable;
+
+use PHPUnit\Framework\TestCase;
+
+abstract class BaseTestCase extends TestCase
+{
+	protected function setUp(): void
+	{
+	}
+
+	protected function tearDown(): void
+	{
+	}
+}
+
+// setUp(): parent call is prepended
+class SetUpTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function setUp(): void
+	{
+		parent::setUp();
+		$this->resource = new \stdClass();
+	}
+}
+
+// tearDown(): parent call is appended
+class TearDownTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function tearDown(): void
+	{
+		$this->resource = null;
+		parent::tearDown();
+	}
+}
+
+// both methods in one class are fixed
+class SetUpAndTearDownTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function setUp(): void
+	{
+		parent::setUp();
+		$this->resource = new \stdClass();
+	}
+
+	protected function tearDown(): void
+	{
+		$this->resource = null;
+		parent::tearDown();
+	}
+}
+
+// empty bodies
+class EmptyBodyTest extends BaseTestCase
+{
+	protected function setUp(): void
+	{
+		parent::setUp();
+	}
+
+	protected function tearDown(): void
+	{
+		parent::tearDown();
+	}
+}
+
+// bodies containing only a comment
+class CommentOnlyBodyTest extends BaseTestCase
+{
+	protected function setUp(): void
+	{
+		parent::setUp();
+		// nothing to set up
+	}
+
+	protected function tearDown(): void
+	{
+		// nothing to tear down
+		parent::tearDown();
+	}
+}
+
+// the generated call uses the name of the parent method, not the lowercase declaration
+class LowercaseMethodNameTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function setup(): void
+	{
+		parent::setUp();
+		$this->resource = new \stdClass();
+	}
+
+	protected function teardown(): void
+	{
+		$this->resource = null;
+		parent::tearDown();
+	}
+}
+
+// setUp() with an early return: prepending still runs on every path
+class SetUpEarlyReturnTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function setUp(): void
+	{
+		parent::setUp();
+		if ($this->resource !== null) {
+			return;
+		}
+
+		$this->resource = new \stdClass();
+	}
+}
+
+// tearDown() with a trailing return: parent call is inserted before it
+class TearDownTrailingReturnTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function tearDown(): void
+	{
+		$this->resource = null;
+		parent::tearDown();
+
+		return;
+	}
+}
+
+// tearDown() with an early return: an appended call would be skipped, not fixed
+class TearDownEarlyReturnTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function tearDown(): void
+	{
+		if ($this->resource === null) {
+			return;
+		}
+
+		$this->resource = null;
+	}
+}
+
+// a return inside a closure is not an early return of tearDown()
+class TearDownReturnInClosureTest extends BaseTestCase
+{
+	private ?\Closure $factory = null;
+
+	protected function tearDown(): void
+	{
+		$this->factory = static function (): int {
+			return 1;
+		};
+		parent::tearDown();
+	}
+}
+
+// parent call already present in a nested statement: nothing to fix
+class NestedParentCallTest extends BaseTestCase
+{
+	private bool $enabled = true;
+
+	protected function setUp(): void
+	{
+		if ($this->enabled) {
+			parent::setUp();
+		}
+	}
+
+	protected function tearDown(): void
+	{
+		try {
+			$this->enabled = false;
+		} finally {
+			parent::tearDown();
+		}
+	}
+}
+
+// methods from a trait: fixing the trait would affect every class using it, not fixed
+trait LifecycleTrait
+{
+	protected function setUp(): void
+	{
+		$this->resource = new \stdClass();
+	}
+
+	protected function tearDown(): void
+	{
+		$this->resource = null;
+	}
+}
+
+class TraitLifecycleTest extends BaseTestCase
+{
+	use LifecycleTrait;
+
+	private ?object $resource = null;
+}

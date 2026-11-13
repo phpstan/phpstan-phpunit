@@ -68,21 +68,27 @@ class ShouldCallParentMethodsRule implements Rule
 			sprintf('Missing call to parent::%s() method.', $methodName),
 		)->identifier('phpunit.callParent');
 
-		$position = $this->getParentCallPosition($stmts, strtolower($methodName) === 'setup');
-		if ($position !== null && !$scope->isInTrait()) {
-			$parentMethodName = $parentMethod->getName();
-			$errorBuilder->fixNode($node->getOriginalNode(), static function (ClassMethod $methodNode) use ($position, $parentMethodName): ClassMethod {
-				$stmts = $methodNode->stmts ?? [];
-				array_splice($stmts, $position, 0, [
-					new Node\Stmt\Expression(
-						new Node\Expr\StaticCall(new Node\Name('parent'), new Node\Identifier($parentMethodName)),
-					),
-				]);
-				$methodNode->stmts = $stmts;
-
-				return $methodNode;
-			});
+		if ($scope->isInTrait()) {
+			return [$errorBuilder->build()];
 		}
+
+		$position = $this->getParentCallPosition($stmts, $methodName);
+		if ($position === null) {
+			return [$errorBuilder->build()];
+		}
+
+		$parentMethodName = $parentMethod->getName();
+		$errorBuilder->fixNode($node->getOriginalNode(), static function (ClassMethod $methodNode) use ($position, $parentMethodName): ClassMethod {
+			$stmts = $methodNode->stmts ?? [];
+			array_splice($stmts, $position, 0, [
+				new Node\Stmt\Expression(
+					new Node\Expr\StaticCall(new Node\Name('parent'), new Node\Identifier($parentMethodName)),
+				),
+			]);
+			$methodNode->stmts = $stmts;
+
+			return $methodNode;
+		});
 
 		return [$errorBuilder->build()];
 	}
@@ -107,9 +113,9 @@ class ShouldCallParentMethodsRule implements Rule
 	 *
 	 * @param Node\Stmt[] $stmts
 	 */
-	private function getParentCallPosition(array $stmts, bool $isSetUp): ?int
+	private function getParentCallPosition(array $stmts, string $methodName): ?int
 	{
-		if ($isSetUp) {
+		if (strtolower($methodName) === 'setup') {
 			return 0;
 		}
 

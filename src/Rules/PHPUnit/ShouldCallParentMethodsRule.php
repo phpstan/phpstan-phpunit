@@ -108,8 +108,8 @@ class ShouldCallParentMethodsRule implements Rule
 
 	/**
 	 * setUp() gets the parent call as its first statement, tearDown() as its last one
-	 * (before a trailing return). A tearDown() with an early return is not fixable,
-	 * because the appended call would be skipped on that path.
+	 * (before a trailing return). A tearDown() with an early return or with a throw
+	 * is not fixable, because the appended call would be skipped on that path.
 	 *
 	 * @param Node\Stmt[] $stmts
 	 */
@@ -120,15 +120,15 @@ class ShouldCallParentMethodsRule implements Rule
 		}
 
 		$position = count($stmts);
-		$returns = $this->findInMethodScope($stmts, static fn (Node $node): bool => $node instanceof Node\Stmt\Return_);
+		$exits = $this->findInMethodScope($stmts, static fn (Node $node): bool => $node instanceof Node\Stmt\Return_ || $node instanceof Node\Expr\Throw_);
 
 		if (end($stmts) instanceof Node\Stmt\Return_) {
 			// the trailing return is the last one found
-			array_pop($returns);
+			array_pop($exits);
 			$position--;
 		}
 
-		if ($returns !== []) {
+		if ($exits !== []) {
 			return null;
 		}
 

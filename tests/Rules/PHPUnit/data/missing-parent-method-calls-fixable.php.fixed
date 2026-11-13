@@ -206,3 +206,27 @@ class TraitLifecycleTest extends BaseTestCase
 
 	private ?object $resource = null;
 }
+
+// tearDown() ending with a throw: an appended call would be unreachable, not fixed
+class TearDownTrailingThrowTest extends BaseTestCase
+{
+	protected function tearDown(): void
+	{
+		throw new \RuntimeException('tearDown failed');
+	}
+}
+
+// tearDown() with a conditional throw: an appended call would be skipped, not fixed
+class TearDownEarlyThrowTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	protected function tearDown(): void
+	{
+		if ($this->resource === null) {
+			throw new \RuntimeException('tearDown failed');
+		}
+
+		$this->resource = null;
+	}
+}

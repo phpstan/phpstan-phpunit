@@ -3,6 +3,9 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
+use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
 use PHPStan\Rules\Rule;
@@ -66,7 +69,6 @@ class ShouldCallParentMethodsRule implements Rule
 
 	/**
 	 * @param Node\Stmt[]|null $stmts
-	 *
 	 */
 	private function hasParentClassCall(?array $stmts, string $methodName): bool
 	{
@@ -74,35 +76,45 @@ class ShouldCallParentMethodsRule implements Rule
 			return false;
 		}
 
-		foreach ($stmts as $stmt) {
-			if (! $stmt instanceof Node\Stmt\Expression) {
-				continue;
+		$visitor = new class ($methodName) extends NodeVisitorAbstract {
+
+			private string $methodName;
+
+			public bool $found = false;
+
+			public function __construct(string $methodName)
+			{
+				$this->methodName = $methodName;
 			}
 
-			if (! $stmt->expr instanceof Node\Expr\StaticCall) {
-				continue;
+			public function enterNode(Node $node): ?int
+			{
+				if ($node instanceof Node\FunctionLike || $node instanceof Node\Stmt\ClassLike) {
+					return NodeVisitor::DONT_TRAVERSE_CHILDREN;
+				}
+
+				if (
+					$node instanceof Node\Expr\StaticCall
+					&& !$node->isFirstClassCallable()
+					&& $node->class instanceof Node\Name
+					&& $node->class->toLowerString() === 'parent'
+					&& $node->name instanceof Node\Identifier
+					&& $node->name->toLowerString() === $this->methodName
+				) {
+					$this->found = true;
+
+					return NodeVisitor::STOP_TRAVERSAL;
+				}
+
+				return null;
 			}
 
-			if (! $stmt->expr->class instanceof Node\Name) {
-				continue;
-			}
+		};
 
-			$class = (string) $stmt->expr->class;
+		$traverser = new NodeTraverser($visitor);
+		$traverser->traverse($stmts);
 
-			if (strtolower($class) !== 'parent') {
-				continue;
-			}
-
-			if (! $stmt->expr->name instanceof Node\Identifier) {
-				continue;
-			}
-
-			if ($stmt->expr->name->toLowerString() === $methodName) {
-				return true;
-			}
-		}
-
-		return false;
+		return $visitor->found;
 	}
 
 }

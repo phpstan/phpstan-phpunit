@@ -90,3 +90,75 @@ class LoremTest extends BaseTestWithoutSetUp
 	}
 
 }
+
+class ParentCallInIfTest extends BaseTestCase
+{
+	private bool $enabled = true;
+
+	public function setUp(): void
+	{
+		if ($this->enabled) {
+			parent::setUp();
+		}
+	}
+
+	public function tearDown(): void
+	{
+		if ($this->enabled) {
+			parent::tearDown();
+		} else {
+			parent::tearDown();
+		}
+	}
+}
+
+class ParentCallInTryFinallyTest extends BaseTestCase
+{
+	private ?object $resource = null;
+
+	public function setUp(): void
+	{
+		try {
+			parent::setUp();
+		} catch (\Throwable $e) {
+			throw $e;
+		}
+	}
+
+	public function tearDown(): void
+	{
+		try {
+			$this->resource = null;
+		} finally {
+			parent::tearDown();
+		}
+	}
+}
+
+class ParentCallInClosureTest extends BaseTestCase
+{
+	public function setUp(): void
+	{
+		$fn = function (): void {
+			parent::setUp();
+		};
+	}
+
+	public function tearDown(): void
+	{
+		$fn = fn () => parent::tearDown();
+	}
+}
+
+class ParentCallInAnonymousClassTest extends BaseTestCase
+{
+	public function setUp(): void
+	{
+		new class extends BaseTestCase {
+			public function setUp(): void
+			{
+				parent::setUp();
+			}
+		};
+	}
+}

@@ -3,15 +3,19 @@
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\TestCase;
 use function array_merge;
 use function array_shift;
 use function count;
+use function is_string;
 use function sprintf;
 
 /**
@@ -85,7 +89,114 @@ class ClassCoversExistsRule implements Rule
 			);
 		}
 
+		return array_merge($errors, $this->processCoversAttributes($classReflection));
+	}
+
+	/**
+	 * Checks the #[CoversClass], #[CoversTrait], #[CoversMethod] and #[CoversFunction] attributes.
+	 *
+	 * @return list<IdentifierRuleError>
+	 */
+	private function processCoversAttributes(ClassReflection $classReflection): array
+	{
+		$betterReflection = $classReflection->getNativeReflection()->getBetterReflection();
+		$errors = [];
+
+		foreach ($betterReflection->getAttributesByName('PHPUnit\Framework\Attributes\CoversClass') as $attribute) {
+			$className = $this->getStringArgument($attribute->getArguments(), 0, 'className');
+			if ($className === null) {
+				continue;
+			}
+
+			if (!$this->reflectionProvider->hasClass($className)) {
+				$errors[] = RuleErrorBuilder::message(sprintf(
+					'#[CoversClass] value %s references an invalid class.',
+					$className,
+				))->identifier('phpunit.coversClass')->build();
+				continue;
+			}
+
+			if (!$this->reflectionProvider->getClass($className)->isInterface()) {
+				continue;
+			}
+
+			$errors[] = RuleErrorBuilder::message(sprintf(
+				'#[CoversClass] value %s references an interface.',
+				$className,
+			))->identifier('phpunit.coversInterface')->build();
+		}
+
+		foreach ($betterReflection->getAttributesByName('PHPUnit\Framework\Attributes\CoversTrait') as $attribute) {
+			$traitName = $this->getStringArgument($attribute->getArguments(), 0, 'traitName');
+			if ($traitName === null) {
+				continue;
+			}
+
+			if ($this->reflectionProvider->hasClass($traitName) && $this->reflectionProvider->getClass($traitName)->isTrait()) {
+				continue;
+			}
+
+			$errors[] = RuleErrorBuilder::message(sprintf(
+				'#[CoversTrait] value %s references an invalid trait.',
+				$traitName,
+			))->identifier('phpunit.coversTrait')->build();
+		}
+
+		foreach ($betterReflection->getAttributesByName('PHPUnit\Framework\Attributes\CoversMethod') as $attribute) {
+			$arguments = $attribute->getArguments();
+			$className = $this->getStringArgument($arguments, 0, 'className');
+			$methodName = $this->getStringArgument($arguments, 1, 'methodName');
+			if ($className === null || $methodName === null) {
+				continue;
+			}
+
+			if (!$this->reflectionProvider->hasClass($className)) {
+				$errors[] = RuleErrorBuilder::message(sprintf(
+					'#[CoversMethod] value %s::%s references an invalid class.',
+					$className,
+					$methodName,
+				))->identifier('phpunit.coversMethod')->build();
+				continue;
+			}
+
+			if ($this->reflectionProvider->getClass($className)->hasMethod($methodName)) {
+				continue;
+			}
+
+			$errors[] = RuleErrorBuilder::message(sprintf(
+				'#[CoversMethod] value %s::%s references an invalid method.',
+				$className,
+				$methodName,
+			))->identifier('phpunit.coversMethod')->build();
+		}
+
+		foreach ($betterReflection->getAttributesByName('PHPUnit\Framework\Attributes\CoversFunction') as $attribute) {
+			$functionName = $this->getStringArgument($attribute->getArguments(), 0, 'functionName');
+			if ($functionName === null) {
+				continue;
+			}
+
+			if ($this->reflectionProvider->hasFunction(new Name($functionName), null)) {
+				continue;
+			}
+
+			$errors[] = RuleErrorBuilder::message(sprintf(
+				'#[CoversFunction] value %s references an invalid function.',
+				$functionName,
+			))->identifier('phpunit.coversFunction')->build();
+		}
+
 		return $errors;
+	}
+
+	/**
+	 * @param array<int|string, mixed> $arguments
+	 */
+	private function getStringArgument(array $arguments, int $position, string $name): ?string
+	{
+		$value = $arguments[$position] ?? $arguments[$name] ?? null;
+
+		return is_string($value) && $value !== '' ? $value : null;
 	}
 
 }

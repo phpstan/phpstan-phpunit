@@ -53,6 +53,39 @@ class ClassCoversExistsRuleTest extends RuleTestCase
 	}
 
 	/**
+	 * @requires PHP 8.0
+	 */
+	public function testAttributes(): void
+	{
+		$this->analyse([__DIR__ . '/data/class-coverage-attributes.php'], [
+			[
+				'#[CoversClass] value Not\\A\\Klass references an invalid class.',
+				37,
+			],
+			[
+				'#[CoversClass] value DateTimeInterface references an interface.',
+				37,
+			],
+			[
+				'#[CoversTrait] value ClassCoverageAttributes\\Covered references an invalid trait.',
+				37,
+			],
+			[
+				'#[CoversMethod] value ClassCoverageAttributes\\Covered::missing references an invalid method.',
+				37,
+			],
+			[
+				'#[CoversMethod] value Not\\A\\Klass::covered references an invalid class.',
+				37,
+			],
+			[
+				'#[CoversFunction] value ClassCoverageAttributes\\missingFunction references an invalid function.',
+				37,
+			],
+		]);
+	}
+
+	/**
 	 * @return string[]
 	 */
 	public static function getAdditionalConfigFiles(): array

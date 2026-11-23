@@ -162,3 +162,64 @@ class ParentCallInAnonymousClassTest extends BaseTestCase
 		};
 	}
 }
+
+class TerminatingSetUpSelfMarkSkippedTest extends BaseTestCase
+{
+	protected function setUp(): void
+	{
+		self::markTestSkipped('Skipped');
+	}
+}
+
+class TerminatingSetUpThisMarkSkippedTest extends BaseTestCase
+{
+	protected function setUp(): void
+	{
+		$this->markTestSkipped('Skipped');
+	}
+}
+
+class TerminatingSetUpMarkIncompleteTest extends BaseTestCase
+{
+	protected function setUp(): void
+	{
+		$this->markTestIncomplete('Incomplete');
+	}
+}
+
+class TerminatingSetUpFailTest extends BaseTestCase
+{
+	protected function setUp(): void
+	{
+		$this->fail('Failed');
+	}
+}
+
+class TerminatingSetUpThrowTest extends BaseTestCase
+{
+	protected function setUp(): void
+	{
+		throw new \RuntimeException('Error');
+	}
+}
+
+class TerminatingTearDownTest extends BaseTestCase
+{
+	protected function tearDown(): void
+	{
+		$this->fail('Failed');
+	}
+}
+
+class NonTerminatingConditionalSkipMissingParentTest extends BaseTestCase
+{
+	private bool $shouldSkip = false;
+
+	protected function setUp(): void
+	{
+		if ($this->shouldSkip) {
+			self::markTestSkipped('Skipped');
+		}
+	}
+}
+

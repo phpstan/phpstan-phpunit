@@ -47,6 +47,14 @@ class ShouldCallParentMethodsRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testFix(): void
+	{
+		$this->fix(
+			__DIR__ . '/data/missing-parent-method-calls-fixable.php',
+			__DIR__ . '/data/missing-parent-method-calls-fixable.php.fixed',
+		);
+	}
+
 	public function testFirstClassCallable(): void
 	{
 		if (PHP_VERSION_ID < 80100) {

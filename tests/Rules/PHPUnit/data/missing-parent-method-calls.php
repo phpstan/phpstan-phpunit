@@ -165,7 +165,7 @@ class ParentCallInAnonymousClassTest extends BaseTestCase
 
 class TerminatingSetUpSelfMarkSkippedTest extends BaseTestCase
 {
-	protected function setUp(): void
+	public function setUp(): void
 	{
 		self::markTestSkipped('Skipped');
 	}
@@ -173,7 +173,7 @@ class TerminatingSetUpSelfMarkSkippedTest extends BaseTestCase
 
 class TerminatingSetUpThisMarkSkippedTest extends BaseTestCase
 {
-	protected function setUp(): void
+	public function setUp(): void
 	{
 		$this->markTestSkipped('Skipped');
 	}
@@ -181,7 +181,7 @@ class TerminatingSetUpThisMarkSkippedTest extends BaseTestCase
 
 class TerminatingSetUpMarkIncompleteTest extends BaseTestCase
 {
-	protected function setUp(): void
+	public function setUp(): void
 	{
 		$this->markTestIncomplete('Incomplete');
 	}
@@ -189,7 +189,7 @@ class TerminatingSetUpMarkIncompleteTest extends BaseTestCase
 
 class TerminatingSetUpFailTest extends BaseTestCase
 {
-	protected function setUp(): void
+	public function setUp(): void
 	{
 		$this->fail('Failed');
 	}
@@ -197,7 +197,7 @@ class TerminatingSetUpFailTest extends BaseTestCase
 
 class TerminatingSetUpThrowTest extends BaseTestCase
 {
-	protected function setUp(): void
+	public function setUp(): void
 	{
 		throw new \RuntimeException('Error');
 	}
@@ -205,7 +205,7 @@ class TerminatingSetUpThrowTest extends BaseTestCase
 
 class TerminatingTearDownTest extends BaseTestCase
 {
-	protected function tearDown(): void
+	public function tearDown(): void
 	{
 		$this->fail('Failed');
 	}
@@ -215,7 +215,7 @@ class NonTerminatingConditionalSkipMissingParentTest extends BaseTestCase
 {
 	private bool $shouldSkip = false;
 
-	protected function setUp(): void
+	public function setUp(): void
 	{
 		if ($this->shouldSkip) {
 			self::markTestSkipped('Skipped');

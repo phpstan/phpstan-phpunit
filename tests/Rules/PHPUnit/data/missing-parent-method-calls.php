@@ -223,3 +223,17 @@ class NonTerminatingConditionalSkipMissingParentTest extends BaseTestCase
 	}
 }
 
+class NonTerminatingConditionalWithMissingParentTest extends BaseTestCase
+{
+	private bool $shouldSkip = false;
+
+	public function setUp(): void
+	{
+		if ($this->shouldSkip) {
+			self::markTestSkipped('Skipped');
+		}
+		parent::setUp();
+	}
+}
+
+

@@ -67,6 +67,15 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testFixIncompleteVersion(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 5;
+		$this->warnAboutIncompleteVersion = true;
+
+		$this->fix(__DIR__ . '/data/requires-php-version-on-class-fixable.php', __DIR__ . '/data/requires-php-version-on-class-fixable.php.fixed');
+	}
+
 	protected function getRule(): Rule
 	{
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);

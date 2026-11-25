@@ -41,6 +41,7 @@ class ClassAttributeRequiresPhpVersionRule implements Rule
 				$classReflection->getNativeReflection()->getBetterReflection()->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhp'),
 				$classReflection->getNativeReflection()->getBetterReflection()->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhpunit'),
 			),
+			$node->getOriginalNode()->attrGroups,
 			$scope,
 		);
 	}

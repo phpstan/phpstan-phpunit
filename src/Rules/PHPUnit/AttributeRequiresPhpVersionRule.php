@@ -50,6 +50,7 @@ class AttributeRequiresPhpVersionRule implements Rule
 				$reflectionMethod->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhp'),
 				$reflectionMethod->getAttributesByName('PHPUnit\Framework\Attributes\RequiresPhpunit'),
 			),
+			$node->getOriginalNode()->attrGroups,
 			$scope,
 		);
 	}

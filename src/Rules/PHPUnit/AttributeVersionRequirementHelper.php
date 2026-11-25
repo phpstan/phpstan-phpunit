@@ -5,6 +5,8 @@ namespace PHPStan\Rules\PHPUnit;
 use PharIo\Version\UnsupportedVersionConstraintException;
 use PharIo\Version\Version;
 use PharIo\Version\VersionConstraintParser;
+use PhpParser\Node;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\ReflectionAttribute;
 use PHPStan\Php\ConfiguredPhpVersionRangeHelper;
@@ -13,6 +15,8 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 use function count;
+use function explode;
+use function implode;
 use function is_numeric;
 use function is_string;
 use function preg_match;
@@ -23,6 +27,12 @@ use function version_compare;
 
 final class AttributeVersionRequirementHelper
 {
+
+	/**
+	 * Matches requirements whose version can be completed and given an explicit `>=` operator
+	 * without changing their meaning, e.g. `8`, `8.1`, `>=8.1` or `^8.1`.
+	 */
+	private const FIXABLE_VERSION_REQUIREMENT = '/^(?P<operator>>=|\^)?(?P<space>\s*)(?P<version>\d+(?:\.\d+){0,2})$/';
 
 	private const VERSION_COMPARISON = "/(?P<operator>!=|<|<=|<>|=|==|>|>=)?\s*(?P<version>[\d\.-]+(dev|(RC|alpha|beta)[\d\.])?)[ \t]*\r?$/m";
 
@@ -59,18 +69,29 @@ final class AttributeVersionRequirementHelper
 
 	/**
 	 * @param array<ReflectionAttribute> $attributes
+	 * @param array<Node\AttributeGroup> $attrGroups AST attribute groups of the node $attributes were read from
 	 *
 	 * @return list<IdentifierRuleError>
 	 */
-	public function checkVersionRequirement(array $attributes, Scope $scope): array
+	public function checkVersionRequirement(array $attributes, array $attrGroups, Scope $scope): array
 	{
 		$errors = [];
 		$parser = new VersionConstraintParser();
+		$attributeNodes = $this->groupAttributeNodesByName($attrGroups);
+		$attributeIndexes = [];
 		foreach ($attributes as $attr) {
+			$attributeIndex = $attributeIndexes[$attr->getName()] ?? 0;
+			$attributeIndexes[$attr->getName()] = $attributeIndex + 1;
+
 			$args = $attr->getArguments();
 			if (count($args) !== 1) {
 				continue;
 			}
+
+			$versionNode = $this->getFixableVersionNode(
+				$attributeNodes[$attr->getName()][$attributeIndex] ?? null,
+				$args,
+			);
 
 			// the following block is mimicing PHPUnit version parsing
 			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
@@ -82,11 +103,11 @@ final class AttributeVersionRequirementHelper
 			}
 
 			if ($this->warnAboutIncompleteVersion($versionRequirement)) {
-				$errors[] = RuleErrorBuilder::message(
+				$errorBuilder = RuleErrorBuilder::message(
 					sprintf('Version requirement %s is incomplete. Expect a version composed of major, minor and patch.', $versionRequirement),
 				)
-					->identifier('phpunit.attributeRequiresPhpVersion')
-					->build();
+					->identifier('phpunit.attributeRequiresPhpVersion');
+				$errors[] = $this->buildError($errorBuilder, $versionNode);
 			}
 
 			if (
@@ -161,23 +182,103 @@ final class AttributeVersionRequirementHelper
 			}
 
 			if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
-				$errors[] = RuleErrorBuilder::message(
+				$errorBuilder = RuleErrorBuilder::message(
 					sprintf('Version requirement %s is missing operator.', $versionRequirement),
 				)
-					->identifier('phpunit.attributeRequiresPhpVersion')
-					->build();
+					->identifier('phpunit.attributeRequiresPhpVersion');
+				$errors[] = $this->buildError($errorBuilder, $versionNode);
 			} elseif (
 				$this->deprecationRulesInstalled
 				&& $this->PHPUnitVersion->deprecatesPhpversionAttributeWithoutOperator()->yes()
 			) {
-				$errors[] = RuleErrorBuilder::message(
+				$errorBuilder = RuleErrorBuilder::message(
 					sprintf('Version requirement %s without operator is deprecated.', $versionRequirement),
 				)
-					->identifier('phpunit.attributeRequiresPhpVersion')
-					->build();
+					->identifier('phpunit.attributeRequiresPhpVersion');
+				$errors[] = $this->buildError($errorBuilder, $versionNode);
 			}
 		}
 		return $errors;
+	}
+
+	/**
+	 * @param array<Node\AttributeGroup> $attrGroups
+	 *
+	 * @return array<string, list<Node\Attribute>>
+	 */
+	private function groupAttributeNodesByName(array $attrGroups): array
+	{
+		$attributeNodes = [];
+		foreach ($attrGroups as $attrGroup) {
+			foreach ($attrGroup->attrs as $attributeNode) {
+				$attributeNodes[$attributeNode->name->toString()][] = $attributeNode;
+			}
+		}
+
+		return $attributeNodes;
+	}
+
+	/**
+	 * Returns the string literal holding the version requirement, when it is a plain literal in the analysed file.
+	 *
+	 * @param array<int|string, mixed> $args
+	 */
+	private function getFixableVersionNode(?Node\Attribute $attributeNode, array $args): ?String_
+	{
+		if ($attributeNode === null || count($attributeNode->args) !== 1) {
+			return null;
+		}
+
+		$versionNode = $attributeNode->args[0]->value;
+		if (!$versionNode instanceof String_) {
+			return null;
+		}
+
+		// make sure the AST node is the one the reflection attribute was read from
+		if ($versionNode->value !== ($args[0] ?? null)) {
+			return null;
+		}
+
+		return $versionNode;
+	}
+
+	/**
+	 * @param RuleErrorBuilder<IdentifierRuleError> $errorBuilder
+	 */
+	private function buildError(RuleErrorBuilder $errorBuilder, ?String_ $versionNode): IdentifierRuleError
+	{
+		if ($versionNode === null) {
+			return $errorBuilder->build();
+		}
+
+		$fixedVersionRequirement = $this->fixVersionRequirement($versionNode->value);
+		if ($fixedVersionRequirement === null) {
+			return $errorBuilder->build();
+		}
+
+		return $errorBuilder->fixNode(
+			$versionNode,
+			static fn (String_ $versionNode): String_ => new String_($fixedVersionRequirement, ['kind' => $versionNode->getAttribute('kind')]),
+		)->build();
+	}
+
+	/**
+	 * Completes the version to major.minor.patch and adds the implicit `>=` operator.
+	 * Only applied where the meaning of the requirement stays the same.
+	 */
+	private function fixVersionRequirement(string $versionRequirement): ?string
+	{
+		if (preg_match(self::FIXABLE_VERSION_REQUIREMENT, $versionRequirement, $matches) !== 1) {
+			return null;
+		}
+
+		$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
+		$versionParts = explode('.', $matches['version']);
+		while (count($versionParts) < 3) {
+			$versionParts[] = '0';
+		}
+
+		return $operator . $matches['space'] . implode('.', $versionParts);
 	}
 
 	/**

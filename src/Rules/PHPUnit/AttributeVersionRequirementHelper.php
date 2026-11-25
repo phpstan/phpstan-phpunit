@@ -243,21 +243,28 @@ final class AttributeVersionRequirementHelper
 	}
 
 	/**
+	 * Attaches the fix only to the first error of an attribute,
+	 * as fixes of several errors replacing the same node conflict with each other.
+	 *
 	 * @param RuleErrorBuilder<IdentifierRuleError> $errorBuilder
+	 * @param-out null $versionNode
 	 */
-	private function buildError(RuleErrorBuilder $errorBuilder, ?String_ $versionNode): IdentifierRuleError
+	private function buildError(RuleErrorBuilder $errorBuilder, ?String_ &$versionNode): IdentifierRuleError
 	{
 		if ($versionNode === null) {
 			return $errorBuilder->build();
 		}
 
-		$fixedVersionRequirement = $this->fixVersionRequirement($versionNode->value);
+		$node = $versionNode;
+		$versionNode = null;
+
+		$fixedVersionRequirement = $this->fixVersionRequirement($node->value);
 		if ($fixedVersionRequirement === null) {
 			return $errorBuilder->build();
 		}
 
 		return $errorBuilder->fixNode(
-			$versionNode,
+			$node,
 			static fn (String_ $versionNode): String_ => new String_($fixedVersionRequirement, ['kind' => $versionNode->getAttribute('kind')]),
 		)->build();
 	}

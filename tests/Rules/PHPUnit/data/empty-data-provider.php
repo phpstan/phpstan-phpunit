@@ -322,3 +322,18 @@ class IteratorWithEmptyReturn extends \PHPUnit\Framework\TestCase
 	 */
 	public function testFileAsserts() {}
 }
+
+class NamedArgumentAttributeTest extends TestCase
+{
+
+	#[DataProvider(methodName: 'provideData')]
+	public function testFoo(string $input): void
+	{
+	}
+
+	public static function provideData(): iterable
+	{
+		return [];
+	}
+
+}

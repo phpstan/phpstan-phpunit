@@ -44,7 +44,8 @@ class FixableTest extends TestCase
 
 	}
 
-	#[RequiresPhp('8.0'), RequiresPhpunit('>=11')]
+	#[RequiresPhp('8.0')]
+	#[RequiresPhpunit('>=11')]
 	public function testMultipleAttributes(): void {
 
 	}

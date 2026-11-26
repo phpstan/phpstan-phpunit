@@ -322,3 +322,20 @@ class IteratorWithEmptyReturn extends \PHPUnit\Framework\TestCase
 	 */
 	public function testFileAsserts() {}
 }
+
+class NamedArgumentAttributeTest extends TestCase
+{
+
+	// phpunit does not support named arguments.
+	// we handle them here just to make sure we don't crash on them.
+	#[DataProvider(methodName: 'provideData')]
+	public function testFoo(string $input): void
+	{
+	}
+
+	public static function provideData(): iterable
+	{
+		return [];
+	}
+
+}

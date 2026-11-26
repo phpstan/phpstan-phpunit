@@ -44,6 +44,10 @@ class ShouldCallParentMethodsRuleTest extends RuleTestCase
 				'Missing call to parent::setUp() method.',
 				155,
 			],
+			[
+				'Missing call to parent::setUp() method.',
+				218,
+			],
 		]);
 	}
 

@@ -288,6 +288,8 @@ class DataProviderHelper
 					continue;
 				}
 
+				// phpunit does not support named arguments.
+				// we handle them here just to make sure we don't crash on them.
 				$methodName = $args[0] ?? $args['methodName'] ?? null;
 				if (!is_string($methodName)) {
 					continue;

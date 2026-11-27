@@ -4,10 +4,12 @@ namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Modifiers;
+use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
@@ -171,9 +173,11 @@ class DataProviderHelper
 			$dataProviderMethodReflectionDeclaringClass = $dataProviderMethodReflection->getDeclaringClass();
 			if ($dataProviderMethodReflectionDeclaringClass->getFileName() !== null) {
 				$stmts = $this->parser->parseFile($dataProviderMethodReflectionDeclaringClass->getFileName());
-				$nodeFinder = new NodeFinder();
-				/** @var ClassMethod|null $methodNode */
-				$methodNode = $nodeFinder->findFirst($stmts, static fn ($node) => $node instanceof ClassMethod && $node->name->toString() === $dataProviderMethodReflection->getName());
+				$methodNode = $this->findMethodNode(
+					$stmts,
+					$dataProviderMethodReflectionDeclaringClass->getName(),
+					$dataProviderMethodReflection->getName(),
+				);
 				if ($methodNode !== null) {
 					$errorBuilder->fixNode($methodNode, static function (ClassMethod $methodNode) {
 						$methodNode->flags |= Modifiers::STATIC;
@@ -186,6 +190,27 @@ class DataProviderHelper
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * @param Node[] $stmts
+	 */
+	private function findMethodNode(array $stmts, string $className, string $methodName): ?ClassMethod
+	{
+		$nodeFinder = new NodeFinder();
+
+		/** @var ClassLike|null $classNode */
+		$classNode = $nodeFinder->findFirst(
+			$stmts,
+			static fn (Node $node): bool => $node instanceof ClassLike
+				&& $node->namespacedName !== null
+				&& $node->namespacedName->toString() === $className,
+		);
+		if ($classNode === null) {
+			return null;
+		}
+
+		return $classNode->getMethod($methodName);
 	}
 
 	private function getDataProviderAnnotationValue(PhpDocTagNode $phpDocTag): ?string

@@ -226,6 +226,35 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		$this->fix(__DIR__ . '/data/requires-php-version.php', __DIR__ . '/data/requires-php-version.php.fixed');
 	}
 
+	public function testNamedArgument(): void
+	{
+		$this->phpunitMajorVersion = 13;
+		$this->phpunitMinorVersion = 0;
+		$this->deprecationRulesInstalled = false;
+		$this->warnAboutIncompleteVersion = true;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version-named-argument.php'], [
+			[
+				'Version requirement 8.0 is incomplete. Expect a version composed of major, minor and patch.',
+				12,
+			],
+			[
+				'Version requirement 8.0 is missing operator.',
+				12,
+			],
+		]);
+	}
+
+	public function testFixNamedArgument(): void
+	{
+		$this->phpunitMajorVersion = 13;
+		$this->phpunitMinorVersion = 0;
+		$this->deprecationRulesInstalled = false;
+		$this->warnAboutIncompleteVersion = true;
+
+		$this->fix(__DIR__ . '/data/requires-php-version-named-argument.php', __DIR__ . '/data/requires-php-version-named-argument.php.fixed');
+	}
+
 	protected function getRule(): Rule
 	{
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);

@@ -1,0 +1,16 @@
+<?php
+
+namespace RequiresPhpVersionNamedArgument;
+
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\RequiresPhp;
+
+class NamedArgument extends TestCase
+{
+	// phpunit does not support named arguments.
+	// we handle them here just to make sure we don't crash on them.
+	#[RequiresPhp(versionRequirement: '>=8.0.0')]
+	public function testFoo(): void {
+
+	}
+}

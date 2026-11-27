@@ -88,19 +88,20 @@ final class AttributeVersionRequirementHelper
 				continue;
 			}
 
-			$versionNode = $this->getFixableVersionNode(
-				$attributeNodes[$attr->getName()][$attributeIndex] ?? null,
-				$args,
-			);
-
-			// the following block is mimicing PHPUnit version parsing
-			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
-
-			// named arguments are handled just to make sure we don't crash on them.
+			// phpunit does not support named arguments.
+			// we handle them here just to make sure we don't crash on them.
 			$versionRequirement = $args[0] ?? $args['versionRequirement'] ?? null;
 			if (!is_string($versionRequirement)) {
 				continue;
 			}
+
+			$versionNode = $this->getFixableVersionNode(
+				$attributeNodes[$attr->getName()][$attributeIndex] ?? null,
+				$versionRequirement,
+			);
+
+			// the following block is mimicing PHPUnit version parsing
+			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
 
 			if ($this->warnAboutIncompleteVersion($versionRequirement)) {
 				$errorBuilder = RuleErrorBuilder::message(
@@ -220,10 +221,8 @@ final class AttributeVersionRequirementHelper
 
 	/**
 	 * Returns the string literal holding the version requirement, when it is a plain literal in the analysed file.
-	 *
-	 * @param array<int|string, mixed> $args
 	 */
-	private function getFixableVersionNode(?Node\Attribute $attributeNode, array $args): ?String_
+	private function getFixableVersionNode(?Node\Attribute $attributeNode, string $versionRequirement): ?String_
 	{
 		if ($attributeNode === null || count($attributeNode->args) !== 1) {
 			return null;
@@ -235,7 +234,7 @@ final class AttributeVersionRequirementHelper
 		}
 
 		// make sure the AST node is the one the reflection attribute was read from
-		if ($versionNode->value !== ($args[0] ?? null)) {
+		if ($versionNode->value !== $versionRequirement) {
 			return null;
 		}
 

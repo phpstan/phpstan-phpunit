@@ -192,6 +192,21 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		]);
 	}
 
+	public function testNonStringArguments(): void
+	{
+		$this->phpunitMajorVersion = 12;
+		$this->phpunitMinorVersion = 5;
+		$this->deprecationRulesInstalled = false;
+		$this->warnAboutIncompleteVersion = true;
+
+		$this->analyse([__DIR__ . '/data/requires-php-version-non-string.php'], [
+			[
+				'Version requirement >=8.0 is incomplete. Expect a version composed of major, minor and patch.',
+				35,
+			],
+		]);
+	}
+
 	protected function getRule(): Rule
 	{
 		$phpunitVersion = new PHPUnitVersion($this->phpunitMajorVersion, $this->phpunitMinorVersion);

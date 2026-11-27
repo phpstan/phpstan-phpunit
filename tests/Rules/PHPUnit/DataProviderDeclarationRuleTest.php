@@ -118,6 +118,13 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$this->fix(__DIR__ . '/data/data-provider-static-fix.php', __DIR__ . '/data/data-provider-static-fix.php.fixed');
 	}
 
+	public function testFixDataProviderStaticWithSameNamedMethodInOtherClass(): void
+	{
+		$this->phpunitVersion = 10;
+
+		$this->fix(__DIR__ . '/data/data-provider-static-fix-same-name.php', __DIR__ . '/data/data-provider-static-fix-same-name.php.fixed');
+	}
+
 	/**
 	 * @return string[]
 	 */

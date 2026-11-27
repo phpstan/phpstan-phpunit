@@ -8,12 +8,12 @@ use PHPUnit\Framework\Attributes\RequiresPhpunit;
 
 class FixableTest extends TestCase
 {
-	#[RequiresPhp('>=8.0.0')]
+	#[RequiresPhp('8')]
 	public function testMajorOnly(): void {
 
 	}
 
-	#[RequiresPhp('>=8.0.0')]
+	#[RequiresPhp('8.0')]
 	public function testMissingOperator(): void {
 
 	}
@@ -39,19 +39,19 @@ class FixableTest extends TestCase
 
 	}
 
-	#[RequiresPhp(">=8.0.0")]
+	#[RequiresPhp("8.0")]
 	public function testDoubleQuoted(): void {
 
 	}
 
-	#[RequiresPhp('>=8.0.0')]
+	#[RequiresPhp('8.0')]
 	#[RequiresPhpunit('>=11.0.0')]
 	public function testMultipleAttributes(): void {
 
 	}
 
 	#[RequiresPhp('>= 8.0.0')]
-	#[RequiresPhp('>=8.1.0')]
+	#[RequiresPhp('8.1')]
 	public function testRepeatedAttribute(): void {
 
 	}

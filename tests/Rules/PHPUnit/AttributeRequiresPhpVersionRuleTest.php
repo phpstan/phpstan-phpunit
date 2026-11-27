@@ -217,13 +217,13 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		$this->fix(__DIR__ . '/data/requires-php-version-fixable.php', __DIR__ . '/data/requires-php-version-fixable.php.fixed');
 	}
 
-	public function testFixVersionWithoutOperator(): void
+	public function testDoNotFixVersionWithoutOperator(): void
 	{
 		$this->phpunitMajorVersion = 12;
 		$this->phpunitMinorVersion = 4;
 		$this->deprecationRulesInstalled = true;
 
-		$this->fix(__DIR__ . '/data/requires-php-version.php', __DIR__ . '/data/requires-php-version.php.fixed');
+		$this->fix(__DIR__ . '/data/requires-php-version.php', __DIR__ . '/data/requires-php-version.php');
 	}
 
 	public function testNamedArgument(): void
@@ -252,7 +252,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		$this->deprecationRulesInstalled = false;
 		$this->warnAboutIncompleteVersion = true;
 
-		$this->fix(__DIR__ . '/data/requires-php-version-named-argument.php', __DIR__ . '/data/requires-php-version-named-argument.php.fixed');
+		$this->fix(__DIR__ . '/data/requires-php-version-named-argument.php', __DIR__ . '/data/requires-php-version-named-argument.php');
 	}
 
 	protected function getRule(): Rule

@@ -29,10 +29,11 @@ final class AttributeVersionRequirementHelper
 {
 
 	/**
-	 * Matches requirements whose version can be completed and given an explicit `>=` operator
-	 * without changing their meaning, e.g. `8`, `8.1`, `>=8.1` or `^8.1`.
+	 * Matches requirements whose version can be completed to major.minor.patch
+	 * without changing their meaning, e.g. `>=8`, `>=8.1` or `^8.1`.
+	 * Versions without an operator are deliberately not matched.
 	 */
-	private const FIXABLE_VERSION_REQUIREMENT = '/^(?P<operator>>=|\^)?(?P<space>\s*)(?P<version>\d+(?:\.\d+){0,2})$/';
+	private const FIXABLE_VERSION_REQUIREMENT = '/^(?P<operator>>=|\^)(?P<space>\s*)(?P<version>\d+(?:\.\d+){0,2})$/';
 
 	private const VERSION_COMPARISON = "/(?P<operator>!=|<|<=|<>|=|==|>|>=)?\s*(?P<version>[\d\.-]+(dev|(RC|alpha|beta)[\d\.])?)[ \t]*\r?$/m";
 
@@ -183,20 +184,20 @@ final class AttributeVersionRequirementHelper
 			}
 
 			if ($this->PHPUnitVersion->requiresPhpversionAttributeWithOperator()->yes()) {
-				$errorBuilder = RuleErrorBuilder::message(
+				$errors[] = RuleErrorBuilder::message(
 					sprintf('Version requirement %s is missing operator.', $versionRequirement),
 				)
-					->identifier('phpunit.attributeRequiresPhpVersion');
-				$errors[] = $this->buildError($errorBuilder, $versionNode);
+					->identifier('phpunit.attributeRequiresPhpVersion')
+					->build();
 			} elseif (
 				$this->deprecationRulesInstalled
 				&& $this->PHPUnitVersion->deprecatesPhpversionAttributeWithoutOperator()->yes()
 			) {
-				$errorBuilder = RuleErrorBuilder::message(
+				$errors[] = RuleErrorBuilder::message(
 					sprintf('Version requirement %s without operator is deprecated.', $versionRequirement),
 				)
-					->identifier('phpunit.attributeRequiresPhpVersion');
-				$errors[] = $this->buildError($errorBuilder, $versionNode);
+					->identifier('phpunit.attributeRequiresPhpVersion')
+					->build();
 			}
 		}
 		return $errors;
@@ -262,8 +263,9 @@ final class AttributeVersionRequirementHelper
 	}
 
 	/**
-	 * Completes the version to major.minor.patch and adds the implicit `>=` operator.
+	 * Completes the version to major.minor.patch.
 	 * Only applied where the meaning of the requirement stays the same.
+	 * Versions without an operator are not fixed.
 	 */
 	private function fixVersionRequirement(string $versionRequirement): ?string
 	{
@@ -271,13 +273,12 @@ final class AttributeVersionRequirementHelper
 			return null;
 		}
 
-		$operator = $matches['operator'] !== '' ? $matches['operator'] : '>=';
 		$versionParts = explode('.', $matches['version']);
 		while (count($versionParts) < 3) {
 			$versionParts[] = '0';
 		}
 
-		return $operator . $matches['space'] . implode('.', $versionParts);
+		return $matches['operator'] . $matches['space'] . implode('.', $versionParts);
 	}
 
 	/**

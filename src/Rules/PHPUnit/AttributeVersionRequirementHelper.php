@@ -96,11 +96,6 @@ final class AttributeVersionRequirementHelper
 				continue;
 			}
 
-			$versionNode = $this->getFixableVersionNode(
-				$attributeNodes[$attr->getName()][$attributeIndex] ?? null,
-				$versionRequirement,
-			);
-
 			// the following block is mimicing PHPUnit version parsing
 			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
 
@@ -109,6 +104,10 @@ final class AttributeVersionRequirementHelper
 					sprintf('Version requirement %s is incomplete. Expect a version composed of major, minor and patch.', $versionRequirement),
 				)
 					->identifier('phpunit.attributeRequiresPhpVersion');
+				$versionNode = $this->getFixableVersionNode(
+					$attributeNodes[$attr->getName()][$attributeIndex] ?? null,
+					$versionRequirement,
+				);
 				$errors[] = $this->buildError($errorBuilder, $versionNode);
 			}
 

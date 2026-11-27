@@ -18,6 +18,7 @@ use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ExtendedMethodReflection;
 use PHPStan\Reflection\MissingMethodFromReflectionException;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
@@ -149,13 +150,24 @@ class DataProviderHelper
 		}
 
 		if (!$dataProviderMethodReflection->isPublic()) {
-			$errors[] = RuleErrorBuilder::message(sprintf(
+			$errorBuilder = RuleErrorBuilder::message(sprintf(
 				'@dataProvider %s related method must be public.',
 				$dataProviderValue,
 			))
 				->line($lineNumber)
-				->identifier('phpunit.dataProviderPublic')
-				->build();
+				->identifier('phpunit.dataProviderPublic');
+
+			$methodNodeAndFile = $this->findMethodNode($dataProviderMethodReflection);
+			if ($methodNodeAndFile !== null) {
+				[$methodNode, $fileName] = $methodNodeAndFile;
+				$errorBuilder->fixNode($methodNode, static function (ClassMethod $methodNode) {
+					$methodNode->flags &= ~Modifiers::VISIBILITY_MASK;
+					$methodNode->flags |= Modifiers::PUBLIC;
+
+					return $methodNode;
+				}, $fileName);
+			}
+			$errors[] = $errorBuilder->build();
 		}
 
 		if (
@@ -170,23 +182,14 @@ class DataProviderHelper
 				->line($lineNumber)
 				->identifier('phpunit.dataProviderStatic');
 
-			// a method from a trait is declared in the trait, which can be in another file
-			$nativeMethod = $dataProviderMethodReflection->getDeclaringClass()->getNativeReflection()->getMethod($dataProviderMethodReflection->getName())->getBetterReflection();
-			$declaringClassFileName = $nativeMethod->getFileName();
-			if ($declaringClassFileName !== null) {
-				$stmts = $this->parser->parseFile($declaringClassFileName);
-				$methodNode = $this->findMethodNode(
-					$stmts,
-					$nativeMethod->getDeclaringClass()->getName(),
-					$dataProviderMethodReflection->getName(),
-				);
-				if ($methodNode !== null) {
-					$errorBuilder->fixNode($methodNode, static function (ClassMethod $methodNode) {
-						$methodNode->flags |= Modifiers::STATIC;
+			$methodNodeAndFile = $this->findMethodNode($dataProviderMethodReflection);
+			if ($methodNodeAndFile !== null) {
+				[$methodNode, $fileName] = $methodNodeAndFile;
+				$errorBuilder->fixNode($methodNode, static function (ClassMethod $methodNode) {
+					$methodNode->flags |= Modifiers::STATIC;
 
-						return $methodNode;
-					}, $declaringClassFileName);
-				}
+					return $methodNode;
+				}, $fileName);
 			}
 			$errors[] = $errorBuilder->build();
 		}
@@ -195,10 +198,19 @@ class DataProviderHelper
 	}
 
 	/**
-	 * @param Node[] $stmts
+	 * @return array{ClassMethod, string}|null
 	 */
-	private function findMethodNode(array $stmts, string $className, string $methodName): ?ClassMethod
+	private function findMethodNode(ExtendedMethodReflection $methodReflection): ?array
 	{
+		// a method from a trait is declared in the trait, which can be in another file
+		$nativeMethod = $methodReflection->getDeclaringClass()->getNativeReflection()->getMethod($methodReflection->getName())->getBetterReflection();
+		$fileName = $nativeMethod->getFileName();
+		if ($fileName === null) {
+			return null;
+		}
+
+		$stmts = $this->parser->parseFile($fileName);
+		$className = $nativeMethod->getDeclaringClass()->getName();
 		$nodeFinder = new NodeFinder();
 
 		/** @var ClassLike|null $classNode */
@@ -212,7 +224,12 @@ class DataProviderHelper
 			return null;
 		}
 
-		return $classNode->getMethod($methodName);
+		$methodNode = $classNode->getMethod($methodReflection->getName());
+		if ($methodNode === null) {
+			return null;
+		}
+
+		return [$methodNode, $fileName];
 	}
 
 	private function getDataProviderAnnotationValue(PhpDocTagNode $phpDocTag): ?string

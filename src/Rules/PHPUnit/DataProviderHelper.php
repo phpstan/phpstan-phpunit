@@ -171,8 +171,9 @@ class DataProviderHelper
 				->identifier('phpunit.dataProviderStatic');
 
 			$dataProviderMethodReflectionDeclaringClass = $dataProviderMethodReflection->getDeclaringClass();
-			if ($dataProviderMethodReflectionDeclaringClass->getFileName() !== null) {
-				$stmts = $this->parser->parseFile($dataProviderMethodReflectionDeclaringClass->getFileName());
+			$declaringClassFileName = $dataProviderMethodReflectionDeclaringClass->getFileName();
+			if ($declaringClassFileName !== null) {
+				$stmts = $this->parser->parseFile($declaringClassFileName);
 				$methodNode = $this->findMethodNode(
 					$stmts,
 					$dataProviderMethodReflectionDeclaringClass->getName(),
@@ -183,7 +184,7 @@ class DataProviderHelper
 						$methodNode->flags |= Modifiers::STATIC;
 
 						return $methodNode;
-					});
+					}, $declaringClassFileName);
 				}
 			}
 			$errors[] = $errorBuilder->build();

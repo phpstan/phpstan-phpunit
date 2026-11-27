@@ -125,6 +125,24 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		$this->fix(__DIR__ . '/data/data-provider-static-fix-same-name.php', __DIR__ . '/data/data-provider-static-fix-same-name.php.fixed');
 	}
 
+	public function testFixDataProviderStaticDoesNotChangeMethodAtSamePositionInTestFile(): void
+	{
+		$this->phpunitVersion = 10;
+
+		$this->fix(__DIR__ . '/data/data-provider-static-fix-parent.php', __DIR__ . '/data/data-provider-static-fix-parent.php.fixed');
+	}
+
+	public function testFixDataProviderStaticDeclaredInParentClassFile(): void
+	{
+		$this->phpunitVersion = 10;
+
+		$this->fixOtherFile(
+			__DIR__ . '/data/data-provider-static-fix-parent.php',
+			__DIR__ . '/data/data-provider-static-fix-parent-base.php',
+			__DIR__ . '/data/data-provider-static-fix-parent-base.php.fixed',
+		);
+	}
+
 	/**
 	 * @return string[]
 	 */

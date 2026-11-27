@@ -202,7 +202,7 @@ final class AttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		$this->analyse([__DIR__ . '/data/requires-php-version-non-string.php'], [
 			[
 				'Version requirement >=8.0 is incomplete. Expect a version composed of major, minor and patch.',
-				36,
+				35,
 			],
 		]);
 	}

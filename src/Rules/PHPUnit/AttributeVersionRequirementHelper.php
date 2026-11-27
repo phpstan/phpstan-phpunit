@@ -14,6 +14,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 use function count;
 use function is_numeric;
+use function is_string;
 use function preg_match;
 use function sprintf;
 use function strpos;
@@ -74,7 +75,11 @@ final class AttributeVersionRequirementHelper
 			// the following block is mimicing PHPUnit version parsing
 			// see https://github.com/sebastianbergmann/phpunit/blob/43c2cd7b96ee1e800b35e4df23b419a88b53111d/src/Metadata/Version/Requirement.php
 
-			$versionRequirement = $args[0];
+			// named arguments are handled just to make sure we don't crash on them.
+			$versionRequirement = $args[0] ?? $args['versionRequirement'] ?? null;
+			if (!is_string($versionRequirement)) {
+				continue;
+			}
 
 			if ($this->warnAboutIncompleteVersion($versionRequirement)) {
 				$errors[] = RuleErrorBuilder::message(

@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\Attributes\RequiresPhpunit;
 
-// https://github.com/phpstan/phpstan-phpunit/issues/364
 class IntArgument extends TestCase
 {
 	#[RequiresPhp(8)]

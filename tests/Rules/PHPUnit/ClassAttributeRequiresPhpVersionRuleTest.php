@@ -53,9 +53,6 @@ final class ClassAttributeRequiresPhpVersionRuleTest extends RuleTestCase
 		]);
 	}
 
-	/**
-	 * @see https://github.com/phpstan/phpstan-phpunit/issues/364
-	 */
 	public function testNonStringArguments(): void
 	{
 		$this->phpunitMajorVersion = 12;

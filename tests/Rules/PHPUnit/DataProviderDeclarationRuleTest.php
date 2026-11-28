@@ -161,6 +161,13 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		);
 	}
 
+	public function testFixDataProviderPublic(): void
+	{
+		$this->phpunitVersion = 10;
+
+		$this->fix(__DIR__ . '/data/data-provider-public-fix.php', __DIR__ . '/data/data-provider-public-fix.php.fixed');
+	}
+
 	/**
 	 * @return string[]
 	 */

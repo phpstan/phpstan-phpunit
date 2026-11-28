@@ -1,0 +1,33 @@
+<?php declare(strict_types=1);
+
+namespace DataProviderPublicFix;
+
+class FixTestCase extends \PHPUnit\Framework\TestCase
+{
+
+	public static function dataPrivate(): iterable
+	{
+		yield [];
+	}
+
+	public static function dataProtected(): iterable
+	{
+		yield [];
+	}
+
+	public static function dataProtectedNonStatic(): iterable
+	{
+		yield [];
+	}
+
+	/**
+	 * @dataProvider dataPrivate
+	 * @dataProvider dataProtected
+	 * @dataProvider dataProtectedNonStatic
+	 */
+	public function testFoo(): void
+	{
+
+	}
+
+}

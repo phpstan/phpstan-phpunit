@@ -170,13 +170,14 @@ class DataProviderHelper
 				->line($lineNumber)
 				->identifier('phpunit.dataProviderStatic');
 
-			$dataProviderMethodReflectionDeclaringClass = $dataProviderMethodReflection->getDeclaringClass();
-			$declaringClassFileName = $dataProviderMethodReflectionDeclaringClass->getFileName();
+			// a method from a trait is declared in the trait, which can be in another file
+			$nativeMethod = $dataProviderMethodReflection->getDeclaringClass()->getNativeReflection()->getMethod($dataProviderMethodReflection->getName())->getBetterReflection();
+			$declaringClassFileName = $nativeMethod->getFileName();
 			if ($declaringClassFileName !== null) {
 				$stmts = $this->parser->parseFile($declaringClassFileName);
 				$methodNode = $this->findMethodNode(
 					$stmts,
-					$dataProviderMethodReflectionDeclaringClass->getName(),
+					$nativeMethod->getDeclaringClass()->getName(),
 					$dataProviderMethodReflection->getName(),
 				);
 				if ($methodNode !== null) {

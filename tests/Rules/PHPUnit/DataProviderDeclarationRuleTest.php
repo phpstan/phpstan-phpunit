@@ -143,6 +143,24 @@ class DataProviderDeclarationRuleTest extends RuleTestCase
 		);
 	}
 
+	public function testFixDataProviderStaticDeclaredInTraitInSameFile(): void
+	{
+		$this->phpunitVersion = 10;
+
+		$this->fix(__DIR__ . '/data/data-provider-static-fix-trait.php', __DIR__ . '/data/data-provider-static-fix-trait.php.fixed');
+	}
+
+	public function testFixDataProviderStaticDeclaredInTraitInOtherFile(): void
+	{
+		$this->phpunitVersion = 10;
+
+		$this->fixOtherFile(
+			__DIR__ . '/data/data-provider-static-fix-trait-other-file.php',
+			__DIR__ . '/data/data-provider-static-fix-trait-other-file-trait.php',
+			__DIR__ . '/data/data-provider-static-fix-trait-other-file-trait.php.fixed',
+		);
+	}
+
 	/**
 	 * @return string[]
 	 */

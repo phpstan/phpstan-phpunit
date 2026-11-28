@@ -1,0 +1,13 @@
+<?php declare(strict_types=1);
+
+namespace DataProviderStaticFixTraitOtherFile;
+
+trait ProvidesData
+{
+
+	public static function provide(): iterable
+	{
+		yield [];
+	}
+
+}

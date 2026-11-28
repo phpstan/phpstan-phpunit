@@ -1,0 +1,31 @@
+<?php declare(strict_types=1);
+
+namespace DataProviderStaticFixSameName;
+
+class Unrelated
+{
+
+	public function dataProvide(): iterable
+	{
+		yield [];
+	}
+
+}
+
+class FixTestCase extends \PHPUnit\Framework\TestCase
+{
+
+	public static function dataProvide(): iterable
+	{
+		yield [];
+	}
+
+	/**
+	 * @dataProvider dataProvide
+	 */
+	public function testFoo(): void
+	{
+
+	}
+
+}
